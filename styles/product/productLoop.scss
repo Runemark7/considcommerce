@@ -1,0 +1,16 @@
+.productListWrapper{
+  background-color:red;
+  display:flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  .productWrapper{
+    width: 100%;
+    flex-basis: 25%;
+    .productTitle{
+
+    }
+    .productPrice{
+
+    }
+  }
+}
