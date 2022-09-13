@@ -46,6 +46,7 @@ const Checkout = () => {
 const checkoutHandler = async (event: FormEvent, products:Product[]) => {
     event.preventDefault()
 
+    // @ts-ignore
     const data = {
         firstName: event.target.firstName.value,
         lastName: event.target.lastName.value,

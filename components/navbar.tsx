@@ -27,6 +27,11 @@ export default function Navbar() {
                         <a>Checkout</a>
                     </Link>
                 </li>
+                <li>
+                    <Link href={"http://localhost:3000/login"}>
+                        <a>Login</a>
+                    </Link>
+                </li>
             </ul>
         </div>
 
