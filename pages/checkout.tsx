@@ -1,7 +1,7 @@
 import {useSelector} from "react-redux";
-import Link from "next/link";
-import Cart from "./cart";
 import {FormEvent} from "react";
+import Product from "../models/Product";
+import Shipping from "../components/modules/shipping";
 
 const Checkout = () => {
     // @ts-ignore
@@ -9,9 +9,9 @@ const Checkout = () => {
 
     return(
         <div className={"formWrapper"} >
-            <form className={"formHolder"} method="post" onSubmit={(
-                e)=>{
-                checkoutHandler(e);
+            <form className={"formHolder"} method="post" onSubmit={
+                (e)=>{
+                checkoutHandler(e, data.products);
             }}>
                 <label htmlFor="firstName">FirstName</label>
                 <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
@@ -31,6 +31,10 @@ const Checkout = () => {
                 </div>
             ))}
             <div>
+                <p>Choose shippingCost</p>
+                <Shipping />
+            </div>
+            <div>
                 <p>
                     totalprice: {Math.round(data.totalprice*100)/100}
                 </p>
@@ -39,10 +43,32 @@ const Checkout = () => {
     )
 }
 
-const checkoutHandler = (event: FormEvent) => {
+const checkoutHandler = async (event: FormEvent, products:Product[]) => {
     event.preventDefault()
 
-    console.log("test");
+    const data = {
+        firstName: event.target.firstName.value,
+        lastName: event.target.lastName.value,
+        products: products
+    }
+
+    const JSONdata = JSON.stringify(data);
+
+    const endpoint = "/api/order/checkout"
+
+    const options = {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+
+    const result = await response.json()
+
+    console.log(result)
 }
 
 /* for later :D
