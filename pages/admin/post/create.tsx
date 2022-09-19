@@ -1,8 +1,10 @@
 import {FormEvent} from "react";
+import {GetStaticProps} from "next";
+import PostType from "../../../models/PostType";
 
 
 //maybe should show the postid after creation or redirect to it hmmm...
-const AdminCreatePage = () => {
+const AdminCreatePage = (data:any) => {
     return (
         <div>
             <form className={"formHolder"} method="post" onSubmit={(e)=>{
@@ -15,13 +17,28 @@ const AdminCreatePage = () => {
                 <input type="text" name="post_status" id="post_status" className={"inputField"} required/>
 
                 <label htmlFor="post_type">Post Type</label>
-                <input type="post_type" name="post_type" id="post_type" className={"inputField"} required/>
+                <select name="post_type" >
+                    {data.posttypes.map((posttype: PostType) => (
+                        <option value={posttype.posttype_name} key={posttype.posttype_id}>{posttype.posttype_name}</option>
+                    ))}
+                </select>
 
                 <button type="submit">Create Post</button>
             </form>
         </div>
     )
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+    const data = await fetch(`http://localhost:5000/api/posttypes`);
+    const posttypes = await data.json();
+    return {
+        props: {
+            posttypes,
+        },
+    }
+}
+
 
 const createPost = async (e: FormEvent) => {
     e.preventDefault()

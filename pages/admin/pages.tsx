@@ -1,6 +1,6 @@
 import type {GetStaticProps, NextPage} from 'next'
-import Page from "../../models/Page";
 import Link from "next/link";
+import Post from "../../models/Post";
 
 const AdminPages: NextPage = (data:any) => {
     return (
@@ -10,7 +10,7 @@ const AdminPages: NextPage = (data:any) => {
                 <button>Create post</button>
             </Link>
 
-            {data.pages.map((page: Page) => (
+            {data.pages.map((page: Post) => (
                 <div className={"productWrapper"} key={page.post_id}>
                     <div>
                         <p className={"productTitle"}>name: {page.post_name}</p>
