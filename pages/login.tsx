@@ -9,7 +9,7 @@ const Login = () => {
                 handleLogin(e)
             }} >
                 <label htmlFor="email">Email</label>
-                <input type="email" name="email" id="email" className={"inputField"} required/>
+                <input type="text" name="email" id="email" className={"inputField"} required/>
 
                 <label htmlFor="password">password</label>
                 <input type="password" name="password" id="password" className={"inputField"} required/>
@@ -45,9 +45,16 @@ const handleLogin = async (e: FormEvent) => {
     }
 
     // @ts-ignore
-    const response = await fetch(endpoint, options).then(resp=>{
-        console.log(resp);
-    }).then(data => console.log(data))
+    const response = await fetch(endpoint, options)
+        .then(resp=>{
+            console.log("resp");
+            console.log(resp);
+    }).then(
+        data => {
+            console.log("data");
+            console.log(data)
+        }
+    )
 
 }
 
