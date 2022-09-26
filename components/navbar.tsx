@@ -52,6 +52,9 @@ export default function Navbar() {
 
                                 const options = {
                                 method: 'POST',
+                                headers: {
+                                    'Authorization': 'Bearer ' + user.jwtToken,
+                                },
                             }
 
                                 // @ts-ignore

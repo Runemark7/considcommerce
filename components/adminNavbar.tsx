@@ -37,19 +37,19 @@ export default function AdminNavbar() {
             <ul className={"nav"}>
                 {data.map((posttype: PostType) => (
                     <li key={posttype.posttype_id}>
-                        <Link href={"http://localhost:3000/admin/post/create"}>
+                        <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
                             <a>{posttype.posttype_name}</a>
                         </Link>
                     </li>
                 ))}
                 <li>
-                    <Link href={"http://localhost:3000/admin/checkout"}>
-                        <a>Settings</a>
+                    <Link href={"http://localhost:3000/admin/posttype/create"}>
+                        <a>Create posttype</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href={"http://localhost:3000/admin/login"}>
-                        <a>Account</a>
+                    <Link href={"http://localhost:3000/admin/user"}>
+                        <a>Users</a>
                     </Link>
                 </li>
             </ul>

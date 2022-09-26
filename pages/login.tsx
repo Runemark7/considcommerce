@@ -40,6 +40,7 @@ const Login = () => {
         await fetch(endpoint, options)
             .then(resp=>resp.json())
             .then(data => {
+                console.log(data)
                 dispatch(loginUser(data))
             })
     }

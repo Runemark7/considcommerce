@@ -1,7 +1,6 @@
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {userState} from "../../store/authSlice";
 
 const UserProfile = () => {
 
@@ -12,8 +11,9 @@ const UserProfile = () => {
     const [isLoading, setLoading] = useState(false);
 
     useEffect(()=>{
-        setLoading(true);
         console.log(user)
+
+        setLoading(true);
         if (!user.loggedIn) {
             router.push("/login")
         }else{
@@ -30,8 +30,6 @@ const UserProfile = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Headers': "*",
-                    "Access-Control-Allow-Origin": "*"
                 },
                 body: JSONdata
             }

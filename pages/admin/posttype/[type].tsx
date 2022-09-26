@@ -33,7 +33,6 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     // @ts-ignore
     const type = params.type;
     const data = await fetch(`http://localhost:8010/proxy/api/posttype/${type}`);
-    console.log(data);
     const posts = await data.json();
     return {
         props: {

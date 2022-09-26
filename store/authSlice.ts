@@ -34,23 +34,11 @@ const authSlice = createSlice({
             state.userId = 0;
             state.jwtToken = "";
         },
-        userState (state) {
-            return state
-        }
     },
 
-    extraReducers:{
-        [HYDRATE]: (state, action) => {
-            console.log("HYDRATE", action.payload);
-            return {
-                ...state,
-                ...action.payload.auth,
-            };
-        },
-    }
 })
 
-export const { loginUser, logoutUser, userState } = authSlice.actions
+export const { loginUser, logoutUser } = authSlice.actions
 
 export const selectAuthState = (state: AppState) => state.user.loggedIn;
 

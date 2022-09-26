@@ -6,7 +6,6 @@ import { persistReducer, persistStore } from "redux-persist"
 import storage from "redux-persist/lib/storage"
 import thunk from 'redux-thunk'
 
-
 const reducers = combineReducers({
     "cart" : cartSlice,
     "user" : authSlice,
