@@ -25,7 +25,7 @@ const AdminPages: NextPage = (data:any) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const data = await fetch(`http://localhost:5000/api/pages`);
+    const data = await fetch(`http://localhost:8010/proxy/api/pages`);
     const pages = await data.json();
     return {
         props: {

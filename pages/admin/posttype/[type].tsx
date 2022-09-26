@@ -14,6 +14,9 @@ const AdminPages: NextPage = (data:any) => {
 
             {data.posts.map((post: Post) => (
                 <div className={"productWrapper"} key={post.post_id}>
+                    <Link href={`http://localhost:3000/admin/posttype/${type}/update/${post.post_id}`}>
+                        <button>show {type}</button>
+                    </Link>
                     <div>
                         <p className={"productTitle"}>name: {post.post_name}</p>
                         <p className={"productPrice"}>id: {post.post_id}</p>
@@ -29,7 +32,7 @@ const AdminPages: NextPage = (data:any) => {
 export const getStaticProps: GetStaticProps = async ({params}) => {
     // @ts-ignore
     const type = params.type;
-    const data = await fetch(`http://localhost:5000/api/posttype/${type}`);
+    const data = await fetch(`http://localhost:8010/proxy/api/posttype/${type}`);
     console.log(data);
     const posts = await data.json();
     return {

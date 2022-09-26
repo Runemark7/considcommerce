@@ -9,20 +9,18 @@ const PostLayout = (data:any) => {
         <div>
             product detail for: { post }
             <br/>
-            from api: {data.productData}
+            from api: {data.pageData}
         </div>
     );
 }
 
-
-//should move this to a middleware or anything like that, thunk or redux at least
 export const getStaticProps: GetStaticProps = async ({params}) => {
-    const data = await fetch(`http://127.0.0.1:5000/api/page/123`);
-    const productData = await data.json();
-
+    const endpoint = `http://localhost:8010/proxy/api/post/${params}`
+    const data = await fetch(endpoint);
+    const pageData = await data.json();
     return {
         props: {
-            productData,
+            pageData,
         },
     }
 }

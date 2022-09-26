@@ -1,11 +1,11 @@
-import type { NextPage } from 'next'
 
-const Home: NextPage = () => {
-  return (
-    <div>
-      startpage
-    </div>
-  )
+const Home = () => {
+
+    return(
+        <div className={"cartWrapper"}>
+            home
+        </div>
+    )
 }
 
 export default Home

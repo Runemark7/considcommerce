@@ -1,27 +1,15 @@
 import Link from "next/link";
 import {useEffect, useState} from "react";
-
+import PostType from "../models/PostType";
 
 export default function AdminNavbar() {
-
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(false)
-    const options = {
-        method: 'GET',
-        mode: "no-cors",
-        headers:{
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': "*",
-            "Access-Control-Allow-Origin": "*"
-        },
-    }
 
     useEffect(()=>{
         setLoading(true)
-        fetch('http://localhost:5000/api/posttypes', options)
-            .then((res)=>{
-                console.log(res)
-            })
+        fetch('http://localhost:8010/proxy/api/posttypes')
+            .then((res)=>res.json())
             .then((data)=>{
                 setData(data)
                 setLoading(false)
@@ -30,34 +18,30 @@ export default function AdminNavbar() {
 
     if (isLoading) return <p>Loading...</p>
     if (!data) return <p>No profile data</p>
-    console.log(data);
 
     return (
         <div className={"mainNavBar"}>
             <div className={"companyBranding"}>
+                <Link href={"http://localhost:3000"}>
+                    <p>
+                        Site
+                    </p>
+                </Link>
                 <Link href={"http://localhost:3000/admin"}>
                     <p>
-                        logo
+                        admin
                     </p>
                 </Link>
             </div>
 
             <ul className={"nav"}>
-                <li>
-                    <Link href={"http://localhost:3000/admin/post/create"}>
-                        <a>Create post</a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href={"http://localhost:3000/admin/pages"}>
-                        <a>Pages</a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href={"http://localhost:3000/admin/cart"}>
-                        <a>Products</a>
-                    </Link>
-                </li>
+                {data.map((posttype: PostType) => (
+                    <li key={posttype.posttype_id}>
+                        <Link href={"http://localhost:3000/admin/post/create"}>
+                            <a>{posttype.posttype_name}</a>
+                        </Link>
+                    </li>
+                ))}
                 <li>
                     <Link href={"http://localhost:3000/admin/checkout"}>
                         <a>Settings</a>

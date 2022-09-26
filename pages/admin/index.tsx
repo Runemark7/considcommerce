@@ -4,7 +4,6 @@ import AdminNavbar from "../../components/adminNavbar";
 const AdminIndex: NextPage = () => {
     return (
         <div>
-            <AdminNavbar/>
             <div>
                 admin
             </div>

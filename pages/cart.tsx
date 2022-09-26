@@ -1,6 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
-import Product from "../models/Product";
 import {removeItemFromCart} from "../store/cartSlice";
 
 const Cart = () => {

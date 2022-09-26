@@ -1,11 +1,50 @@
 import {useSelector} from "react-redux";
-import {FormEvent} from "react";
+import {FormEvent, useEffect} from "react";
 import Product from "../models/Product";
 import Shipping from "../components/modules/shipping";
 
 const Checkout = () => {
     // @ts-ignore
     const data = useSelector((state)=>(state.cart))
+
+    // @ts-ignore
+    const user = useSelector((state)=>(state.user))
+
+    useEffect(()=>{
+
+
+    }, [data,user])
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+
+        const data = {
+            username: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        const JSONdata = JSON.stringify(data);
+
+        const endpoint = "http://localhost:8010/proxy/auth/token"
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSONdata
+        }
+
+        await fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                //TODO: redirect to thank-you page
+                console.log(data)
+            })
+    }
+
+
+
 
     return(
         <div className={"formWrapper"} >
@@ -69,7 +108,6 @@ const checkoutHandler = async (event: FormEvent, products:Product[]) => {
 
     const result = await response.json()
 
-    console.log(result)
 }
 
 /* for later :D

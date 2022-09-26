@@ -25,7 +25,7 @@ const createPostType = async (e: FormEvent) => {
 
     const JSONdata = JSON.stringify(data);
 
-    const endpoint = "http://localhost:5000/api/posttypes"
+    const endpoint = "http://localhost:8010/proxy/api/posttypes"
 
     const options = {
         method: 'POST',

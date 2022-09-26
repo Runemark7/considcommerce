@@ -1,13 +1,52 @@
 import {useDispatch, useSelector} from "react-redux";
-import {FormEvent} from "react";
+import {FormEvent, useEffect} from "react";
+
+import {loginUser, selectAuthState} from "../store/authSlice";
+import {useRouter} from "next/router";
 
 const Login = () => {
+    const dispatch = useDispatch();
+
+    const router = useRouter();
     // @ts-ignore
+    const user = useSelector(selectAuthState)
+
+    useEffect(()=>{
+        if (user){
+            router.push("/")
+        }
+    },[user])
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        const data = {
+            username: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        const JSONdata = JSON.stringify(data);
+
+        const endpoint = "http://localhost:8010/proxy/auth/token"
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSONdata
+        }
+
+        await fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                dispatch(loginUser(data))
+            })
+    }
+
     return(
         <div className={"cartWrapper"}>
-            <form className={"formHolder"} method="post" onSubmit={(e)=>{
-                handleLogin(e)
-            }} >
+            <form className={"formHolder"} method="post" onSubmit={handleSubmit} >
                 <label htmlFor="email">Email</label>
                 <input type="text" name="email" id="email" className={"inputField"} required/>
 
@@ -18,44 +57,6 @@ const Login = () => {
             </form>
         </div>
     )
-}
-
-const handleLogin = async (e: FormEvent) => {
-    e.preventDefault()
-
-    // @ts-ignore
-    const data = {
-        username: e.target.email.value,
-        password: e.target.password.value,
-    }
-
-    const JSONdata = JSON.stringify(data);
-
-    const endpoint = "http://localhost:5000/auth/account/login"
-
-    const options = {
-        method: 'POST',
-        mode: "no-cors",
-        headers:{
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': "*",
-            "Access-Control-Allow-Origin": "*"
-        },
-        body: JSONdata
-    }
-
-    // @ts-ignore
-    const response = await fetch(endpoint, options)
-        .then(resp=>{
-            console.log("resp");
-            console.log(resp);
-    }).then(
-        data => {
-            console.log("data");
-            console.log(data)
-        }
-    )
-
 }
 
 export default Login
