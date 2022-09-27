@@ -75,14 +75,12 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
                         <h4>meta values</h4>
                         {(data.postMeta.length != 0)?data.postMeta.map((postMeta: PostMeta) => (
                             <div className={"productWrapper"} key={postMeta.meta_id}>
-                                <p className={"productTitle"}>meta: {postMeta.meta_key}</p>
+                                <p className={"productTitle"}>{postMeta.meta_key}</p>
                                 <input type={"text"} name={postMeta.meta_key} defaultValue={postMeta.meta_value} onChange={handleMetaDataChanges} />
                             </div>
                         )):<div>Can't find any meta values</div>}
                     </div>
-
                 </div>
-
                 <input type="submit" value={"Update"}/>
             </form>
         </div>

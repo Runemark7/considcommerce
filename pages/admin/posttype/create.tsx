@@ -1,6 +1,44 @@
 import {FormEvent} from "react";
+import {useSelector} from "react-redux";
 
 const AdminCreatePostType = () => {
+
+    const user = useSelector((state)=>(state.user))
+
+    const createPostType = async (e: FormEvent) => {
+        e.preventDefault()
+
+        // @ts-ignore
+        const data = {
+            posttype_name: e.target.posttype_name.value,
+        }
+
+        const JSONdata = JSON.stringify(data);
+
+        const endpoint = "http://localhost:8010/proxy/api/posttypes"
+
+        const options = {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
+            body: JSONdata
+        }
+
+        // @ts-ignore
+        const response = await fetch(endpoint, options)
+            .then(resp=>{
+                console.log("resp");
+                console.log(resp);
+            }).then(
+                data => {
+                    console.log("success");
+                    console.log(data);
+                }
+            );
+    }
+
     return (
         <div>
             <form className={"formHolder"} method="post" onSubmit={(e)=>{
@@ -15,41 +53,6 @@ const AdminCreatePostType = () => {
     )
 }
 
-const createPostType = async (e: FormEvent) => {
-    e.preventDefault()
 
-    // @ts-ignore
-    const data = {
-        posttype_name: e.target.posttype_name.value,
-    }
-
-    const JSONdata = JSON.stringify(data);
-
-    const endpoint = "http://localhost:8010/proxy/api/posttypes"
-
-    const options = {
-        method: 'POST',
-        mode: "no-cors",
-        headers:{
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': "*",
-            "Access-Control-Allow-Origin": "*"
-        },
-        body: JSONdata
-    }
-
-    // @ts-ignore
-    const response = await fetch(endpoint, options)
-        .then(resp=>{
-            console.log("resp");
-            console.log(resp);
-        }).then(
-            data => {
-                console.log("success");
-                console.log(data);
-            }
-        );
-
-}
 
 export default AdminCreatePostType

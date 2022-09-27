@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
-import {removeItemFromCart} from "../store/cartSlice";
+import {clearItemFromCart, removeItemFromCart} from "../store/cartSlice";
 
 const Cart = () => {
     // @ts-ignore
@@ -30,6 +30,7 @@ const Cart = () => {
                     totalprice: {Math.round(data.totalprice*100)/100}
                 </p>
             </div>
+
         </div>
     )
 }

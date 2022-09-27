@@ -2,6 +2,7 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Post from "../../models/Post";
+import Link from "next/link";
 
 const UserProfile = () => {
 
@@ -17,7 +18,6 @@ const UserProfile = () => {
         if (!user.loggedIn) {
             router.push("/login")
         }else{
-
             const endpoint = "http://localhost:8010/proxy/user/orders"
 
             const options = {
@@ -30,24 +30,29 @@ const UserProfile = () => {
             fetch(endpoint, options)
                 .then(resp=>resp.json())
                 .then(data => {
-                    setData(data)
                     setLoading(false)
+                    setData(data)
                 })
         }
     }, [user])
 
-    console.log(data)
-
     return (
         <div>
-            {(data)?data.map((order: Post) => (
-                <div className={"cartItemWrapper"} key={order.post_id}>
-                    <h3 className={"productTitle"}>{order.post_name}</h3>
+            {(isLoading)?
+                <div>Loading...</div>
+                :
+                <div>
+                    {(data)?data.map((order: Post) => (
+                        <div className={"cartItemWrapper"} key={order.post_id}>
+                            <Link href={`http://localhost:3000/profile/order/${order.post_id}`}>
+                                <div>
+                                    <h3 className={"productTitle"}>{order.post_name}</h3>
+                                </div>
+                            </Link>
+                        </div>
+                    )):<></>}
                 </div>
-            )):<div>
-                loading
-            </div>}
-            profile
+            }
         </div>
     );
 }

@@ -5,6 +5,7 @@ import PostType from "../models/PostType";
 export default function AdminNavbar() {
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(false)
+    const [showSubMenu, setShowMenu] = useState(false)
 
     useEffect(()=>{
         setLoading(true)
@@ -20,7 +21,7 @@ export default function AdminNavbar() {
     if (!data) return <p>No profile data</p>
 
     return (
-        <div className={"mainNavBar"}>
+        <div className={"adminMainNavBar"}>
             <div className={"companyBranding"}>
                 <Link href={"http://localhost:3000"}>
                     <p>
@@ -37,9 +38,24 @@ export default function AdminNavbar() {
             <ul className={"nav"}>
                 {data.map((posttype: PostType) => (
                     <li key={posttype.posttype_id}>
-                        <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
-                            <a>{posttype.posttype_name}</a>
-                        </Link>
+                        <a>{posttype.posttype_name}</a>
+                        <ul className={ "subMenu" }>
+                            <li>
+                                <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
+                                    <a>All {posttype.posttype_name}</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/create`}>
+                                    <a>Create {posttype.posttype_name}</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/categories`}>
+                                    <a>Categories</a>
+                                </Link>
+                            </li>
+                        </ul>
                     </li>
                 ))}
                 <li>

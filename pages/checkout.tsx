@@ -1,13 +1,20 @@
-import {useDispatch, useSelector} from "react-redux";
-import {FormEvent, useEffect} from "react";
+import {useSelector} from "react-redux";
+import {FormEvent, useEffect, useState} from "react";
 import Product from "../models/Product";
 import Shipping from "../components/modules/shipping";
 import {useRouter} from "next/router";
-import {clearItemFromCart} from "../store/cartSlice";
 
 const Checkout = () => {
+
     // @ts-ignore
     const data = useSelector((state)=>(state.cart))
+
+    const [orderData, setOrderData] = useState(data);
+
+    useEffect(()=>{
+        setOrderData(data)
+    }, [data.totalprice])
+
 
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
@@ -39,12 +46,12 @@ const Checkout = () => {
         }
 
         fetch(endpoint, options)
-            .then((resp) => {
-                if (resp.status == 201){
-                    router.push({
-                        pathname: "/thankyou",
-                    })
-                }
+            .then(resp=>resp.json())
+            .then(data => {
+                const orderId = data.orderId;
+                router.push({
+                    pathname: "/thankyou/"+orderId,
+                })
             })
     }
 
@@ -54,7 +61,7 @@ const Checkout = () => {
         <div className={"formWrapper"} >
             <form className={"formHolder"} onSubmit={
                 (e)=>{
-                checkoutHandler(e, data.products, user.userId);
+                checkoutHandler(e, orderData.products, user.userId);
             }}>
                 <label htmlFor="firstName">FirstName</label>
                 <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
@@ -64,7 +71,7 @@ const Checkout = () => {
 
                 <button type="submit">Make order</button>
             </form>
-            {data.products.map((product: any) => (
+            {orderData.products.map((product: any) => (
                 <div className={"checkoutItemWrapper"} key={product.title}>
                     <div className={"checkoutItem"}>
                         <h3 className={"productTitle"}>{product.title}</h3>
@@ -79,7 +86,7 @@ const Checkout = () => {
             </div>
             <div>
                 <p>
-                    totalprice: {Math.round(data.totalprice*100)/100}
+                    totalprice: {Math.round(orderData.totalprice*100)/100}
                 </p>
             </div>
         </div>

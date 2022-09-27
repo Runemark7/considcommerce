@@ -11,6 +11,7 @@ const ProductDetail = (data:any) => {
             product detail for: { name }
             <br/>
             from api: {data.productData.name}
+
         </div>
     );
 }
@@ -34,3 +35,5 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 }
 
 export default ProductDetail
+
+

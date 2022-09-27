@@ -1,0 +1,19 @@
+footer{
+  background: #eee;
+  padding: 60px 0px 1rem 0px;
+  div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .column{
+      ul{
+        list-style-type: none;
+        li{
+          a{
+
+          }
+        }
+      }
+    }
+  }
+}

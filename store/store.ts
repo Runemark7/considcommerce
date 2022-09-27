@@ -13,6 +13,7 @@ const reducers = combineReducers({
 
 const persistConfig = {
     key: "root",
+    version: 8,
     storage,
     whiteList:["cart", "user"]
 }
