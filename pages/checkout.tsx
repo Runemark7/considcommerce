@@ -1,7 +1,9 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FormEvent, useEffect} from "react";
 import Product from "../models/Product";
 import Shipping from "../components/modules/shipping";
+import {useRouter} from "next/router";
+import {clearItemFromCart} from "../store/cartSlice";
 
 const Checkout = () => {
     // @ts-ignore
@@ -10,47 +12,49 @@ const Checkout = () => {
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
 
-    useEffect(()=>{
+    const router = useRouter()
 
+    const checkoutHandler = (event: FormEvent, products:Product[], userId:number) => {
+        event.preventDefault()
 
-    }, [data,user])
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault()
-
+        // @ts-ignore
         const data = {
-            username: e.target.email.value,
-            password: e.target.password.value,
+            firstName: event.target.firstName.value,
+            lastName: event.target.lastName.value,
+            userId: userId,
+            products: products
         }
 
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = "http://localhost:8010/proxy/auth/token"
+        const endpoint = "http://localhost:8010/proxy/api/order"
 
         const options = {
             method: 'POST',
-            headers: {
+            headers:{
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.jwtToken,
             },
             body: JSONdata
         }
 
-        await fetch(endpoint, options)
-            .then(resp=>resp.json())
-            .then(data => {
-                //TODO: redirect to thank-you page
-                console.log(data)
+        fetch(endpoint, options)
+            .then((resp) => {
+                if (resp.status == 201){
+                    router.push({
+                        pathname: "/thankyou",
+                    })
+                }
             })
     }
 
 
 
-
     return(
         <div className={"formWrapper"} >
-            <form className={"formHolder"} method="post" onSubmit={
+            <form className={"formHolder"} onSubmit={
                 (e)=>{
-                checkoutHandler(e, data.products);
+                checkoutHandler(e, data.products, user.userId);
             }}>
                 <label htmlFor="firstName">FirstName</label>
                 <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
@@ -80,34 +84,6 @@ const Checkout = () => {
             </div>
         </div>
     )
-}
-
-const checkoutHandler = async (event: FormEvent, products:Product[]) => {
-    event.preventDefault()
-
-    // @ts-ignore
-    const data = {
-        firstName: event.target.firstName.value,
-        lastName: event.target.lastName.value,
-        products: products
-    }
-
-    const JSONdata = JSON.stringify(data);
-
-    const endpoint = "/api/order/checkout"
-
-    const options = {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-
-    const result = await response.json()
-
 }
 
 /* for later :D

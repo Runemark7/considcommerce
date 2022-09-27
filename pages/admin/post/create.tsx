@@ -3,7 +3,6 @@ import {GetStaticProps} from "next";
 import PostType from "../../../models/PostType";
 
 
-//maybe should show the postid after creation or redirect to it hmmm...
 const AdminCreatePage = (data:any) => {
     return (
         <div>

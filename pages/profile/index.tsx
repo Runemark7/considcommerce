@@ -1,6 +1,7 @@
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import Post from "../../models/Post";
 
 const UserProfile = () => {
 
@@ -11,27 +12,19 @@ const UserProfile = () => {
     const [isLoading, setLoading] = useState(false);
 
     useEffect(()=>{
-        console.log(user)
 
         setLoading(true);
         if (!user.loggedIn) {
             router.push("/login")
         }else{
 
-           const data = {
-                userId : user.userId,
-           }
-
-            const JSONdata = JSON.stringify(data);
-
-            const endpoint = "http://localhost:8010/proxy/user/data"
+            const endpoint = "http://localhost:8010/proxy/user/orders"
 
             const options = {
-                method: 'POST',
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.jwtToken,
                 },
-                body: JSONdata
             }
 
             fetch(endpoint, options)
@@ -47,6 +40,13 @@ const UserProfile = () => {
 
     return (
         <div>
+            {(data)?data.map((order: Post) => (
+                <div className={"cartItemWrapper"} key={order.post_id}>
+                    <h3 className={"productTitle"}>{order.post_name}</h3>
+                </div>
+            )):<div>
+                loading
+            </div>}
             profile
         </div>
     );
