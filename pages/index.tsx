@@ -2,8 +2,10 @@
 const Home = () => {
 
     return(
-        <div className={"cartWrapper"}>
-            home
+        <div className={"homeWrapper"}>
+            <div>
+                Home
+            </div>
         </div>
     )
 }

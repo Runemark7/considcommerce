@@ -7,6 +7,7 @@ interface CartState {
     products: Product[],
     shippingObj: ShippingOption,
     totalprice: number,
+    totalQty: number
 }
 
 const initStateShipping : ShippingOption= {
@@ -19,6 +20,7 @@ const initialState = {
     products: [],
     shippingObj: initStateShipping,
     totalprice: 0,
+    totalQty: 0
 } as CartState
 
 const cartSlice = createSlice({
@@ -33,6 +35,7 @@ const cartSlice = createSlice({
                 state.products[index].quantity++;
             }
             state.totalprice += action.payload.price
+            state.totalQty += 1;
         },
         removeItemFromCart(state, action: PayloadAction<Product>) {
             const index = state.products.findIndex(item => item.title === action.payload.title);
@@ -46,6 +49,7 @@ const cartSlice = createSlice({
                 }
             }
             state.totalprice -= action.payload.price;
+            state.totalQty -= 1;
         },
         addShippingCost (state, action: PayloadAction<ShippingOption>){
             let tempPrice = state.totalprice;

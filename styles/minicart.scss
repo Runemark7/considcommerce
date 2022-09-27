@@ -1,0 +1,23 @@
+.showMiniCart{
+  display: block;
+  background-color: #ffffff;
+  bottom: 12px;
+  position: fixed;
+  width: 100%;
+  right: 0;
+  padding-top: 2rem;
+  z-index: 20;
+  .cartItemWrapper{
+    display: flex;
+    flex-direction: row;
+    .removeItem{
+      align-self: center;
+      padding: 0.5rem;
+    }
+  }
+}
+
+.hideMiniCart{
+  display: none;
+}
+
