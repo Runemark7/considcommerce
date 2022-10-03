@@ -4,6 +4,7 @@ import AddToCart from "../../components/elements/product/addToCart";
 import Product from "../../models/Product";
 import Image from "next/image"
 import mypic from "/public/IMG_5552.jpg"
+import {fetch} from "next/dist/compiled/@edge-runtime/primitives/fetch";
 
 
 const ProductListing = (data: any) => {
@@ -30,12 +31,31 @@ const ProductListing = (data: any) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     const endpoint = "http://localhost:8010/proxy/api/posttype/product"
-    const data = await fetch(endpoint);
-    const products = await data.json();
-    return {
-        props: {
-            products,
+
+    const options = {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json',
         },
+    }
+
+    try{
+        // @ts-ignore
+        const {products, errors} = await fetch(endpoint, options);
+        if (errors || !products){
+            return {
+                notFound: true
+            }
+        }
+        return {
+            props: {
+                products
+            }
+        }
+    }catch{
+        return {
+            notFound: true
+        };
     }
 }
 
