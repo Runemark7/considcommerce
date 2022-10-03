@@ -3,22 +3,17 @@ import {GetStaticPaths, GetStaticProps} from "next";
 
 const ProductDetail = (data:any) => {
     const router = useRouter()
-    const { name } = router.query
-    console.log(data);
 
     return (
         <div>
-            product detail for: { name }
-            <br/>
-            from api: {data.productData.name}
-
+            {data.productData.name}
         </div>
     );
 }
 
-
 export const getStaticProps: GetStaticProps = async ({params}) => {
-    const data = await fetch(`http://localhost:3000/api/product/${params}`);
+    const endpoint = `http://localhost:8010/proxy/api/post/${params}`
+    const data = await fetch(endpoint);
     const productData = await data.json();
     return {
         props: {
