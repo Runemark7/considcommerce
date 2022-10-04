@@ -50,7 +50,11 @@ export default function Layout({ children }) {
     return (
         <>
             <Navbar />
-                <main>{children}</main>
+                <main>
+                    <div className={"pageWrapper"}>
+                        {children}
+                    </div>
+                </main>
             <Footer />
         </>
     )

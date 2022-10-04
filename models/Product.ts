@@ -1,6 +1,6 @@
 export default interface Product{
-    id: number,
-    title: string,
-    price: number,
-    quantity: number
+    post_id: number,
+    post_name: string,
+    product_price: number,
+    product_quantity: number
 }

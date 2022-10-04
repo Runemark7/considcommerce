@@ -116,7 +116,7 @@ const AdminPages: NextPage = (data:any) => {
                                     <div key={index}>
                                         {postMeta.meta_key}
                                         {(postMeta.data_type == "boolean")?
-                                            <input type="checkbox" name={postMeta.meta_key}  required={postMeta.meta_required} />
+                                            <input type="checkbox" name={postMeta.meta_key} onChange={handleMetaDataChanges} required={postMeta.meta_required}/>
                                             :<></>}
 
                                         {(postMeta.data_type == "integer")?

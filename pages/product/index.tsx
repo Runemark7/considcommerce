@@ -1,25 +1,24 @@
-import { GetStaticProps } from "next";
+import {GetServerSideProps} from "next";
+import mypic from "/public/IMG_5552.jpg";
 import Link from "next/link";
 import AddToCart from "../../components/elements/product/addToCart";
-import Product from "../../models/Product";
 import Image from "next/image"
-import mypic from "/public/IMG_5552.jpg"
-import {fetch} from "next/dist/compiled/@edge-runtime/primitives/fetch";
+import Product from "../../models/Product";
 
+const ProductListing = (data :any) => {
 
-const ProductListing = (data: any) => {
     return (
         <div className={"productListWrapper"}>
             {data.products.map((product: Product) => (
-                <div className={"productWrapper"} key={product.title}>
+                <div className={"productWrapper"} key={product.post_name}>
                     <Image
                         src={mypic}
                     />
 
-                    <Link href={`http://localhost:3000/product/${product.title}`}>
+                    <Link href={`http://localhost:3000/product/${product.post_name}`}>
                         <div>
-                            <h4 className={"productTitle"}>{product.title}</h4>
-                            <p className={"productPrice"}>{product.price} SEK</p>
+                            <h4 className={"productTitle"}>{product.post_name}</h4>
+                            <p className={"productPrice"}>{product.product_price} SEK</p>
                         </div>
                     </Link>
                     <AddToCart product={product} />
@@ -29,7 +28,7 @@ const ProductListing = (data: any) => {
     );
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
+export const getServerSideProps: GetServerSideProps = async () => {
     const endpoint = "http://localhost:8010/proxy/api/posttype/product"
 
     const options = {
@@ -39,6 +38,14 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         },
     }
 
+    const data = await fetch(endpoint, options);
+    const products = await data.json();
+    return {
+        props: {
+            products,
+        },
+    }
+    /*
     try{
         // @ts-ignore
         const {products, errors} = await fetch(endpoint, options);
@@ -56,7 +63,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         return {
             notFound: true
         };
-    }
+    }*/
 }
 
 export default ProductListing

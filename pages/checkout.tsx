@@ -72,11 +72,11 @@ const Checkout = () => {
                 <button type="submit">Make order</button>
             </form>
             {orderData.products.map((product: any) => (
-                <div className={"checkoutItemWrapper"} key={product.title}>
+                <div className={"checkoutItemWrapper"} key={product.post_name}>
                     <div className={"checkoutItem"}>
-                        <h3 className={"productTitle"}>{product.title}</h3>
-                        <p className={"productPrice"}>{product.price}</p>
-                        <p>{product.quantity}x{product.price} = {Math.round((product.price * product.quantity)*100)/100}</p>
+                        <h3 className={"productTitle"}>{product.post_name}</h3>
+                        <p className={"productPrice"}>{product.product_price}</p>
+                        <p>{product.product_quantity}x{product.product_price} = {Math.round((product.product_price * product.product_quantity)*100)/100}</p>
                     </div>
                 </div>
             ))}
