@@ -55,40 +55,45 @@ const Checkout = () => {
             })
     }
 
-
-
     return(
-        <div className={"formWrapper"} >
-            <form className={"formHolder"} onSubmit={
-                (e)=>{
-                checkoutHandler(e, orderData.products, user.userId);
-            }}>
-                <label htmlFor="firstName">FirstName</label>
-                <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
+        <div className={"formWrapper fifty-fiftyCols"} >
+            <div className={"fifty-fifty-left"}>
+                <form className={"formHolder"} onSubmit={
+                    (e)=>{
+                        checkoutHandler(e, orderData.products, user.userId);
+                    }}>
+                    <label htmlFor="firstName">FirstName</label>
+                    <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
 
-                <label htmlFor="lastName">LastName</label>
-                <input type="text" name="lastName" id="lastName" className={"inputField"} required/>
+                    <label htmlFor="lastName">LastName</label>
+                    <input type="text" name="lastName" id="lastName" className={"inputField"} required/>
 
-                <button type="submit">Make order</button>
-            </form>
-            {orderData.products.map((product: any) => (
-                <div className={"checkoutItemWrapper"} key={product.post_name}>
-                    <div className={"checkoutItem"}>
-                        <h3 className={"productTitle"}>{product.post_name}</h3>
-                        <p className={"productPrice"}>{product.product_price}</p>
-                        <p>{product.product_quantity}x{product.product_price} = {Math.round((product.product_price * product.product_quantity)*100)/100}</p>
+                    <button type="submit">Make order</button>
+                </form>
+            </div>
+
+            <div className={"fifty-fifty-right"}>
+                {orderData.products.map((product: any) => (
+                    <div className={"checkoutItemWrapper"} key={product.post_name}>
+                        <div className={"checkoutItem"}>
+                            <p className={"productTitle"}>{product.post_name}</p>
+                            <p className={"productPrice"}>{product.product_price}</p>
+                            <p>{product.product_quantity}x{product.product_price} = {Math.round((product.product_price * product.product_quantity)*100)/100}</p>
+                        </div>
                     </div>
+                ))}
+                <div>
+                    <p>Choose shippingCost</p>
+                    <Shipping />
                 </div>
-            ))}
-            <div>
-                <p>Choose shippingCost</p>
-                <Shipping />
+                <div>
+                    <p>
+                        totalprice: {Math.round(orderData.totalprice*100)/100}
+                    </p>
+                </div>
             </div>
-            <div>
-                <p>
-                    totalprice: {Math.round(orderData.totalprice*100)/100}
-                </p>
-            </div>
+
+
         </div>
     )
 }

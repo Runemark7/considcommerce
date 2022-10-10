@@ -1,6 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
-import {clearItemFromCart, removeItemFromCart} from "../store/cartSlice";
+import {removeItemFromCart} from "../store/cartSlice";
+import Product from "../models/Product";
+import Image from "next/image"
+import Shipping from "../components/modules/shipping";
 
 const Cart = () => {
     // @ts-ignore
@@ -8,29 +11,39 @@ const Cart = () => {
     const dispatch = useDispatch();
 
     return(
-        <div className={"cartWrapper"}>
-            {data.products.map((product: any) => (
-                <div className={"cartItemWrapper"} key={product.title}>
-                    <Link href={`http://localhost:3000/product/${product.title}`}>
-                        <div className={"cartItem"}>
-                            <h3 className={"productTitle"}>{product.title}</h3>
-                            <p className={"productPrice"}>{product.price}</p>
-                            <p>{product.quantity}x{product.price} = {Math.round((product.price * product.quantity)*100)/100}</p>
-                        </div>
-                    </Link>
-                    <button
-                        onClick={()=>{
-                            dispatch(removeItemFromCart(product))
-                        }}
-                    >X</button>
-                </div>
-            ))}
-            <div>
-                <p>
-                    totalprice: {Math.round(data.totalprice*100)/100}
-                </p>
-            </div>
+        <div className={"cartWrapper twocols seventy-thirty"}>
+            <div className={"leftCol"}>
+                {data.products.map((product: Product) => (
+                    <div className={"cartItemWrapper"} key={product.post_name}>
+                        <Link href={`http://localhost:3000/product/${product.post_slug}`}>
+                            <div className={"cartItem"}>
+                                <div>
+                                    <Image
+                                        src={product.post_featuredImage}
+                                        width={859}
+                                        height={1163}
+                                    />
+                                </div>
+                                <div>
+                                    <p className={"productTitle"}>{product.post_name}</p>
+                                    <p className={"productPrice"}>{product.product_price}</p>
+                                    <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100}</p>
+                                    <button
+                                        onClick={()=>{
+                                            dispatch(removeItemFromCart(product))
+                                        }}
+                                    >X</button>
+                                </div>
+                            </div>
+                        </Link>
 
+                    </div>
+                ))}
+            </div>
+            <div className={"rightCol"}>
+                <Shipping />
+                <p>totalprice: {Math.round(data.totalprice*100)/100}</p>
+            </div>
         </div>
     )
 }

@@ -69,6 +69,9 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
                         <label htmlFor="post_status">Post status</label>
                         <input type={"text"} name={"post_status"} defaultValue={data.postData.post_status} onChange={handlePostDataChanges} />
+
+                        <label htmlFor="post_slug">Post slug</label>
+                        <input type={"text"} name={"post_slug"} defaultValue={data.postData.post_slug} onChange={handlePostDataChanges} />
                     </div>
                     <br/>
                     <div>

@@ -6,6 +6,7 @@ export default function AddToCart(props: any) {
 
     return (
         <button
+
             onClick={()=>{
                 dispatch(addItemToCart(props.product))
             }}

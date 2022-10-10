@@ -1,18 +1,33 @@
-import { useRouter } from 'next/router'
 import {GetStaticPaths, GetStaticProps} from "next";
+import AddToCart from "../../components/elements/product/addToCart";
+import Image from "next/image"
 
 const ProductDetail = (data:any) => {
-    const router = useRouter()
 
     return (
-        <div>
-            {data.productData.name}
+        <div className={"productWrapper twocols sixty-fourty"} key={data.productData.post_name}>
+            <div className={"leftCol"}>
+                <Image
+                    src={data.productData.post_featuredImage}
+                    width={859}
+                    height={1163}
+                />
+            </div>
+
+            <div className={"rightCol smallPadding"}>
+                <div>
+                    <h2 className={"noMarginTop"}>{data.productData.post_name}</h2>
+                    <p className={"productPrice"}>{data.productData.product_price} SEK</p>
+                </div>
+                <AddToCart product={data.productData} />
+            </div>
         </div>
     );
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-    const endpoint = `http://localhost:8010/proxy/api/post/${params}`
+    const slug = params.name;
+    const endpoint = `http://localhost:8010/proxy/api/post/slug/${slug}`
     const data = await fetch(endpoint);
     const productData = await data.json();
     return {

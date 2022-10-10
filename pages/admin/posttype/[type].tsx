@@ -27,7 +27,7 @@ const AdminPages: NextPage = (data:any) => {
     const getPostModel = (type:String)=>{
         addNewPostToggle()
 
-        if(!postTypeModel){
+        if(postTypeModel.length == 0){
             const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
 
             const options = {
@@ -64,6 +64,12 @@ const AdminPages: NextPage = (data:any) => {
         const value = e.target.value;
         // @ts-ignore
         setPostData({...postData, [name]: value})
+    }
+
+    const handleFileUpload = (e: FormEvent) => {
+        e.preventDefault()
+        console.log(e.target.files)
+
     }
 
     const handleSubmit = (e :FormEvent)=>{
@@ -107,8 +113,14 @@ const AdminPages: NextPage = (data:any) => {
                     <label htmlFor="post_name">PostName*</label>
                     <input type={"text"} name="post_name" onChange={handlePostDataChanges} required={true}/>
 
+                    <label htmlFor="post_slug">Post slug*</label>
+                    <input type={"text"} name="post_slug" onChange={handlePostDataChanges} required={true}/>
+
                     <label htmlFor="post_status">Post status*</label>
                     <input type={"text"} name="post_status" onChange={handlePostDataChanges} required={true}/>
+
+                    <label htmlFor="post_featuredImage">Post featured image*</label>
+                    <input type={"text"} name="post_featuredImage" onChange={handleFileUpload} required={true}/>
 
                         {(postTypeModel.length > 0)?
                             <div>
@@ -125,6 +137,10 @@ const AdminPages: NextPage = (data:any) => {
 
                                         {(postMeta.data_type == "string")?
                                             <input type="text" name={postMeta.meta_key} onChange={handleMetaDataChanges} required={postMeta.meta_required}/>
+                                            :<></>}
+
+                                        {(postMeta.data_type == "file")?
+                                            <input type="file" name={postMeta.meta_key} onChange={handleMetaDataChanges} required={postMeta.meta_required}/>
                                             :<></>}
 
                                         {(postMeta.meta_required)?"*":""}

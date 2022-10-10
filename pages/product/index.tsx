@@ -1,5 +1,4 @@
 import {GetServerSideProps} from "next";
-import mypic from "/public/IMG_5552.jpg";
 import Link from "next/link";
 import AddToCart from "../../components/elements/product/addToCart";
 import Image from "next/image"
@@ -12,10 +11,12 @@ const ProductListing = (data :any) => {
             {data.products.map((product: Product) => (
                 <div className={"productWrapper"} key={product.post_name}>
                     <Image
-                        src={mypic}
-                    />
+                        src={product.post_featuredImage}
+                        width={859}
+                        height={1163}
+                                      />
 
-                    <Link href={`http://localhost:3000/product/${product.post_name}`}>
+                    <Link href={`http://localhost:3000/product/${product.post_slug}`}>
                         <div>
                             <h4 className={"productTitle"}>{product.post_name}</h4>
                             <p className={"productPrice"}>{product.product_price} SEK</p>

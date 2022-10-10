@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "../store/authSlice";
 import {useEffect, useState} from "react";
 import {removeItemFromCart} from "../store/cartSlice";
+import Product from "../models/Product";
 
 export default function Navbar() {
     const user = useSelector((state)=>(state.user))
@@ -92,14 +93,14 @@ export default function Navbar() {
                         toggleMiniCart()
                     }} >Minicart {Math.round(cartDetails.totalprice*100)/100} ({cartDetails.totalQty})</a>
                     <div className={(miniCartToggle)?"showMiniCart":"hideMiniCart"}>
-                        {cartDetails.products.map((product: any) => (
-                            <div className={"cartItemWrapper"} key={product.title}>
+                        {cartDetails.products.map((product: Product) => (
+                            <div className={"cartItemWrapper"} key={product.post_name}>
                                 <div className={"cartItem"}>
-                                    <Link href={`http://localhost:3000/product/${product.title}`}>
-                                        <a href={"#"} className={"productTitle"}>{product.title}</a>
+                                    <Link href={`http://localhost:3000/product/${product.post_name}`}>
+                                        <a href={"#"} className={"productTitle"}>{product.post_name}</a>
                                     </Link>
-                                    <p className={"productPrice"}>{product.price}</p>
-                                    <p>{product.quantity}x{product.price} = {Math.round((product.price * product.quantity)*100)/100}</p>
+                                    <p className={"productPrice"}>{product.product_price}</p>
+                                    <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price ) * product.product_quantity)*100)/100}</p>
                                 </div>
 
                                 <button className={"removeItem"}
@@ -111,7 +112,6 @@ export default function Navbar() {
                         ))}
                     </div>
                 </li>
-
             </ul>
         </div>
 

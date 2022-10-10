@@ -15,6 +15,11 @@ export default wrapper.withRedux(({ Component, pageProps }: AppProps) => {
     return(
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={<div>Fetching data...</div>}>
+                <button onClick={()=>{
+                    persistor.purge()
+                }}>
+
+                </button>
                 <Layout>
                     <Component {...pageProps} />
                 </Layout>

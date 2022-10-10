@@ -2,6 +2,7 @@ import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
 import Product from "../models/Product";
 import ShippingOption from "../models/shippingOption";
+import {act} from "react-dom/test-utils";
 
 interface CartState {
     products: Product[],
@@ -30,11 +31,12 @@ const cartSlice = createSlice({
         addItemToCart (state, action: PayloadAction<Product>) {
             const index = state.products.findIndex(item => item.post_name === action.payload.post_name);
             if(index == -1){
+                action.payload.product_quantity = 1
                 state.products.push(action.payload)
             }else{
                 state.products[index].product_quantity++;
             }
-            state.totalprice += action.payload.product_price
+            state.totalprice += parseInt(action.payload.product_price)
             state.totalQty += 1;
         },
         removeItemFromCart(state, action: PayloadAction<Product>) {
@@ -48,7 +50,7 @@ const cartSlice = createSlice({
                     state.products[index].product_quantity--;
                 }
             }
-            state.totalprice -= action.payload.product_price;
+            state.totalprice -= parseInt(action.payload.product_price);
             state.totalQty -= 1;
         },
         addShippingCost (state, action: PayloadAction<ShippingOption>){

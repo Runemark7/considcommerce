@@ -1,0 +1,73 @@
+.twocols{
+  display:flex;
+  flex-direction: row;
+  width: 100%;
+  &.ninety-ten{
+
+    .leftCol{
+      width: 10%;
+    }
+
+    .rightCol{
+      width: 90%;
+    }
+  }
+
+  &.eighty-twenty{
+    .leftCol, .rightCol{
+
+    }
+
+    .leftCol{
+      width: 20%;
+    }
+
+    .rightCol{
+      width: 80%;
+    }
+  }
+
+  &.seventy-thirty{
+    .leftCol, .rightCol{
+
+    }
+
+    .leftCol{
+      width: 70%;
+    }
+
+    .rightCol{
+      width: 30%;
+    }
+  }
+
+  &.sixty-fourty{
+    .leftCol, .rightCol{
+
+    }
+
+    .leftCol{
+      width: 60%;
+    }
+
+    .rightCol{
+      width: 40%;
+    }
+  }
+
+  &.fifty-fifty{
+
+  }
+}
+
+.smallPadding{
+  padding:1rem;
+}
+
+.noMargin{
+  margin:0;
+}
+
+.noMarginTop{
+  margin-top: 0;
+}
