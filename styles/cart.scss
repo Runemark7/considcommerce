@@ -1,0 +1,15 @@
+.cartWrapper{
+  .cartItemWrapper{
+    .cartItem{
+      display:flex;
+      flex-direction: row;
+      width: 100%;
+      .cartItemImage{
+        width: 100px;
+      }
+      .cartItemInfo{
+
+      }
+    }
+  }
+}

@@ -3,7 +3,6 @@ import AddToCart from "../../components/elements/product/addToCart";
 import Image from "next/image"
 
 const ProductDetail = (data:any) => {
-
     return (
         <div className={"productWrapper twocols sixty-fourty"} key={data.productData.post_name}>
             <div className={"leftCol"}>
@@ -18,6 +17,7 @@ const ProductDetail = (data:any) => {
                 <div>
                     <h2 className={"noMarginTop"}>{data.productData.post_name}</h2>
                     <p className={"productPrice"}>{data.productData.product_price} SEK</p>
+                    <p>{data.productData.post_excerpt}</p>
                 </div>
                 <AddToCart product={data.productData} />
             </div>

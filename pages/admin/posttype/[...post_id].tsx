@@ -72,6 +72,13 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
                         <label htmlFor="post_slug">Post slug</label>
                         <input type={"text"} name={"post_slug"} defaultValue={data.postData.post_slug} onChange={handlePostDataChanges} />
+
+                        <label htmlFor="post_featuredImage">Featured Image</label>
+                        <input type={"text"} name={"post_featuredImage"} defaultValue={data.postData.post_featuredImage} onChange={handlePostDataChanges} />
+
+                        <label htmlFor="post_excerpt">Post excerpt</label>
+                        <input type={"text"} name={"post_excerpt"} defaultValue={data.postData.post_excerpt} onChange={handlePostDataChanges} />
+
                     </div>
                     <br/>
                     <div>

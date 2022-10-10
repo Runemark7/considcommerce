@@ -3,8 +3,9 @@ import Link from "next/link";
 import Post from "../../../models/Post";
 import {useRouter} from "next/router";
 import {useSelector} from "react-redux";
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import PostMetaField from "../../../models/PostMetaField";
+import {Exception} from "sass";
 
 const AdminPages: NextPage = (data:any) => {
     const router = useRouter()
@@ -27,7 +28,7 @@ const AdminPages: NextPage = (data:any) => {
     const getPostModel = (type:String)=>{
         addNewPostToggle()
 
-        if(postTypeModel.length == 0){
+        if(postTypeModel){
             const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
 
             const options = {
@@ -37,9 +38,12 @@ const AdminPages: NextPage = (data:any) => {
                     'Authorization': 'Bearer ' + user.jwtToken,
                 },
             }
-
             fetch(endpoint, options)
-                .then(resp=>resp.json())
+                .then((resp)=>{
+                    if (resp.status == 201){
+                        return resp.json()
+                    }
+                })
                 .then(data => {
                     setPostTypeModel(data)
                 });
@@ -120,9 +124,9 @@ const AdminPages: NextPage = (data:any) => {
                     <input type={"text"} name="post_status" onChange={handlePostDataChanges} required={true}/>
 
                     <label htmlFor="post_featuredImage">Post featured image*</label>
-                    <input type={"text"} name="post_featuredImage" onChange={handleFileUpload} required={true}/>
+                    <input type={"text"} name="post_featuredImage" onChange={handlePostDataChanges} required={true}/>
 
-                        {(postTypeModel.length > 0)?
+                        {(postTypeModel)?
                             <div>
                                 {postTypeModel.map((postMeta:PostMetaField, index:number)=>
                                     <div key={index}>
@@ -184,13 +188,30 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
             'Content-Type': 'application/json',
         },
     }
-    const data = await fetch(endpoint, options);
-    const posts = await data.json();
-    return {
-        props: {
-            posts,
-        },
+    let posts:any = []
+    try{
+        await fetch(endpoint, options).then((response)=>{
+            if (response.status==201){
+                return response.json()
+            }else{
+                throw Exception
+            }
+        }).then((data)=>{
+            posts = data
+        })
+        return {
+            props: {
+                posts,
+            },
+        }
+    }catch {
+        return {
+            props: {
+                posts,
+            },
+        }
     }
+
     /*try{
         // @ts-ignore
         const {posts, errors} = await fetch(endpoint, options);

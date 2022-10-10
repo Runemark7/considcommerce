@@ -1,28 +1,46 @@
-import { useRouter } from 'next/router'
 import {GetStaticPaths, GetStaticProps} from "next";
+import {Exception} from "sass";
 
 const PostLayout = (data:any) => {
-    const router = useRouter()
-    const { post } = router.query
-
     return (
         <div>
-            product detail for: { post }
-            <br/>
-            from api: {data.pageData}
+            {(data)?(
+                <div>
+                    {data.postData.post_name}
+                    <p>
+                        {data.postData.post_excerpt}
+                    </p>
+                </div>
+            ):<></>}
         </div>
     );
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-    const endpoint = `http://localhost:8010/proxy/api/post/${params}`
-    const data = await fetch(endpoint);
-    const pageData = await data.json();
-    return {
-        props: {
-            pageData,
-        },
+    const post = params.post;
+    const endpoint = `http://localhost:8010/proxy/api/post/slug/${post}`
+    let postData:any = null;
+    try{
+        await fetch(endpoint).then((response)=>{
+            if (response.status==201){
+                return response.json()
+            }else{
+                throw Exception
+            }
+        }).then((data)=>{
+            postData = data
+        })
+        return {
+            props: {
+                postData,
+            },
+        }
+    }catch {
+        return {
+            notFound: true
+        }
     }
+
 }
 
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {

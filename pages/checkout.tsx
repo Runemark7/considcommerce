@@ -62,10 +62,10 @@ const Checkout = () => {
                     (e)=>{
                         checkoutHandler(e, orderData.products, user.userId);
                     }}>
-                    <label htmlFor="firstName">FirstName</label>
+                    <label htmlFor="firstName">FirstName*</label>
                     <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
 
-                    <label htmlFor="lastName">LastName</label>
+                    <label htmlFor="lastName">LastName*</label>
                     <input type="text" name="lastName" id="lastName" className={"inputField"} required/>
 
                     <button type="submit">Make order</button>
@@ -73,12 +73,12 @@ const Checkout = () => {
             </div>
 
             <div className={"fifty-fifty-right"}>
-                {orderData.products.map((product: any) => (
-                    <div className={"checkoutItemWrapper"} key={product.post_name}>
+                {orderData.products.map((product: Product) => (
+                    <div className={"checkoutItemWrapper"} key={product.post_id}>
                         <div className={"checkoutItem"}>
                             <p className={"productTitle"}>{product.post_name}</p>
                             <p className={"productPrice"}>{product.product_price}</p>
-                            <p>{product.product_quantity}x{product.product_price} = {Math.round((product.product_price * product.product_quantity)*100)/100}</p>
+                            <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100}</p>
                         </div>
                     </div>
                 ))}
