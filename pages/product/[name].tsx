@@ -1,28 +1,10 @@
 import {GetStaticPaths, GetStaticProps} from "next";
-import AddToCart from "../../components/elements/product/addToCart";
-import Image from "next/image"
+import ProductListItem from "../../components/productListItem";
 
 const ProductDetail = (data:any) => {
     return (
-        <div className={"productWrapper twocols sixty-fourty"} key={data.productData.post_name}>
-            <div className={"leftCol"}>
-                <Image
-                    src={data.productData.post_featuredImage}
-                    width={859}
-                    height={1163}
-                />
-            </div>
-
-            <div className={"rightCol smallPadding"}>
-                <div>
-                    <h2 className={"noMarginTop"}>{data.productData.post_name}</h2>
-                    <p className={"productPrice"}>{data.productData.product_price} SEK</p>
-                    <p>{data.productData.post_excerpt}</p>
-                </div>
-                <AddToCart product={data.productData} />
-            </div>
-        </div>
-    );
+        <ProductListItem product={data.productData} layout={"single"}/>
+    )
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {

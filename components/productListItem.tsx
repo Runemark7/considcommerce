@@ -35,6 +35,27 @@ const ProductListItem = (props: Props) => {
                 <AddToCart product={product} />
             </div>
             )
+    }else if(props.layout == "single"){
+        return (
+            <div className={"productWrapper twocols sixty-fourty"} key={product.post_name}>
+                <div className={"leftCol"}>
+                    <Image
+                        src={product.post_featuredImage}
+                        width={859}
+                        height={1163}
+                    />
+                </div>
+
+                <div className={"rightCol smallPadding"}>
+                    <div>
+                        <h2 className={"noMarginTop"}>{product.post_name}</h2>
+                        <p className={"productPrice"}>{product.product_price} SEK</p>
+                        <p>{product.post_excerpt}</p>
+                    </div>
+                    <AddToCart product={product} />
+                </div>
+            </div>
+        )
     }else{
         return (
             <div className={"productWrapper twocols sixty-fourty"} key={product.post_name}>
