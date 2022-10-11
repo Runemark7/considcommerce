@@ -9,7 +9,7 @@ const UserProfile = () => {
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
     const router = useRouter();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
     const [isLoading, setLoading] = useState(false);
 
     useEffect(()=>{

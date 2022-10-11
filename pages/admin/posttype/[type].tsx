@@ -3,7 +3,7 @@ import Link from "next/link";
 import Post from "../../../models/Post";
 import {useRouter} from "next/router";
 import {useSelector} from "react-redux";
-import {FormEvent, useEffect, useState} from "react";
+import {FormEvent, useState} from "react";
 import PostMetaField from "../../../models/PostMetaField";
 import {Exception} from "sass";
 
