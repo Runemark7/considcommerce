@@ -30,6 +30,7 @@ const UserProfile = () => {
             fetch(endpoint, options)
                 .then(resp=>resp.json())
                 .then(data => {
+                    console.log(data)
                     setLoading(false)
                     setData(data)
                 })

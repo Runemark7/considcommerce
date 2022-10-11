@@ -10,6 +10,8 @@ import {useEffect, useState} from "react";
 export default function Layout({ children }) {
     const router = useRouter()
 
+
+
     if(router.pathname.startsWith("/admin")){
         const [isAdmin, setIsAdmin] = useState(false);
         // @ts-ignore

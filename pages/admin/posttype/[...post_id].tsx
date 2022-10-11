@@ -1,6 +1,6 @@
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
 import PostMeta from "../../../models/PostMeta";
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 
 const AdminUpdateSinglePost: NextPage = (data: any) => {
@@ -56,8 +56,88 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
         setChangedPostData({...changedPostData, [name]: value})
     }
 
+    const [categories, setCategories] = useState([]);
+    useEffect(()=>{
+        const endpoint = `http://localhost:8010/proxy/category/posttype/product`
+
+        fetch(endpoint)
+            .then(resp=>resp.json())
+            .then(data => {
+                setCategories(data)
+            })
+    }, [])
+
+    const [postCategories, setPostCategories] = useState([]);
+    useEffect(()=>{
+        const endpoint = `http://localhost:8010/proxy/category/post/${data.postData.post_id}`
+
+        fetch(endpoint)
+            .then(resp=>resp.json())
+            .then(data => {
+                setPostCategories(data)
+            })
+    }, [])
+
+    const findCommonElement = (element:any) => {
+        for(let j = 0; j < postCategories.length; j++) {
+            if(element.category_id === postCategories[j].category_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const [updatedCategories, setUpdatedCategories] = useState([]);
+    const updateCategory = (e :FormEvent ,postId:number) => {
+        e.preventDefault()
+
+        const payload = {
+            "category_id": updatedCategories,
+            "post_id": postId
+        }
+
+        const JSONdata = JSON.stringify(payload);
+
+        const endpoint = "http://localhost:8010/proxy/category/addpost"
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
+            body:JSONdata
+        }
+
+        fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+
+
+    const updateChangeCategory = (e: FormEvent) =>{
+        const value = e.target.value;
+        const checked = e.target.checked;
+        // @ts-ignore
+        setUpdatedCategories({...updatedCategories, [value]: checked})
+    }
+
     return (
         <div>
+            <form onSubmit={(e:FormEvent)=>{
+                updateCategory(e, data.postData.post_id)
+            }}>
+                {categories.map((category:any)=>
+                    <div>
+                        <label htmlFor={category.category_name}>{category.category_name}</label>
+                        <input type="checkbox" name={category.category_name} onChange={updateChangeCategory} value={category.category_id} defaultChecked={findCommonElement(category)}/>
+                    </div>
+                )}
+                <input type="submit" value={"Change Category"}/>
+            </form>
+
+
             <form className={"formHolder"} onSubmit={(e:FormEvent)=>{
                 handleSubmit(e, data.postData.post_id);
             }} >
@@ -78,12 +158,10 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
                         <label htmlFor="post_excerpt">Post excerpt</label>
                         <input type={"text"} name={"post_excerpt"} defaultValue={data.postData.post_excerpt} onChange={handlePostDataChanges} />
-
                     </div>
-                    <br/>
                     <div>
                         <h4>meta values</h4>
-                        {(data.postMeta.length != 0)?data.postMeta.map((postMeta: PostMeta) => (
+                        {(data)?data.postMeta.map((postMeta: PostMeta) => (
                             <div className={"productWrapper"} key={postMeta.meta_id}>
                                 <p className={"productTitle"}>{postMeta.meta_key}</p>
                                 <input type={"text"} name={postMeta.meta_key} defaultValue={postMeta.meta_value} onChange={handleMetaDataChanges} />

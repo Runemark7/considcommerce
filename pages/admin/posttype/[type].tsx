@@ -103,9 +103,45 @@ const AdminPages: NextPage = (data:any) => {
 
     }
 
+
+
+    const createCategory = (e: FormEvent)=>{
+        e.preventDefault()
+
+        const payload = {
+            "category_name": e.target.category_name.value,
+            "posttype_name": type
+        }
+
+        const JSONdata = JSON.stringify(payload);
+
+        const endpoint = "http://localhost:8010/proxy/category/create"
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
+            body:JSONdata
+        }
+
+        fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+
     //TODO: should wait for validation from server and send response to client
     return (
         <div>
+
+            <form onSubmit={createCategory}>
+                <label htmlFor="category_name">Category name*</label>
+                <input type={"text"} name="category_name"  required={true}/>
+                <input type="submit"/>
+            </form>
+
             <button onClick={()=>{
                 if(type){
                     getPostModel(type)

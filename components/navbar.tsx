@@ -40,8 +40,13 @@ export default function Navbar() {
 
             <ul className={"nav"}>
                 <li>
-                    <Link href={"http://localhost:3000/product"}>
-                        <a>shop</a>
+                    <Link href={"http://localhost:3000/product-category/hoodie"}>
+                        <a>Hoodies</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href={"http://localhost:3000/product-category/tshirt"}>
+                        <a>tshirts</a>
                     </Link>
                 </li>
                 <li>

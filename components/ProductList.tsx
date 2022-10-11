@@ -12,7 +12,7 @@ const ProductList = (props:Props) => {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(()=>{
-        const endpoint = `http://localhost:8010/proxy/api/posttype/${props.posttype}`;
+        const endpoint = `http://localhost:8010/proxy/category/${props.category}`;
 
         const options = {
             method: 'GET',
@@ -28,7 +28,7 @@ const ProductList = (props:Props) => {
         }).then((data)=>{
             setProducts(data)
         })
-    },[])
+    },[props])
 
     if(props.layout == "list"){
         return (

@@ -5,8 +5,8 @@ const Home = () => {
     return(
         <div className={"homeWrapper"}>
             <div>
-                <ProductList posttype={"product"} category={"test"} />
                 Home
+                <ProductList posttype={"product"} category={"hoodie"} layout={"list"}/>
             </div>
         </div>
     )
