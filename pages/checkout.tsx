@@ -4,6 +4,30 @@ import Product from "../models/Product";
 import Shipping from "../components/modules/shipping";
 import {useRouter} from "next/router";
 
+
+type ServicePoint = {
+    name: string,
+    servicePointId: string
+    deliveryAddress: {
+        city: string,
+        streetName: string,
+        streetNumber: string,
+        postalCode: string
+    },
+    openingHours: {
+        postalServices: []
+    },
+    phoneNoToCashRegister: string
+}
+
+type OpeningHours = {
+    closeDay : string
+    closeTime : string
+    openDay : string
+    openTime : string
+}
+
+
 const Checkout = () => {
 
     // @ts-ignore
@@ -55,6 +79,60 @@ const Checkout = () => {
             })
     }
 
+
+    const [servicePoints, setServicePoints] = useState([]);
+
+    const [addressEndpoint, setAddressEndpoint] = useState({
+        deliveryAddress: "",
+        postalCode: "",
+        cityName: "",
+        countryCode: ""
+    });
+
+    const checkDeliveryAddress = (value:string, stringKey: String) => {
+        let copyObj = {...addressEndpoint}
+        switch (stringKey){
+            case "deliveryAddress":
+                copyObj.deliveryAddress = value;
+                break;
+            case "postalCode":
+                copyObj.postalCode = value;
+                break;
+            case "cityName":
+                copyObj.cityName = value;
+                break;
+            case "countryCode":
+                copyObj.countryCode = value;
+                break;
+        }
+        setAddressEndpoint(obj => ({
+            ...copyObj
+        }))
+    }
+
+    useEffect(()=>{
+        if (addressEndpoint.deliveryAddress, addressEndpoint.postalCode, addressEndpoint.cityName, addressEndpoint.countryCode){
+            const endpoint = 'https://atapi2.postnord.com/rest/businesslocation/v5/servicepoints/nearest/byaddress?' +
+                'returnType=json&' +
+                'countryCode=SE&' +
+                `agreementCountry=${addressEndpoint.countryCode}&` +
+                `city=${addressEndpoint.cityName}&` +
+                `postalCode=${addressEndpoint.postalCode}&` +
+                `streetName=${addressEndpoint.deliveryAddress}&` +
+                'numberOfServicePoints=5&srId=EPSG%3A4326&context=optionalservicepoint&responseFilter=public&typeId=24%2C25%2C54&apikey=50f1dbd11731869229f07cae6dd75627'
+
+            fetch(endpoint).then(resp=>{
+                if (resp.ok){
+                    return resp.json()
+                }
+            }).then(data => {
+                if (data.servicePointInformationResponse){
+                    setServicePoints(data.servicePointInformationResponse.servicePoints)
+                }
+            })
+        }
+    }, [addressEndpoint])
+
     return(
         <div className={"formWrapper fifty-fiftyCols"} >
             <div className={"fifty-fifty-left"}>
@@ -67,6 +145,28 @@ const Checkout = () => {
 
                     <label htmlFor="lastName">LastName*</label>
                     <input type="text" name="lastName" id="lastName" className={"inputField"} required/>
+
+                    <label htmlFor="deliveryAddress">DeliveryAddress*</label>
+                    <input type="text" name="deliveryddress" id="deliveryAddress" onChange={(e:FormEvent)=>{
+                        checkDeliveryAddress(e.target.value, "deliveryAddress")
+                    }} className={"inputField"} required/>
+
+                    <label htmlFor="cityName">City*</label>
+                    <input type="text" name="cityName" id="cityName" onChange={(e:FormEvent)=>{
+                        checkDeliveryAddress(e.target.value, "cityName")
+                    }} className={"inputField"} required/>
+
+                    <label htmlFor="postalCode">PostalCode*</label>
+                    <input type="text" name="postalCode" id="postalCode" onChange={(e:FormEvent)=>{
+                        checkDeliveryAddress(e.target.value, "postalCode")
+                    }} className={"inputField"} required/>
+
+                    <select onChange={(e:FormEvent)=>{
+                        checkDeliveryAddress(e.target.value, "countryCode")
+                    }}>
+                        <option value="" selected disabled hidden>Choose here</option>
+                        <option value="SE">Sweden</option>
+                    </select>
 
                     <button type="submit">Make order</button>
                 </form>
@@ -83,6 +183,38 @@ const Checkout = () => {
                     </div>
                 ))}
                 <div>
+                    {(servicePoints)?
+                        servicePoints.map((servicepoints:ServicePoint)=>(
+                            <div key={servicepoints.servicePointId}>
+                                <h3>
+                                    {servicepoints.name}
+                                </h3>
+
+                                <div>
+                                    {servicepoints.deliveryAddress.city}
+                                    {servicepoints.deliveryAddress.postalCode}
+                                    {servicepoints.deliveryAddress.streetName}
+                                    {servicepoints.deliveryAddress.streetNumber}
+                                </div>
+
+                                <article>
+                                    <h4>
+                                        Open hours
+                                    </h4>
+                                    <p>
+                                        {servicepoints.openingHours.postalServices.map((hours: OpeningHours)=>(
+                                            <div>
+                                                {hours.closeDay}
+                                                {hours.closeTime}
+                                                {hours.openDay}
+                                                {hours.openTime}
+                                            </div>
+                                        ))}
+                                    </p>
+                                </article>
+                            </div>
+                        ))
+                        :<div>No servicepoints for this address</div>}
                     <p>Choose shippingCost</p>
                     <Shipping />
                 </div>
