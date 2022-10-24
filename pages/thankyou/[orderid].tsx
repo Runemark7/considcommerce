@@ -26,6 +26,8 @@ const ThankYouIndex = () => {
             })
             .then(data => {
                 setCallbackHTML(data.html_snippet)
+                //TODO: set order to payed, and waiting for shipping
+
             })
     }, [] )
 
