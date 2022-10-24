@@ -1,19 +1,7 @@
-import Product from "./Product";
-import Shipping from "./shipping";
+import Post from "./Post";
 
-enum orderStatus {
-    "pending",
-    "shipped",
-    "processing",
-    "onhold",
-    "completed",
-    "cancelled",
-    "refunded",
-    "failed"
-}
-
-export default interface Order{
+export default interface Order extends Post{
     firstName: string,
     lastName: string,
-    orderStatus: orderStatus
+    orderStatus: string
 }

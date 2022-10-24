@@ -1,9 +1,11 @@
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import Post from "../../../models/Post";
 import Link from "next/link";
+import Order from "../../../models/order";
 
-const UserIndex = () => {
+const UserProfile = () => {
 
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
@@ -27,11 +29,7 @@ const UserIndex = () => {
             }
 
             fetch(endpoint, options)
-                .then(resp=>{
-                    if(resp.ok){
-                        resp.json()
-                    }
-                })
+                .then(resp=>resp.json())
                 .then(data => {
                     setLoading(false)
                     setData(data)
@@ -39,9 +37,11 @@ const UserIndex = () => {
         }
     }, [user])
 
+    console.log(data)
 
     return (
         <div>
+
             <ul>
                 <li>
                     <Link href={"http://localhost:3000/profile/order"}>
@@ -55,9 +55,33 @@ const UserIndex = () => {
 
                 </li>
             </ul>
-            Index
+            {(isLoading)?
+                <div>Loading...</div>
+                :
+                <div>
+                    {(data.length > 0)?data.map((order: Order) => (
+                        <div className={"cartItemWrapper"} key={order.post_id}>
+                            <Link href={`http://localhost:3000/profile/order/${order.post_id}`}>
+                                <div className={"twocols"}>
+                                    <p>
+                                        {order.post_name}
+                                    </p>
+                                    <p>
+                                        {order.orderStatus}
+                                    </p>
+                                    <p>
+                                        {order.post_id}
+                                    </p>
+                                </div>
+                            </Link>
+                        </div>
+                    )):<div>
+                        No orders found!
+                    </div>}
+                </div>
+            }
         </div>
     );
 }
 
-export default UserIndex
+export default UserProfile

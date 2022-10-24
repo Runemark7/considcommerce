@@ -42,8 +42,10 @@ export default function Layout({ children }) {
         if(isAdmin){
             return(
                 <>
-                    <AdminNavbar />
-                    <main>{children}</main>
+                    <div className="adminPage">
+                        <AdminNavbar />
+                        <main>{children}</main>
+                    </div>
                 </>
             )
         }

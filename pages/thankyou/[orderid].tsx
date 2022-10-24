@@ -1,64 +1,74 @@
 import { useRouter } from 'next/router'
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import PostMeta from "../../models/PostMeta";
+import {GetStaticPaths, GetStaticProps} from "next";
 
 const ThankYouIndex = () => {
     const router = useRouter()
     const { orderid } = router.query
-
-    // @ts-ignore
-    const user = useSelector((state)=>(state.user))
-
-    const [data, setData] = useState(null);
-    const [isLoading, setLoading] = useState(false);
+    const [callbackHTML, setCallbackHTML] = useState();
 
     useEffect(()=>{
-        setLoading(true);
-        if (!user.loggedIn) {
-            router.push("/login")
-        }else{
-            const endpoint = `http://localhost:8010/proxy/user/order/${orderid}`
+        const endpoint = `https://api.playground.klarna.com/checkout/v3/orders/${orderid}`
 
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-
-            fetch(endpoint, options)
-                .then(resp=>resp.json())
-                .then(data => {
-                    setLoading(false)
-                    setData(data)
-                })
+        const options = {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + window.btoa('PK64251_9ae70e07d814:GwxiSlLjCLj8t8B3'),
+            },
         }
-    }, [user])
+
+        fetch(endpoint, options)
+            .then(resp=>{
+                if (resp.ok){
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                setCallbackHTML(data.html_snippet)
+            })
+    }, [] )
+
+    useEffect(()=>{
+        if (callbackHTML){
+            var checkoutContainer = document.getElementById('my-checkout-container')
+            // @ts-ignore
+            checkoutContainer.innerHTML = callbackHTML.replace(/\\"/g, "\"").replace(/\\n/g, "");
+            // @ts-ignore
+            var scriptsTags = checkoutContainer.getElementsByTagName('script')
+            for (var i = 0; i < scriptsTags.length; i++) {
+                var parentNode = scriptsTags[i].parentNode
+                var newScriptTag = document.createElement('script')
+                newScriptTag.type = 'text/javascript'
+                newScriptTag.text = scriptsTags[i].text
+                // @ts-ignore
+                parentNode.removeChild(scriptsTags[i])
+                // @ts-ignore
+                parentNode.appendChild(newScriptTag)
+            }
+        }
+    }, [callbackHTML])
 
     return (
         <div className={"productWrapper"}>
-            {(isLoading) ?
-                <div>
-                    loading...
-                </div> :
-                <div>
-                    {(data) ?
-                        <div>
-                            <h3>Thank you for making a order!</h3>
-                            <p className={"productTitle"}>Order: {data.postData.post_name}</p>
-                            {data.postMeta.map((postMeta: PostMeta) => (
-                                <div className={"productWrapper"} key={postMeta.meta_id}>
-                                    <p className={"productTitle"}>{postMeta.meta_key}: {postMeta.meta_value}</p>
-                                </div>
-                            ))}
-                        </div>
-                        :<></>
-                    }
-                </div>
-            }
+            <div id={"my-checkout-container"}></div>
         </div>
     );
 }
 
 export default ThankYouIndex
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+    return {
+        props: {
+
+        },
+    }
+}
+
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+    return {
+        paths: [], //indicates that no page needs be created at build time
+        fallback: 'blocking' //indicates the type of fallback
+    }
+}

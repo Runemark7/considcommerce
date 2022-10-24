@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import {FormEvent, useState} from "react";
 import PostMetaField from "../../../models/PostMetaField";
 import {Exception} from "sass";
+import {getObjectClassLabel} from "next/dist/shared/lib/is-plain-object";
 
 const AdminPages: NextPage = (data:any) => {
     const router = useRouter()
@@ -103,8 +104,6 @@ const AdminPages: NextPage = (data:any) => {
 
     }
 
-
-
     const createCategory = (e: FormEvent)=>{
         e.preventDefault()
 
@@ -132,9 +131,84 @@ const AdminPages: NextPage = (data:any) => {
             })
     }
 
-    //TODO: should wait for validation from server and send response to client
+    const [newPostMetaField, setNewPostMetafield] = useState<PostMetaField>({
+        meta_required:false,
+        data_type: "string",
+        meta_key: ""
+    });
+
+    const addFieldToDataModel = (e:FormEvent,type:String)=>{
+        e.preventDefault()
+
+        if(type && newPostMetaField.meta_key){
+            const endpoint = `http://localhost:8010/proxy/api/posttype/model/update`
+
+            const payload = {
+                "posttype_name": type,
+                "posttype_field": newPostMetaField
+            }
+
+            const JSONdata = JSON.stringify(payload);
+
+            const options = {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.jwtToken,
+                },
+                body:JSONdata
+            }
+            fetch(endpoint, options)
+                .then((resp)=>{
+                    if (resp.status == 201){
+                        return resp.json()
+                    }
+                })
+                .then(msg => {
+                    console.log(msg)
+                });
+        }else{
+            console.log("error")
+        }
+    }
+
+    const updateFieldValue = (postField:String, newValue:any) => {
+        if(postField == "meta_key"){
+            setNewPostMetafield({...newPostMetaField, meta_key:newValue})
+        }else if(postField == "data_type"){
+            setNewPostMetafield({...newPostMetaField, data_type:newValue})
+        }else if(postField == "meta_required"){
+            if (newPostMetaField.meta_required){
+                setNewPostMetafield({...newPostMetaField, meta_required:true})
+            }
+        }
+    }
     return (
         <div>
+            <button>Add metafield to datamodel</button>
+
+            <form onSubmit={(e:FormEvent)=>{
+                addFieldToDataModel(e, type)
+            }}>
+                <input type="text" onChange={(e)=>{
+                    updateFieldValue("meta_key", e.target.value)
+                }}/>
+
+                <select onChange={(e)=>{
+                    updateFieldValue("data_type", e.target.value)
+                }}>
+                    <option value="string" defaultChecked={true}>String</option>
+                    <option value="integer">Int</option>
+                    <option value="boolean">Boolean</option>
+                    <option value="date">Date</option>
+                    <option value="file">File</option>
+                </select>
+
+                <input type="checkbox" name="requiredMeta" onChange={(e)=>{
+                    updateFieldValue("meta_required",false)
+                }} defaultChecked={true} />Required
+                <input type="submit" value={"Add field"}/>
+            </form>
 
             <form onSubmit={createCategory}>
                 <label htmlFor="category_name">Category name*</label>

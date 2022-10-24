@@ -3,6 +3,7 @@ import {FormEvent, useEffect} from "react";
 
 import {loginUser, selectAuthState} from "../store/authSlice";
 import {useRouter} from "next/router";
+import Link from "next/link";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const Login = () => {
 
     useEffect(()=>{
         if (user){
-            router.push("/")
+            router.push("/register")
         }
     },[user])
 
@@ -21,8 +22,8 @@ const Login = () => {
         e.preventDefault()
 
         const data = {
-            username: e.target.email.value,
-            password: e.target.password.value,
+            "username": e.target.email.value,
+            "password": e.target.password.value,
         }
 
         const JSONdata = JSON.stringify(data);
@@ -32,15 +33,18 @@ const Login = () => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8',
             },
             body: JSONdata
         }
 
         await fetch(endpoint, options)
-            .then(resp=>resp.json())
+            .then(resp=>{
+                if (resp.ok){
+                    return resp.json()
+                }
+            })
             .then(data => {
-                console.log(data)
                 dispatch(loginUser(data))
             })
     }
@@ -56,6 +60,11 @@ const Login = () => {
 
                 <button type="submit">Login</button>
             </form>
+            <Link href={"http://localhost:3000/register"}>
+                <a href="">
+                    Register
+                </a>
+            </Link>
         </div>
     )
 }

@@ -22,22 +22,17 @@ export default function AdminNavbar() {
 
     return (
         <div className={"adminMainNavBar"}>
-            <div className={"companyBranding"}>
-                <Link href={"http://localhost:3000"}>
-                    <p>
-                        Site
-                    </p>
-                </Link>
-                <Link href={"http://localhost:3000/admin"}>
-                    <p>
-                        admin
-                    </p>
-                </Link>
-            </div>
+            <ul className={"zeroLevelNav"}>
+                <li className={"zeroLevelLi"} >
+                    <Link href={"http://localhost:3000"}>
+                        <p>
+                            Home
+                        </p>
+                    </Link>
+                </li>
 
-            <ul className={"nav"}>
                 {data.map((posttype: PostType) => (
-                    <li key={posttype.posttype_id}>
+                    <li className={"zeroLevelLi"} key={posttype.posttype_id}>
                         <a>{posttype.posttype_name}</a>
                         <ul className={ "subMenu" }>
                             <li>
@@ -58,12 +53,12 @@ export default function AdminNavbar() {
                         </ul>
                     </li>
                 ))}
-                <li>
+                <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/posttype/create"}>
                         <a>Create posttype</a>
                     </Link>
                 </li>
-                <li>
+                <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/user"}>
                         <a>Users</a>
                     </Link>

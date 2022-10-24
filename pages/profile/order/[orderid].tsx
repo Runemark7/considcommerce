@@ -28,7 +28,13 @@ const OrderDetail = () => {
             }
 
             fetch(endpoint, options)
-                .then(resp=>resp.json())
+                .then(resp=>{
+                    if (resp.ok){
+                        return resp.json()
+                    }else{
+                        setLoading(false)
+                    }
+                })
                 .then(data => {
                     setLoading(false)
                     setData(data)

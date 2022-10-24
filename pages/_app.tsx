@@ -18,7 +18,6 @@ export default wrapper.withRedux(({ Component, pageProps }: AppProps) => {
                 <button onClick={()=>{
                     persistor.purge()
                 }}>
-
                 </button>
                 <Layout>
                     <Component {...pageProps} />

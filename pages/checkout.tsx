@@ -1,9 +1,6 @@
 import {useSelector} from "react-redux";
 import {FormEvent, useEffect, useState} from "react";
 import Product from "../models/Product";
-import Shipping from "../components/modules/shipping";
-import {useRouter} from "next/router";
-
 
 type ServicePoint = {
     name: string,
@@ -39,45 +36,168 @@ const Checkout = () => {
         setOrderData(data)
     }, [data.totalprice])
 
-
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
 
-    const router = useRouter()
-
+    const [callbackHTML, setCallbackHTML] = useState();
     const checkoutHandler = (event: FormEvent, products:Product[], userId:number) => {
         event.preventDefault()
 
-        // @ts-ignore
         const data = {
-            firstName: event.target.firstName.value,
-            lastName: event.target.lastName.value,
-            userId: userId,
-            products: products
+            "purchase_country": "se",
+            "purchase_currency": "SEK",
+            "locale": "sv-SE",
+            "order_amount": 50000,
+            "order_tax_amount": 4545,
+            "order_lines": [
+                {
+                    "type": "physical",
+                    "reference": "19-402-USA",
+                    "name": "Red T-Shirt",
+                    "quantity": 5,
+                    "quantity_unit": "pcs",
+                    "unit_price": 10000,
+                    "tax_rate": 1000,
+                    "total_amount": 50000,
+                    "total_discount_amount": 0,
+                    "total_tax_amount": 4545
+                }
+            ],
+            "shipping_options": [
+                {
+                    "id": "express_priority",
+                    "name": "NEXT DAY 0-1 Days",
+                    "description": "Delivery by 4:30 pm",
+                    "promo": "Christmas Promotion",
+                    "price": 50,
+                    "preselected": true,
+                    "tax_amount": 0,
+                    "tax_rate": 0,
+                    "shipping_method": "PickUpStore",
+                    "delivery_details": {
+                        "carrier": "string",
+                        "class": "string",
+                        "product": {
+                            "name": "string",
+                            "identifier": "string"
+                        },
+                        "timeslot": {
+                            "id": "string",
+                            "start": "string",
+                            "end": "string"
+                        },
+                        "pickup_location": {
+                            "id": "string",
+                            "name": "string",
+                            "address": {
+                                "given_name": "John",
+                                "family_name": "Doe",
+                                "organization_name": "string",
+                                "email": "john@doe.com",
+                                "title": "Mr",
+                                "street_address": "Lombard St 10",
+                                "street_address2": "Apt 214",
+                                "street_name": "Lombard St",
+                                "street_number": "10",
+                                "house_extension": "B",
+                                "postal_code": "90210",
+                                "city": "Beverly Hills",
+                                "region": "CA",
+                                "phone": "333444555",
+                                "country": "US",
+                                "care_of": "C/O",
+                            }
+                        }
+                    },
+                    "selected_addons": [
+                        {
+                            "type": "string",
+                            "price": 50,
+                            "external_id": "string",
+                            "user_input": "string"
+                        }
+                    ]
+                }
+            ],
+            "merchant_urls": {
+                "terms": "http://localhost:3000/terms",
+                "checkout": "http://localhost:3000/checkout",
+                "confirmation": "http://localhost:3000/thankyou/{checkout.order.id}",
+                "push": "http://localhost:3000/api/push"
+            }
         }
 
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = "http://localhost:8010/proxy/api/order"
+        const endpoint = "https://api.playground.klarna.com/checkout/v3/orders"
 
         const options = {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.jwtToken,
+                'Authorization': 'Basic ' + window.btoa('PK64251_9ae70e07d814:GwxiSlLjCLj8t8B3'),
             },
             body: JSONdata
         }
 
         fetch(endpoint, options)
-            .then(resp=>resp.json())
+            .then(resp=>{
+                if (resp.ok){
+                    return resp.json()
+                }
+            })
             .then(data => {
-                const orderId = data.orderId;
-                router.push({
-                    pathname: "/thankyou/"+orderId,
-                })
+                setCallbackHTML(data.html_snippet)
+
+                //create order in our database
+                 const formData = {
+                    firstName: event.target.firstName.value,
+                    lastName: event.target.lastName.value,
+                    userId: userId,
+                     klarna_order_id: data.order_id,
+                     klarna_order_amount: data.order_amount
+                }
+
+                const fromFormDataToJSON = JSON.stringify(formData);
+
+                const endpoint = "http://localhost:8010/proxy/api/order"
+
+                const options = {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + user.jwtToken,
+                    },
+                    body: fromFormDataToJSON
+                }
+
+                fetch(endpoint, options)
+                    .then(resp=>{
+                        if (resp.ok){
+                            return resp.json()
+                        }
+                    })
+                    .then(data => {
+                        console.log(data)
+                    })
             })
     }
+
+    useEffect(()=>{
+        if (callbackHTML){
+            var checkoutContainer = document.getElementById('my-checkout-container')
+            checkoutContainer.innerHTML = callbackHTML.replace(/\\"/g, "\"").replace(/\\n/g, "");
+            var scriptsTags = checkoutContainer.getElementsByTagName('script')
+            for (var i = 0; i < scriptsTags.length; i++) {
+                var parentNode = scriptsTags[i].parentNode
+                var newScriptTag = document.createElement('script')
+                newScriptTag.type = 'text/javascript'
+                newScriptTag.text = scriptsTags[i].text
+                parentNode.removeChild(scriptsTags[i])
+                parentNode.appendChild(newScriptTag)
+            }
+        }
+    }, [callbackHTML])
 
 
     const [servicePoints, setServicePoints] = useState([]);
@@ -215,8 +335,6 @@ const Checkout = () => {
                             </div>
                         ))
                         :<div>No servicepoints for this address</div>}
-                    <p>Choose shippingCost</p>
-                    <Shipping />
                 </div>
                 <div>
                     <p>
@@ -225,29 +343,13 @@ const Checkout = () => {
                 </div>
             </div>
 
+            <div id={"my-checkout-container"}></div>
+
 
         </div>
     )
 }
 
-/* for later :D
-                <label htmlFor="country">Country</label>
-                <input type="text" name="country" id="country" className={"inputField"} required/>
-
-                <label htmlFor="streetName">Street name</label>
-                <input type="text" name="streetName" id="streetName" className={"inputField"} required/>
-
-                <label htmlFor="postalCode">Postal code</label>
-                <input type="text" name="postalCode" id="postalCode" className={"inputField"} required/>
-
-                <label htmlFor="city">City</label>
-                <input type="text" name="city" id="city" className={"inputField"} required/>
-
-                <label htmlFor="phoneNumber">Telephone</label>
-                <input type="text" name="phoneNumber" id="phoneNumber" className={"inputField"} required/>
-
-                <label htmlFor="emailAdress">Email</label>
-                <input type="text" name="emailAdress" id="emailAdress" className={"inputField"} required/>
- */
-
 export default Checkout
+
+

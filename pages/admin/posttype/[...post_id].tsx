@@ -13,7 +13,7 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
     const user = useSelector((state)=>(state.user))
 
-    const handleSubmit = (e: FormEvent, postId) =>{
+    const handleSubmit = (e: FormEvent, postId: number) =>{
         e.preventDefault();
 
         const payload = {

@@ -1,0 +1,40 @@
+.adminPage{
+  display:flex;
+  flex-direction: row;
+  width: 100%;
+  .adminMainNavBar{
+    width: 20%;
+    .zeroLevelNav{
+      list-style-type: none;
+      padding: 0;
+      margin:0;
+      background-color: #1d2327;
+      height: 100%;
+      .zeroLevelLi{
+        a{
+          padding-left: 0.5rem;
+          &:hover{
+            color:#2271b1;
+            box-shadow: inset 4px 0 0 0 currentColor;
+            transition: box-shadow .1s linear;
+          }
+        }
+
+        font-weight: bold;
+        font-size: 1.25rem;
+        padding: 0.25rem;
+        color:#9CA2A6;
+        cursor: pointer;
+      }
+      .subMenu{
+        font-size:1rem;
+        padding-left: 1rem;
+      }
+    }
+
+  }
+  main{
+    width: 100%;
+    padding: 2rem;
+  }
+}
