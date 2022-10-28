@@ -1,5 +1,5 @@
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
-import PostMeta from "../../../models/PostMeta";
+import PostMeta from "../../../../../models/PostMeta";
 import {FormEvent, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 
@@ -178,7 +178,7 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     // @ts-ignore
-    const post_id = params.post_id[2]
+    const post_id = params.post_id
 
     const data = await fetch(`http://localhost:8010/proxy/api/post/${post_id}`);
     const postData = await data.json();

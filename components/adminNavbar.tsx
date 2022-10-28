@@ -33,7 +33,9 @@ export default function AdminNavbar() {
 
                 {data.map((posttype: PostType) => (
                     <li className={"zeroLevelLi"} key={posttype.posttype_id}>
-                        <a>{posttype.posttype_name}</a>
+                        <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
+                            <a>{posttype.posttype_name}</a>
+                        </Link>
                         <ul className={ "subMenu" }>
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
@@ -48,6 +50,11 @@ export default function AdminNavbar() {
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/categories`}>
                                     <a>Categories</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/model`}>
+                                    <a>ModelFields</a>
                                 </Link>
                             </li>
                         </ul>

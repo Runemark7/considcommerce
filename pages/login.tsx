@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {FormEvent, useEffect} from "react";
+import {FormEvent, useEffect, useState} from "react";
 
 import {loginUser, selectAuthState} from "../store/authSlice";
 import {useRouter} from "next/router";
@@ -17,6 +17,8 @@ const Login = () => {
             router.push("/register")
         }
     },[user])
+
+    const [error,setError] = useState(false)
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -41,11 +43,18 @@ const Login = () => {
         await fetch(endpoint, options)
             .then(resp=>{
                 if (resp.ok){
+                    setError(false)
                     return resp.json()
+                }else{
+                    const error = new Error(resp.statusText)
+                    throw error
+
                 }
             })
             .then(data => {
                 dispatch(loginUser(data))
+            }).catch((error)=>{
+                setError(true)
             })
     }
 
@@ -53,10 +62,12 @@ const Login = () => {
         <div className={"cartWrapper"}>
             <form className={"formHolder"} method="post" onSubmit={handleSubmit} >
                 <label htmlFor="email">Email</label>
-                <input type="text" name="email" id="email" className={"inputField"} required/>
+                <input type="text" name="email" id="email" className={`inputField ${(error)?"inputError":""} `} required/>
 
                 <label htmlFor="password">password</label>
-                <input type="password" name="password" id="password" className={"inputField"} required/>
+                <input type="password" name="password" id="password" className={`inputField ${(error)?"inputError":""}`} required/>
+
+                {(error)?<p className={"errorText"}>Try again</p>:""}
 
                 <button type="submit">Login</button>
             </form>
