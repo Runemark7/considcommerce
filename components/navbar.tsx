@@ -4,6 +4,7 @@ import {logoutUser} from "../store/authSlice";
 import {useEffect, useState} from "react";
 import {removeItemFromCart} from "../store/cartSlice";
 import Product from "../models/Product";
+import SearchBar from "./searchBar";
 
 export default function Navbar() {
     const user = useSelector((state)=>(state.user))
@@ -118,6 +119,7 @@ export default function Navbar() {
                     </div>
                 </li>
             </ul>
+            <SearchBar/>
         </div>
 
     )

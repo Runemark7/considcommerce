@@ -1,15 +1,5 @@
-interface KlarnaOrderProduct {
-    "type": string,
-    "reference": "",
-    "name": string,
-    "quantity": number,
-    "quantity_unit": "pcs",
-    "unit_price": number,
-    "tax_rate": 0,
-    "total_amount": number,
-    "total_discount_amount": 0,
-    "total_tax_amount": 0
-}
+import KlarnaOrderProduct from "./klarnaOrderProduct";
+import KlarnaShippingOptions from "./klarnaShippingOptions";
 
 export default interface KlarnaOrder {
     "purchase_country": "se",
@@ -18,10 +8,13 @@ export default interface KlarnaOrder {
     "order_amount": number,
     "order_tax_amount": 0,
     "order_lines": KlarnaOrderProduct[],
+    "shipping_options": KlarnaShippingOptions[],
     "merchant_urls": {
         "terms": "http://localhost:3000/terms",
         "checkout": "http://localhost:3000/checkout",
-        "confirmation": "http://localhost:3000/confirmation",
+        "confirmation": "http://localhost:3000/thankyou/{checkout.order.id}",
         "push": "http://localhost:3000/api/push"
     }
 }
+
+

@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Link from "next/link";
 import UserShowObj from "../../../models/userShowObj";
@@ -34,6 +34,40 @@ const UserSettings = () => {
         }
     }, [user])
 
+
+    const submitPasswordChanges = (e: FormEvent) => {
+        e.preventDefault()
+
+        const formData = {
+            oldPass: e.target.passwordBefore.value,
+            newPass: e.target.newPassword.value,
+        }
+
+        const fromFormDataToJSON = JSON.stringify(formData);
+
+        const endpoint = "http://localhost:8010/proxy/user/update/password"
+
+        const options = {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
+            body: fromFormDataToJSON
+        }
+
+        fetch(endpoint, options)
+            .then(resp=>{
+                if (resp.ok){
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                console.log(data)
+            })
+
+    }
+
     return (
         <div>
 
@@ -50,32 +84,52 @@ const UserSettings = () => {
 
                 </li>
             </ul>
-            {(isLoading)?
-                <div>Loading...</div>
-                :
-                <div>
-                    {(data)?
-                        <div className={"cartItemWrapper"} >
-                            <div >
-                                <p>
-                                    Username: {data.userName}
-                                </p>
-                                <p>
-                                    Email: {data.userEmail}
-                                </p>
-                                <p>
-                                    Role: {(data.userRole==1)?"Customer":"Admin"}
-                                </p>
-                                <p>
-                                    Status: {data.userStatus}
-                                </p>
+            <div>
+                {(isLoading)?
+                    <div>Loading...</div>
+                    :
+                    <div>
+                        {(data)?
+                            <div className={"cartItemWrapper"} >
+                                <div >
+                                    <p>
+                                        Username: {data.userName}
+                                    </p>
+                                    <p>
+                                        Email: {data.userEmail}
+                                    </p>
+                                    <p>
+                                        Role: {(data.userRole==1)?"Customer":"Admin"}
+                                    </p>
+                                    <p>
+                                        Status: {data.userStatus}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    :<div>
-                        No orders found!
-                    </div>}
-                </div>
-            }
+                            :<div>
+                                No orders found!
+                            </div>}
+                    </div>
+                }
+
+                <h3>
+                    Update password
+                    <form onSubmit={submitPasswordChanges}>
+                        <label htmlFor={"passwordBefore"}>Old password</label>
+                        <input type="password" name={"passwordBefore"}/>
+
+                        <label htmlFor="newPassword">New password</label>
+                        <input type="password" name={"newPassword"}/>
+
+                        <label htmlFor="newPasswordAgain">New password again</label>
+                        <input type="password" name={"newPasswordAgain"}/>
+
+                        <input type="submit"/>
+                    </form>
+                </h3>
+
+            </div>
+
         </div>
     );
 }
