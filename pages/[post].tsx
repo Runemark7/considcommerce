@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     let postData:any = null;
     try{
         await fetch(endpoint).then((response)=>{
-            if (response.status==201){
+            if (response.ok){
                 return response.json()
             }else{
                 throw Exception

@@ -1,14 +1,26 @@
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
-import {removeItemFromCart} from "../store/cartSlice";
+import {addItemToCart, removeAllOfThisItemFromCart, removeItemFromCart} from "../store/cartSlice";
 import Product from "../models/Product";
 import Image from "next/image"
-import Shipping from "../components/modules/shipping";
+import {FormEvent} from "react";
 
 const Cart = () => {
     // @ts-ignore
     const data = useSelector((state)=>(state.cart))
     const dispatch = useDispatch();
+
+    const changeQuantity = (e: FormEvent, product: Product) => {
+        const newQuantity = e.target.value
+
+        if (newQuantity != 0){
+            if (newQuantity > product.product_quantity){
+                dispatch(addItemToCart(product))
+            }else {
+                dispatch(removeItemFromCart(product))
+            }
+        }
+    }
 
     return(
         <div className={"cartWrapper twocols seventy-thirty"}>
@@ -26,22 +38,32 @@ const Cart = () => {
                                 </div>
                                 <div className={"cartItemInfo"}>
                                     <p className={"productTitle"}>{product.post_name}</p>
-                                    <p className={"productPrice"}>{product.product_price}</p>
-                                    <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100}</p>
                                 </div>
                             </div>
                         </Link>
+                        <div>
+                            <p className={"productPrice"}> {product.product_price} SEK</p>
+                        </div>
+
+                        <input type="number" onChange={(e)=>{
+                            changeQuantity(e, product)
+                        }} className={"productQuantityInput"} value={product.product_quantity}/>
+
+                        <div>
+                            <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100} SEK</p>
+                        </div>
+
                         <button
                             onClick={()=>{
-                                dispatch(removeItemFromCart(product))
+                                dispatch(removeAllOfThisItemFromCart(product))
                             }}
                         >X</button>
                     </div>
                 ))}
             </div>
             <div className={"rightCol"}>
-                <Shipping />
                 <p>totalprice: {Math.round(data.totalprice*100)/100}</p>
+                <p>Calculate shipping cost in checkout</p>
                 <Link href={"http://localhost:3000/checkout"}>
                     <button>
                         Checkout

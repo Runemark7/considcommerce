@@ -53,6 +53,18 @@ const cartSlice = createSlice({
             state.totalprice -= parseInt(action.payload.product_price);
             state.totalQty -= 1;
         },
+        removeAllOfThisItemFromCart(state, action: PayloadAction<Product>) {
+            const index = state.products.findIndex(item => item.post_name === action.payload.post_name);
+
+            const removedQty = state.products[index].product_quantity
+            const removedPrice = parseInt(state.products[index].product_price)*removedQty
+
+            state.totalprice -= removedPrice;
+            state.totalQty -= removedQty;
+
+
+            state.products = state.products.filter(item => action.payload.post_name !== item.post_name)
+        },
         addShippingCost (state, action: PayloadAction<ShippingOption>){
             let tempPrice = state.totalprice;
 
@@ -71,6 +83,6 @@ const cartSlice = createSlice({
     },
 })
 
-export const { addItemToCart, removeItemFromCart, clearItemFromCart, addShippingCost} = cartSlice.actions
+export const { addItemToCart, removeItemFromCart, removeAllOfThisItemFromCart, addShippingCost} = cartSlice.actions
 
 export default cartSlice.reducer

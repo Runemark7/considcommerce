@@ -169,7 +169,6 @@ const Checkout = () => {
 
         })
 
-
         const data:KlarnaOrder = {
             locale: "sv-SE",
             merchant_urls: {
