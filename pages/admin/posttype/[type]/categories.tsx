@@ -41,17 +41,26 @@ const TypeCategories: NextPage = (data:any) => {
 
     const [categories, setCategories] = useState([]);
     useEffect(()=>{
-        const endpoint = `http://localhost:8010/proxy/category/posttype/product`
+        const endpoint = `http://localhost:8010/proxy/category/posttype/${type}`
 
         fetch(endpoint)
-            .then(resp=>resp.json())
-            .then(data => {
+            .then((resp)=>{
+                if (resp.status == 201){
+                    return resp.json()
+                }else if (resp.status == 204){
+                    return []
+                }
+            })
+            .then((data) => {
                 setCategories(data)
             })
-    }, [])
+    }, [type])
 
     return (
         <div>
+            <h1>
+                Categories for {type}
+            </h1>
             <h3>Add another category</h3>
             <form onSubmit={createCategory}>
                 <label htmlFor="category_name">Category name*</label>
@@ -64,9 +73,9 @@ const TypeCategories: NextPage = (data:any) => {
                     Categories
                 </h3>
                 <div>
-                    {categories.map((category:any)=>
-                        <p>{category.category_name}</p>
-                    )}
+                    {(categories.length>0)?categories.map((category:any)=>
+                        <p>{category.category_name} ({category.amount_of_posts})</p>
+                    ):<></>}
                 </div>
 
             </div>

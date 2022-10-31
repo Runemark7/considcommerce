@@ -3,27 +3,25 @@ import "../styles/main.scss"
 import type { AppProps } from 'next/app'
 import Layout from "../components/layout";
 import { wrapper } from "../store/store";
-import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-import {Provider, useStore} from "react-redux";
+import { persistStore } from 'redux-persist';
 
-export default wrapper.withRedux(({ Component, pageProps }: AppProps) => {
+export default wrapper.withRedux(({ Component, ...rest }: AppProps) => {
 
-    const store = useStore()
-    const persistor = persistStore(store)
+    const {store, props} = wrapper.useWrappedStore(rest)
 
-    return(
-        <Provider store={store}>
-            <PersistGate persistor={persistor} loading={<div>Fetching data...</div>}>
-                <button onClick={()=>{
-                    persistor.purge()
-                }}>
-                </button>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            </PersistGate>
-        </Provider>
-   )
+    return (typeof window === "undefined") ? (
+        <PersistGate persistor={store.__persistor} loading={<div>Fetching data...</div>}>
+            <Layout>
+                <Component {...props.pageProps} />
+            </Layout>
+        </PersistGate>
+    ): (
+        <PersistGate persistor={persistStore(store)} loading={null}>
+            <Layout>
+                <Component {...props.pageProps} />
+            </Layout>
+        </PersistGate>
+    )
 });
 

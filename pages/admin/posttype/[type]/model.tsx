@@ -13,27 +13,25 @@ const TypeCreate: NextPage = () => {
     const [postTypeModel, setPostTypeModel] = useState<PostMetaField[]>([]);
 
     useEffect(() =>{
-        if(postTypeModel){
-            const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
+        const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
 
-            const options = {
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-            fetch(endpoint, options)
-                .then((resp)=>{
-                    if (resp.status == 201){
-                        return resp.json()
-                    }
-                })
-                .then(data => {
-                    setPostTypeModel(data)
-                });
+        const options = {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
         }
-    }, [])
+        fetch(endpoint, options)
+            .then((resp)=>{
+                if (resp.status == 201){
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                setPostTypeModel(data)
+            });
+    }, [type])
 
     const [newPostMetaField, setNewPostMetafield] = useState<PostMetaField>({
         meta_required:false,
@@ -91,10 +89,10 @@ const TypeCreate: NextPage = () => {
 
             <div>
                 <h3>
-                    Model Custom Fields:
+                    Existing Custom Fields:
                 </h3>
 
-                {postTypeModel.map((postMeta:PostMetaField)=>
+                {(postTypeModel)?postTypeModel.map((postMeta:PostMetaField)=>
                     <div key={postMeta.meta_key}>
                         <p>
                             Metakey: {postMeta.meta_key}
@@ -104,16 +102,16 @@ const TypeCreate: NextPage = () => {
                             Required: {(postMeta.meta_required)?"yes":"no"}
                         </p>
                     </div>
-                )}
+                ):<></>}
             </div>
 
             <h3>
-                Add another Custom Field:
+                Add New Custom Field:
             </h3>
             <form onSubmit={(e:FormEvent)=>{
                 addFieldToDataModel(e)
             }}>
-                <input type="text" onChange={(e)=>{
+                <input type="text" placeholder={"Metakey name"} onChange={(e)=>{
                     updateFieldValue("meta_key", e.target.value)
                 }}/>
 

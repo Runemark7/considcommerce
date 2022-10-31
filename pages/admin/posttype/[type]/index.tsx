@@ -1,6 +1,5 @@
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
 import {useRouter} from "next/router";
-import {useSelector} from "react-redux";
 import Link from "next/link";
 import Post from "../../../../models/Post";
 import {Exception} from "sass";
@@ -9,10 +8,9 @@ const PosttypeIndex: NextPage = (data:any) => {
     const router = useRouter()
     const { type } = router.query
 
-    const user = useSelector((state)=>(state.user))
-
     return (
         <div>
+            <h1>{type}(s)</h1>
             {(data.posts)?
                 <div>
                     {

@@ -64,30 +64,29 @@ const TypeCreate: NextPage = () => {
     }
 
     useEffect(() =>{
-        if(postTypeModel){
-            const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
+        const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
 
-            const options = {
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-            fetch(endpoint, options)
-                .then((resp)=>{
-                    if (resp.status == 201){
-                        return resp.json()
-                    }
-                })
-                .then(data => {
-                    setPostTypeModel(data)
-                });
+        const options = {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.jwtToken,
+            },
         }
-    }, [])
+        fetch(endpoint, options)
+            .then((resp)=>{
+                if (resp.status == 201){
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                setPostTypeModel(data)
+            });
+    }, [type])
 
     return (
         <div>
+            <h1>Create new {type}</h1>
             <form onSubmit={handleSubmit}  >
                 <label htmlFor="post_name">PostName*</label>
                 <input type={"text"} name="post_name" onChange={handlePostDataChanges} required={true}/>

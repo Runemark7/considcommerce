@@ -78,8 +78,16 @@ const AdminUserList: NextPage = () => {
             </form>
 
             {(data)?data.map((user: any) => (
-                <div className={"cartItemWrapper"} key={user.id}>
-                    <h3 className={"productTitle"}>{user.name}</h3>
+                <div className={"cartItemWrapper"} key={user.userId}>
+                    <p className={"productTitle"}>
+                        {user.userName}
+                        <br/>
+                        {user.userEmail}
+                        <br/>
+                        {user.userRole}
+                        <br/>
+                        {user.userStatus}
+                    </p>
                 </div>
             )):<div>
                 loading
