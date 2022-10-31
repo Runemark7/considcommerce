@@ -11,7 +11,7 @@ export default wrapper.withRedux(({ Component, ...rest }: AppProps) => {
     const {store, props} = wrapper.useWrappedStore(rest)
 
     return (typeof window === "undefined") ? (
-        <PersistGate persistor={store.__persistor} loading={<div>Fetching data...</div>}>
+        <PersistGate persistor={persistStore(store)} loading={null}>
             <Layout>
                 <Component {...props.pageProps} />
             </Layout>
