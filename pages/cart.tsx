@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
-import {addItemToCart, removeAllOfThisItemFromCart, removeItemFromCart} from "../store/cartSlice";
+import {addItemToCart,addMultipleItemsToCart,removeMultipleItemsFromCart, removeAllOfThisItemFromCart, removeItemFromCart} from "../store/cartSlice";
 import Product from "../models/Product";
 import Image from "next/image"
 import {FormEvent} from "react";
@@ -12,12 +12,27 @@ const Cart = () => {
 
     const changeQuantity = (e: FormEvent, product: Product) => {
         const newQuantity = e.target.value
+        const qtyChange = product.product_quantity-newQuantity
+        const dispatchObj = {
+            product: product,
+            qty: qtyChange
+        }
 
         if (newQuantity != 0){
             if (newQuantity > product.product_quantity){
-                dispatch(addItemToCart(product))
+                //add multiple
+                if(qtyChange > 1){
+                    dispatch(addMultipleItemsToCart(dispatchObj))
+                }else{
+                    dispatch(addItemToCart(product))
+                }
             }else {
-                dispatch(removeItemFromCart(product))
+                //remove multiple
+                if(qtyChange > 1){
+                    dispatch(removeMultipleItemsFromCart(dispatchObj))
+                }else{
+                    dispatch(removeItemFromCart(product))
+                }
             }
         }
     }

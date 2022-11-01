@@ -14,7 +14,7 @@ const ProductListItem = (props: Props) => {
     const [product, setProduct] = useState<Product>(props.product);
     useEffect(()=>{
         setProduct(props.product)
-    },[])
+    },[props])
 
 
     if(props.layout == "list"){

@@ -11,7 +11,7 @@ export default function AddToCart(props: any) {
                 dispatch(addItemToCart(props.product))
             }}
         >
-            add to cart
+            Add to cart
         </button>
     )
 }

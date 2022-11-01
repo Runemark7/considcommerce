@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import User from "../models/user";
-import { HYDRATE } from "next-redux-wrapper";
 import { AppState } from "./store";
 
 interface AuthState {

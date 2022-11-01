@@ -1,6 +1,7 @@
 import Product from "../models/Product";
 import ProductListItem from "./productListItem";
-import {useEffect, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
+import product from "../pages/product";
 
 type Props = {
     posttype: String,
@@ -10,6 +11,26 @@ type Props = {
 
 const ProductList = (props:Props) => {
     const [products, setProducts] = useState<Product[]>([]);
+
+    const compare = (a: Product, b: Product) => {
+        if (parseInt(a.product_price) < parseInt(b.product_price)){
+            return -1;
+        } else if (parseInt(a.product_price) > parseInt(b.product_price)){
+            return 1;
+        }else{
+            return 0
+        }
+    }
+
+    const highLow = (a: Product, b: Product) => {
+        if (parseInt(a.product_price) > parseInt(b.product_price)){
+            return -1;
+        } else if (parseInt(a.product_price) < parseInt(b.product_price)){
+            return 1;
+        }else{
+            return 0
+        }
+    }
 
     useEffect(()=>{
         const endpoint = `http://localhost:8010/proxy/category/${props.category}`;
@@ -26,13 +47,46 @@ const ProductList = (props:Props) => {
                 return response.json()
             }
         }).then((data)=>{
-            setProducts(data)
+            setProducts(data.sort(compare))
         })
     },[props])
+
+    const [activeFilter, setActiveFilter] = useState(0)
+
+
+
+    const filterOption = (e: FormEvent) => {
+        const value = e.target.value
+        switch (value){
+            case "0":
+                setProducts((prevProducts)=> [...prevProducts.sort(compare)])
+                setActiveFilter(value)
+                break;
+            case "1":
+                setProducts((prevProducts)=> [...prevProducts.sort(compare)])
+                setActiveFilter(value)
+                break;
+            case "2":
+                setProducts((prevProducts)=> [...prevProducts.sort(highLow)])
+                setActiveFilter(value)
+                break;
+
+        }
+    }
 
     if(props.layout == "list"){
         return (
             <div>
+                <div>
+                    <p>
+                        Filter:
+                    </p>
+                    <select onChange={filterOption}>
+                        <option value="0" defaultChecked={true}>Default</option>
+                        <option value="1">Price rising</option>
+                        <option value="2">Price falling</option>
+                    </select>
+                </div>
                 {(products)?
                     <div className={"productListWrapper"}>
                         {products.map((product: Product)=>(

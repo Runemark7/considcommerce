@@ -10,6 +10,7 @@ const UserSettings = () => {
     const router = useRouter();
     const [data, setData] = useState<UserShowObj>();
     const [isLoading, setLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     useEffect(()=>{
         setLoading(true);
@@ -26,10 +27,17 @@ const UserSettings = () => {
             }
 
             fetch(endpoint, options)
-                .then(resp=>resp.json())
+                .then((resp)=>{
+                    if (resp.ok){
+                        return resp.json()
+                    }
+                })
                 .then(data => {
                     setLoading(false)
                     setData(data)
+                }).catch((error) => {
+                    setLoading(false)
+                    setIsError(error)
                 })
         }
     }, [user])
@@ -69,8 +77,7 @@ const UserSettings = () => {
     }
 
     return (
-        <div>
-
+        <div className={"componentWrapper"}>
             <ul>
                 <li>
                     <Link href={"http://localhost:3000/profile/order"}>
@@ -112,8 +119,7 @@ const UserSettings = () => {
                     </div>
                 }
 
-                <h3>
-                    Update password
+                <h3>Update password</h3>
                     <form onSubmit={submitPasswordChanges}>
                         <label htmlFor={"passwordBefore"}>Old password</label>
                         <input type="password" name={"passwordBefore"}/>
@@ -124,9 +130,9 @@ const UserSettings = () => {
                         <label htmlFor="newPasswordAgain">New password again</label>
                         <input type="password" name={"newPasswordAgain"}/>
 
-                        <input type="submit"/>
+                        <br/>
+                        <input type="submit" value={"Change Password"}/>
                     </form>
-                </h3>
 
             </div>
 

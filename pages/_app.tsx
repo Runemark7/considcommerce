@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import { wrapper } from "../store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from 'redux-persist';
+import { HookHandler } from "../core/hooks";
 
 export default wrapper.withRedux(({ Component, ...rest }: AppProps) => {
 
@@ -25,3 +26,4 @@ export default wrapper.withRedux(({ Component, ...rest }: AppProps) => {
     )
 });
 
+export const hooks:HookHandler = new HookHandler()

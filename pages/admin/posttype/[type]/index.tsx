@@ -1,8 +1,9 @@
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
 import {useRouter} from "next/router";
 import Link from "next/link";
-import Post from "../../../../models/Post";
 import {Exception} from "sass";
+import {hooks} from "../../../_app";
+import DataTable from "react-data-table-component";
 
 const PosttypeIndex: NextPage = (data:any) => {
     const router = useRouter()
@@ -11,22 +12,46 @@ const PosttypeIndex: NextPage = (data:any) => {
     return (
         <div>
             <h1>{type}(s)</h1>
+            <button onClick={()=>{
+                hooks.doActionOnHook(data, "product", "after", "updatePost" ,"afterAdminSubmit")
+            }}>
+                test
+            </button>
             {(data.posts)?
                 <div>
-                    {
-                        data.posts.map((post: Post) => (
-                            <div className={"productWrapper"} key={post.post_id}>
-                                <div>
-                                    <p className={"productTitle"}>name: {post.post_name}</p>
-                                    <p className={"productPrice"}>id: {post.post_id}</p>
-                                    <p className={"productPrice"}>status: {post.post_status}</p>
-                                </div>
-                                <Link href={`http://localhost:3000/admin/posttype/${type}/update/${post.post_id}`}>
-                                    <button>show {type}</button>
-                                </Link>
-                            </div>
-                        ))
-                    }
+                    <DataTable
+                        onRowClicked={(row,event) => {
+
+                        }}
+
+                        columns={[
+                        {
+                            name: "ID",
+                            selector: row => row.post_id
+                        },
+                        {
+                            name: "Postname",
+                            selector: row => row.post_name
+                        },
+                        {
+                            name: "Status",
+                            selector: row => row.post_status,
+                            sortable: true
+                        },
+                        {
+                            name: "test",
+                            cell: (row,index,column,id) => {
+                                console.log(row)
+                                return (
+                                    <Link href={`http://localhost:3000/admin/posttype/${type}/update/${row.post_id}`}>
+                                        <button>
+                                            Change
+                                        </button>
+                                    </Link>
+                                )
+                            }
+                        }
+                    ]} data={data.posts} highlightOnHover={true} striped={true} pointerOnHover={true} />
                 </div>
                 :<div>No {type}(s) was found</div>
             }

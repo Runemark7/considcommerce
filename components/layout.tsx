@@ -7,13 +7,11 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 
 
-export default function Layout({ children }) {
+export default function Layout({ children }:any) {
     const router = useRouter()
-
-
+    const [isAdmin, setIsAdmin] = useState(false);
 
     if(router.pathname.startsWith("/admin")){
-        const [isAdmin, setIsAdmin] = useState(false);
         // @ts-ignore
         const user = useSelector((state)=>(state.user))
 
@@ -38,28 +36,25 @@ export default function Layout({ children }) {
                 })
 
         },[user])
-
-        if(isAdmin){
-            return(
-                <>
-                    <div className="adminPage">
-                        <AdminNavbar />
-                        <main>{children}</main>
-                    </div>
-                </>
-            )
-        }
     }
 
     return (
-        <>
-            <Navbar />
+        (isAdmin)?
+            <>
+                <div className="adminPage">
+                    <AdminNavbar />
+                    <main>{children}</main>
+                </div>
+            </>
+            :
+            <>
+                <Navbar />
                 <main>
                     <div className={"pageWrapper"}>
                         {children}
                     </div>
                 </main>
-            <Footer />
-        </>
+                <Footer />
+            </>
     )
 }

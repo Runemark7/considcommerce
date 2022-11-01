@@ -11,6 +11,12 @@ interface CartState {
     totalQty: number
 }
 
+interface ProductMulti {
+    product: Product,
+    qty: number
+
+}
+
 const initStateShipping : ShippingOption= {
     shippingName:"free",
     shippingEstimateDelivery: "5-7",
@@ -65,6 +71,21 @@ const cartSlice = createSlice({
 
             state.products = state.products.filter(item => action.payload.post_name !== item.post_name)
         },
+        removeMultipleItemsFromCart(state, action: PayloadAction<ProductMulti>){
+            const index = state.products.findIndex(item => item.post_name === action.payload.product.post_name);
+            if (action.payload.qty < 0){
+                removeAllOfThisItemFromCart(action.payload.product)
+            }else{
+                if (state.products[index].product_quantity > action.payload.qty){
+                    state.products[index].product_quantity -= action.payload.qty;
+                    state.totalprice -= parseInt(action.payload.product.product_price)*action.payload.qty;
+                    state.totalQty -= action.payload.qty;
+                }
+            }
+        },
+        addMultipleItemsToCart(state, action: PayloadAction<ProductMulti>) {
+
+        },
         addShippingCost (state, action: PayloadAction<ShippingOption>){
             let tempPrice = state.totalprice;
 
@@ -83,6 +104,6 @@ const cartSlice = createSlice({
     },
 })
 
-export const { addItemToCart, removeItemFromCart, removeAllOfThisItemFromCart, addShippingCost} = cartSlice.actions
+export const { addItemToCart, removeItemFromCart, removeMultipleItemsFromCart, addMultipleItemsToCart,removeAllOfThisItemFromCart, addShippingCost} = cartSlice.actions
 
 export default cartSlice.reducer
