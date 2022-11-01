@@ -19,25 +19,29 @@ const ProductListItem = (props: Props) => {
 
     if(props.layout == "list"){
         return (
-            <div className={"productWrapper"} key={product.post_name}>
-                <Image
-                    src={product.post_featuredImage}
-                    width={859}
-                    height={1163}
-                />
-
+            <div className={"productWrapper componentWrapper"} key={product.post_name}>
                 <Link href={`http://localhost:3000/product/${product.post_slug}`}>
                     <div>
-                        <h4 className={"productTitle"}>{product.post_name}</h4>
-                        <p className={"productPrice"}>{product.product_price} SEK</p>
+                        <Image
+                            src={product.post_featuredImage}
+                            width={859}
+                            height={1163}
+                        />
+
+
+                        <div>
+                            <h4 className={"productTitle"}>{product.post_name}</h4>
+                            <p className={"productPrice"}>{product.product_price} SEK</p>
+                        </div>
                     </div>
                 </Link>
+
                 <AddToCart product={product} />
             </div>
             )
     }else if(props.layout == "single"){
         return (
-            <div className={"productWrapper twocols sixty-fourty"} key={product.post_name}>
+            <div className={"productWrapper componentWrapper twocols sixty-fourty"} key={product.post_name}>
                 <div className={"leftCol"}>
                     <Image
                         src={product.post_featuredImage}
@@ -56,9 +60,20 @@ const ProductListItem = (props: Props) => {
                 </div>
             </div>
         )
-    }else{
+    }else if(props.layout == "checkout"){
         return (
-            <div className={"productWrapper twocols sixty-fourty"} key={product.post_name}>
+            <div className={"productWrapper"} key={product.post_name}>
+                <div>
+                    <p>{product.post_name}</p>
+                    <p>{product.product_price} SEK</p>
+                    <p>{product.product_price}*{product.product_quantity} = {parseInt(product.product_price)*(product.product_quantity)} SEK</p>
+                </div>
+            </div>
+        )
+    }
+    else{
+        return (
+            <div className={"productWrapper componentWrapper twocols sixty-fourty"} key={product.post_name}>
                 <div className={"leftCol"}>
                     <Image
                         src={product.post_featuredImage}

@@ -38,7 +38,7 @@ const makeStore = ({ isServer }) => {
 
         const persistConfig = {
             key: 'root',
-            version: 18,
+            version: 19,
             whitelist: ["cart", "user"], // only counter will be persisted, add other reducers if needed
             storage, // if needed, use a safer storage
         };

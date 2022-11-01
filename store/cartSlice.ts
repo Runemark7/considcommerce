@@ -84,7 +84,13 @@ const cartSlice = createSlice({
             }
         },
         addMultipleItemsToCart(state, action: PayloadAction<ProductMulti>) {
+            const index = state.products.findIndex(item => item.post_name === action.payload.product.post_name);
 
+            if (index != -1){
+                state.products[index].product_quantity += action.payload.qty;
+                state.totalprice += parseInt(action.payload.product.product_price)*action.payload.qty;
+                state.totalQty += action.payload.qty;
+            }
         },
         addShippingCost (state, action: PayloadAction<ShippingOption>){
             let tempPrice = state.totalprice;

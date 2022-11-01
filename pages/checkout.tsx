@@ -4,6 +4,8 @@ import Product from "../models/Product";
 import KlarnaOrder from "../models/klarnaOrder";
 import KlarnaOrderProduct from "../models/klarnaOrderProduct";
 import KlarnaShippingOptions from "../models/klarnaShippingOptions";
+import ProductListItem from "../components/productListItem";
+import DataTable from "react-data-table-component";
 
 const Checkout = () => {
 
@@ -258,6 +260,8 @@ const Checkout = () => {
     }, [callbackHTML])
 
     const [addressEndpoint, setAddressEndpoint] = useState({
+        firstName: "",
+        secondName: "",
         deliveryAddress: "",
         postalCode: "",
         cityName: "",
@@ -267,6 +271,12 @@ const Checkout = () => {
     const checkDeliveryAddress = (value:string, stringKey: String) => {
         let copyObj = {...addressEndpoint}
         switch (stringKey){
+            case "firstName":
+                copyObj.firstName = value;
+                break;
+            case "secondName":
+                copyObj.secondName = value;
+                break;
             case "deliveryAddress":
                 copyObj.deliveryAddress = value;
                 break;
@@ -286,7 +296,7 @@ const Checkout = () => {
     }
 
     useEffect(()=>{
-        if (addressEndpoint.deliveryAddress, addressEndpoint.postalCode, addressEndpoint.cityName, addressEndpoint.countryCode) {
+        if (addressEndpoint.deliveryAddress && addressEndpoint.postalCode && addressEndpoint.cityName && addressEndpoint.countryCode) {
             const postData = {
                 "customer": {
                     "customerId": "string"
@@ -304,10 +314,10 @@ const Checkout = () => {
                     }
                 ],
                 "recipientAddress": {
-                    "countryCode": "SE",
-                    "postCode": "30227",
-                    "city": "Halmstad",
-                    "street": "Waldemar Lorentzons gata 3",
+                    "countryCode": addressEndpoint.countryCode,
+                    "postCode": addressEndpoint.postalCode,
+                    "city": addressEndpoint.cityName,
+                    "street": addressEndpoint.deliveryAddress,
                 },
                 "parcelInfo": {
                     "length": 130,
@@ -358,63 +368,79 @@ const Checkout = () => {
     }, [addressEndpoint])
 
     return(
-        <div className={"formWrapper fifty-fiftyCols"} >
-            <div className={"fifty-fifty-left"}>
-                <form className={"formHolder"} onSubmit={
-                    (e)=>{
-                        checkoutHandler(e, orderData.products, user.userId);
-                    }}>
-                    <label htmlFor="firstName">FirstName*</label>
-                    <input type="text" name="firstName" id="firstName" className={"inputField"} required/>
+        <div>
+            <div id={"checkoutWrapper"} className={"formWrapper twocols componentWrapper fifty-fifty"} >
+                <div className={"leftCol"}>
+                    <h1>Checkout</h1>
+                    <h3>Delivery information</h3>
+                    <form className={"formHolder"} onSubmit={
+                        (e)=>{
+                            checkoutHandler(e, orderData.products, user.userId);
+                        }}>
 
-                    <label htmlFor="lastName">LastName*</label>
-                    <input type="text" name="lastName" id="lastName" className={"inputField"} required/>
+                        <input type="text" name="firstName" id="firstName" placeholder={"FirstName*"}  className={"inputField"} onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "firstName")
+                        }} required/>
+                        <input type="text" name="lastName" id="lastName" placeholder={"LastName*"} className={"inputField"} onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "secondName")
+                        }} required/>
+                        <input type="text" name="deliveryAddress" placeholder={"DeliveryAddress"} id="deliveryAddress" onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "deliveryAddress")
+                        }} className={"inputField"} required/>
+                        <input type="text" name="cityName" placeholder={"City*"} id="cityName" onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "cityName")
+                        }} className={"inputField"} required/>
+                        <input type="text" name="postalCode" placeholder={"PostalCode*"} id="postalCode" onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "postalCode")
+                        }} className={"inputField"} required/>
+                        <select onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "countryCode")
+                        }}>
+                            <option value="" selected disabled hidden>Choose here</option>
+                            <option value="SE">Sweden</option>
+                        </select>
 
-                    <label htmlFor="deliveryAddress">DeliveryAddress*</label>
-                    <input type="text" name="deliveryddress" id="deliveryAddress" onChange={(e:FormEvent)=>{
-                        checkDeliveryAddress(e.target.value, "deliveryAddress")
-                    }} className={"inputField"} required/>
+                        <button type="submit">Make order</button>
+                    </form>
+                </div>
 
-                    <label htmlFor="cityName">City*</label>
-                    <input type="text" name="cityName" id="cityName" onChange={(e:FormEvent)=>{
-                        checkDeliveryAddress(e.target.value, "cityName")
-                    }} className={"inputField"} required/>
-
-                    <label htmlFor="postalCode">PostalCode*</label>
-                    <input type="text" name="postalCode" id="postalCode" onChange={(e:FormEvent)=>{
-                        checkDeliveryAddress(e.target.value, "postalCode")
-                    }} className={"inputField"} required/>
-
-                    <select onChange={(e:FormEvent)=>{
-                        checkDeliveryAddress(e.target.value, "countryCode")
-                    }}>
-                        <option value="" selected disabled hidden>Choose here</option>
-                        <option value="SE">Sweden</option>
-                    </select>
-
-                    <button type="submit">Make order</button>
-                </form>
-            </div>
-
-            <div className={"fifty-fifty-right"}>
-                {orderData.products.map((product: Product) => (
-                    <div className={"checkoutItemWrapper"} key={product.post_id}>
-                        <div className={"checkoutItem"}>
-                            <p className={"productTitle"}>{product.post_name}</p>
-                            <p className={"productPrice"}>{product.product_price}</p>
-                            <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100}</p>
-                        </div>
+                <div className={"rightCol"}>
+                    <h3>Product details</h3>
+                    <div className={"productCheckoutListing"}>
+                        <DataTable
+                            columns={[
+                                {
+                                    name: "Product name",
+                                    selector: row => row.post_name,
+                                    compact: true
+                                },
+                                {
+                                    name: "Unit price",
+                                    selector: row => row.product_price + " SEK",
+                                    compact: true
+                                },
+                                {
+                                    name: "Quantity",
+                                    selector: row => row.product_quantity,
+                                    compact: true
+                                },
+                                {
+                                    name: "Total price",
+                                    selector: row => parseInt(row.product_price)*row.product_quantity + " SEK",
+                                    compact: true
+                                },
+                            ]} data={orderData.products}  />
                     </div>
-                ))}
-                <div>
-                    <p>
-                        totalprice: {Math.round(orderData.totalprice*100)/100}
-                    </p>
+
+                    <div>
+                        <p>
+                            totalprice: {Math.round(orderData.totalprice*100)/100}
+                        </p>
+                    </div>
                 </div>
             </div>
 
             <div id={"my-checkout-container"}></div>
-
 
         </div>
     )

@@ -49,11 +49,11 @@ export default function Layout({ children }:any) {
             :
             <>
                 <Navbar />
-                <main>
-                    <div className={"pageWrapper"}>
-                        {children}
-                    </div>
-                </main>
+                    <main>
+                        <div className={"pageWrapper"}>
+                            {children}
+                        </div>
+                    </main>
                 <Footer />
             </>
     )

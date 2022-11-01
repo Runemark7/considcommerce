@@ -1,7 +1,6 @@
 import Product from "../models/Product";
 import ProductListItem from "./productListItem";
 import {FormEvent, useEffect, useState} from "react";
-import product from "../pages/product";
 
 type Props = {
     posttype: String,
@@ -76,7 +75,7 @@ const ProductList = (props:Props) => {
 
     if(props.layout == "list"){
         return (
-            <div>
+            <div className={"componentWrapper"}>
                 <div>
                     <p>
                         Filter:
@@ -98,7 +97,7 @@ const ProductList = (props:Props) => {
         )
     }else{
         return (
-            <div>
+            <div className={"componentWrapper"}>
                 {(products)?
                     <div className={"productListWrapper"}>
                         {products.map((product: Product)=>(

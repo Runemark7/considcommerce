@@ -17,7 +17,7 @@ export default function SearchBar() {
     }
 
     return (
-        <div>
+        <div className={"searchBar"}>
             <input type="search" name={"search"} onChange={onTextChange} />
             <button onClick={searchForValue}>
                Search

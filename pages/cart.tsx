@@ -12,23 +12,24 @@ const Cart = () => {
 
     const changeQuantity = (e: FormEvent, product: Product) => {
         const newQuantity = e.target.value
-        const qtyChange = product.product_quantity-newQuantity
+        const qtyChangeNegative = product.product_quantity-newQuantity
+        const qtyChangeAddition = newQuantity-product.product_quantity
         const dispatchObj = {
             product: product,
-            qty: qtyChange
+            qty: 0
         }
 
         if (newQuantity != 0){
             if (newQuantity > product.product_quantity){
-                //add multiple
-                if(qtyChange > 1){
+                if(qtyChangeAddition > 1){
+                    dispatchObj.qty = qtyChangeAddition
                     dispatch(addMultipleItemsToCart(dispatchObj))
                 }else{
                     dispatch(addItemToCart(product))
                 }
             }else {
-                //remove multiple
-                if(qtyChange > 1){
+                if(qtyChangeNegative > 1){
+                    dispatchObj.qty = qtyChangeNegative
                     dispatch(removeMultipleItemsFromCart(dispatchObj))
                 }else{
                     dispatch(removeItemFromCart(product))
@@ -38,54 +39,58 @@ const Cart = () => {
     }
 
     return(
-        <div className={"cartWrapper twocols seventy-thirty"}>
-            <div className={"leftCol"}>
-                {data.products.map((product: Product) => (
-                    <div className={"cartItemWrapper"} key={product.post_name}>
-                        <Link href={`http://localhost:3000/product/${product.post_slug}`}>
-                            <div className={"cartItem"}>
-                                <div className={"cartItemImage"}>
-                                    <Image
-                                        src={product.post_featuredImage}
-                                        width={859}
-                                        height={1163}
-                                    />
+        <div>
+            <div className={"cartWrapper componentWrapper twocols seventy-thirty"}>
+                <div className={"leftCol"}>
+                    <h1>Cart</h1>
+                    {data.products.map((product: Product) => (
+                        <div className={"cartItemWrapper"} key={product.post_name}>
+                            <Link href={`http://localhost:3000/product/${product.post_slug}`}>
+                                <div className={"cartItem"}>
+                                    <div className={"cartItemImage"}>
+                                        <Image
+                                            src={product.post_featuredImage}
+                                            width={859}
+                                            height={1163}
+                                        />
+                                    </div>
+                                    <div className={"cartItemInfo"}>
+                                        <p className={"productTitle"}>{product.post_name}</p>
+                                    </div>
                                 </div>
-                                <div className={"cartItemInfo"}>
-                                    <p className={"productTitle"}>{product.post_name}</p>
-                                </div>
+                            </Link>
+                            <div>
+                                <p className={"productPrice"}> {product.product_price} SEK</p>
                             </div>
-                        </Link>
-                        <div>
-                            <p className={"productPrice"}> {product.product_price} SEK</p>
+
+                            <input type="number" onChange={(e)=>{
+                                changeQuantity(e, product)
+                            }} className={"productQuantityInput"} value={product.product_quantity}/>
+
+                            <div>
+                                <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100} SEK</p>
+                            </div>
+
+                            <button
+                                onClick={()=>{
+                                    dispatch(removeAllOfThisItemFromCart(product))
+                                }}
+                            >X</button>
                         </div>
-
-                        <input type="number" onChange={(e)=>{
-                            changeQuantity(e, product)
-                        }} className={"productQuantityInput"} value={product.product_quantity}/>
-
-                        <div>
-                            <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price) * product.product_quantity)*100)/100} SEK</p>
-                        </div>
-
-                        <button
-                            onClick={()=>{
-                                dispatch(removeAllOfThisItemFromCart(product))
-                            }}
-                        >X</button>
-                    </div>
-                ))}
-            </div>
-            <div className={"rightCol"}>
-                <p>totalprice: {Math.round(data.totalprice*100)/100}</p>
-                <p>Calculate shipping cost in checkout</p>
-                <Link href={"http://localhost:3000/checkout"}>
-                    <button>
-                        Checkout
-                    </button>
-                </Link>
+                    ))}
+                </div>
+                <div className={"rightCol"}>
+                    <p>totalprice: {Math.round(data.totalprice*100)/100}</p>
+                    <p>Calculate shipping cost in checkout</p>
+                    <Link href={"http://localhost:3000/checkout"}>
+                        <button>
+                            Checkout
+                        </button>
+                    </Link>
+                </div>
             </div>
         </div>
+
     )
 }
 

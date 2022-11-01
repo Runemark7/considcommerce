@@ -2,6 +2,18 @@
   display:flex;
   flex-direction: row;
   width: 100%;
+
+  &.fifty-fifty{
+
+    .leftCol{
+      width: 50%;
+    }
+
+    .rightCol{
+      width: 50%;
+    }
+  }
+
   &.ninety-ten{
 
     .leftCol{
@@ -70,4 +82,26 @@
 
 .noMarginTop{
   margin-top: 0;
+}
+
+.componentWrapper:only-of-type:first-of-type{
+  padding-bottom: 0;
+}
+
+
+.formHolder{
+  width: 100%;
+
+  input, select{
+    &:first-child{
+      margin-top: 0;
+    }
+    &:last-child{
+      margin-bottom: 0;
+    }
+    width: 80%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
 }

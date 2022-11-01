@@ -79,7 +79,7 @@ button, input[type="submit"]{
   color:red;
 }
 
-input[type="text"], input[type="number"], input[type="password"], input[type="email"], select{
+input[type="text"], input[type="number"], input[type="password"], input[type="email"], input[type="search"], select{
   &.inputError{
     border:1px solid red;
   }
