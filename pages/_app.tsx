@@ -6,23 +6,23 @@ import { wrapper } from "../store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from 'redux-persist';
 import { HookHandler } from "../core/hooks";
+import {Provider} from "react-redux";
 
-export default wrapper.withRedux(({ Component, ...rest }: AppProps) => {
+export default (({ Component, ...rest }: AppProps) => {
 
-    const {store, props} = wrapper.useWrappedStore(rest)
+    const { store, props } = wrapper.useWrappedStore(rest)
+    const { pageProps } = props;
+    const persistor = persistStore(store)
 
-    return (typeof window === "undefined") ? (
-        <PersistGate persistor={persistStore(store)} loading={null}>
-            <Layout>
-                <Component {...props.pageProps} />
-            </Layout>
-        </PersistGate>
-    ): (
-        <PersistGate persistor={persistStore(store)} loading={null}>
-            <Layout>
-                <Component {...props.pageProps} />
-            </Layout>
-        </PersistGate>
+
+    return (
+        <Provider store={store}>
+            <PersistGate persistor={persistor} loading={<div>Loading</div>}>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </PersistGate>
+        </Provider>
     )
 });
 
