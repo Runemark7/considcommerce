@@ -49,21 +49,38 @@ const PageEditor = (props:Props) => {
         setPageContent(newState)
     }
 
+    const [selectedBlock, setSelectedBlock] = useState({
+        id:0,
+        type:""
+    })
+
+    const selectBlock = (id:number, type: string) => {
+        setSelectedBlock({...selectedBlock, id:id, type:type})
+    }
+
     return (
         <div className={"componentWrapper"}>
-            editor {props.postId}
+            <h3>PageContent Preview</h3>
 
-            <h3>content</h3>
-            {(pageContent)?
-                (pageContent.map((block: any)=>{
-                    if (block.name == "header"){
-                        return <EditorHeaderBlock headerText={block.value} headerColor={block.style}/>
-                    }else if(block.name == "textBlock"){
-                        return <EditorTextBlock changeState={updateState} id={block.id} text={block.value} styling={block.style}/>
-                    }
-                }))
-                :<div>no content</div>}
-            <EditorBlockSelector/>
+            <div>
+                {(pageContent)?
+                    (pageContent.map((block: any)=>{
+                        if (block.name == "header"){
+                            return <EditorHeaderBlock headerText={block.value} headerColor={block.style}/>
+                        }else if(block.name == "textBlock"){
+                            return <EditorTextBlock
+                                selectBlock={selectBlock}
+                                changeState={updateState}
+                                type={block.name}
+                                id={block.id}
+                                text={block.value}
+                                styling={block.style}/>
+                        }
+                    }))
+                    :<div>no content</div>}
+            </div>
+
+            <EditorBlockSelector blockId={selectedBlock.id} blockType={selectedBlock.type}/>
         </div>
     )
 }
