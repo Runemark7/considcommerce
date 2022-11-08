@@ -32,14 +32,18 @@ const EditorTextBlock = (props:Props) => {
         setEditBlock(true)
     }
 
-    const handleTextChange = (e : FormEvent) => {
+    const handleTextChange = (e : any) => {
         props.changeState(e.target.value, props.id)
     }
 
     return (
-        <div onClick={toggleEditor} contentEditable={editBlock} >
+        <div onClick={toggleEditor} >
             {
-                 <ClearTextBlock onChange={handleTextChange} {...props} />
+                (editBlock)?
+                    <textarea onChange={handleTextChange}>
+                        {props.text}
+                    </textarea>
+                    : <ClearTextBlock {...props} />
             }
         </div>
     )

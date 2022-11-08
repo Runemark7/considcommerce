@@ -5,6 +5,8 @@ import {EditorTextBlock} from "./blocks/EditorTextBlock";
 
 type Props = {
     postId: number,
+    onChange: any,
+    postContent: string
 }
 
 
@@ -20,32 +22,11 @@ const PageEditor = (props:Props) => {
     const [pageContent, setPageContent] = useState([])
 
     useEffect(()=>{
-        const testContent = {
-            blocks: [
-                {
-                    id: 1,
-                    name: "header",
-                    value: "post 1266 nicee",
-                    style: "red-text"
-                },
-                {
-                    id: 2,
-                    name: "header",
-                    value: "coolt igen",
-                    style: "red-text"
-                },
-                {
-                    id: 3,
-                    name: "textBlock",
-                    value: "cool text här",
-                    style: "red-text"
-                },
-
-            ]
-        }
-
-        setPageContent(testContent.blocks)
+        const testContent = JSON.parse(props.postContent)
+        setPageContent(testContent)
     },[])
+
+
 
     const updateState = (newValue:any, id: number) => {
         const newState = pageContent.map((block:any)=>{
@@ -55,7 +36,12 @@ const PageEditor = (props:Props) => {
             return block
         })
         setPageContent(newState)
+
     }
+
+    useEffect(()=>{
+        props.onChange(JSON.stringify(pageContent))
+    },[pageContent])
 
     const [selectedBlock, setSelectedBlock] = useState({
         id:0,

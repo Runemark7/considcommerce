@@ -38,7 +38,11 @@ const EditorHeaderBlock = (props:EditorProps) => {
     return (
         <div onClick={toggleEditor} contentEditable={editBlock} >
             {
-                <ClearHeaderBlock onChange={handleTextChange} {...props} />
+                (editBlock)?
+                    <textarea onChange={handleTextChange}>
+                        {props.text}
+                    </textarea>
+                    : <ClearHeaderBlock {...props} />
             }
         </div>
     )

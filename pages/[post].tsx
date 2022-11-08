@@ -11,7 +11,7 @@ const PostLayout = (data:any) => {
                     <p>
                         {data.postData.post_excerpt}
                     </p>
-                    <PageEditorClear postId={data.postData.post_id}/>
+                    <PageEditorClear postId={data.postData.post_id} postContent={data.postData.post_content} />
                 </div>
             ):<></>}
         </div>

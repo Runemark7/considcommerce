@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
-import EditorHeaderBlock from "./blocks/EditorHeaderBlock";
 import { ClearTextBlock } from "./blocks/EditorTextBlock";
+import {ClearHeaderBlock} from "./blocks/EditorHeaderBlock";
 
 type Props = {
     postId: number,
+    postContent: string
 }
 
 
@@ -12,31 +13,8 @@ const PageEditorClear = (props:Props) => {
     const [pageContent, setPageContent] = useState([])
 
     useEffect(()=>{
-        const testContent = {
-            blocks: [
-                {
-                    id: 1,
-                    name: "header",
-                    value: "post 1266 nicee",
-                    style: "red-text"
-                },
-                {
-                    id: 2,
-                    name: "header",
-                    value: "coolt igen",
-                    style: "red-text"
-                },
-                {
-                    id: 3,
-                    name: "textBlock",
-                    value: "cool text här",
-                    style: "red-text"
-                },
-
-            ]
-        }
-
-        setPageContent(testContent.blocks)
+        const testContent = JSON.parse(props.postContent)
+        setPageContent(testContent)
     },[])
 
     return (
@@ -44,9 +22,10 @@ const PageEditorClear = (props:Props) => {
             {(pageContent)?
                 (pageContent.map((block: any)=>{
                     if (block.name == "header"){
-                        return <EditorHeaderBlock
-                            headerText={block.value}
-                            headerColor={block.style}/>
+                        return <ClearHeaderBlock
+                            type={block.name}
+                            text={block.value}
+                            styling={block.style}/>
                     }else if(block.name == "textBlock"){
                         return <ClearTextBlock
                             type={block.name}

@@ -62,6 +62,11 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
         setChangedPostData({...changedPostData, [name]: value})
     }
 
+    const handlePostContentChanges = (jsonString:string) => {
+        // @ts-ignore
+        setChangedPostData({...changedPostData, ["post_content"]: jsonString})
+    }
+
     const [categories, setCategories] = useState([]);
     useEffect(()=>{
         const endpoint = `http://localhost:8010/proxy/category/posttype/${type}`
@@ -192,7 +197,7 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
             <div>
                 <h3>Post content</h3>
-                <PageEditor postId={data.postData.post_id}/>
+                <PageEditor onChange={handlePostContentChanges} postContent={data.postData.post_content} postId={data.postData.post_id}/>
             </div>
         </div>
     )
