@@ -45,7 +45,6 @@ class HookHandler {
     doActionOnHook = (data:any, posttype:string, position:string, action:string, hookName: string) => {
         let returnInfo = null;
 
-        console.log("test")
         this.globalHooks.map((hook: Hook)=>{
 
             if (hook.hookName == hookName && hook.action == action && hook.posttype == posttype && hook.action == action){
