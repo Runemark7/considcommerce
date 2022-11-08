@@ -9,17 +9,27 @@ type Props = {
     styling: string
 }
 
+type ClearProps = {
+    type: string,
+    text: string,
+    styling: string
+}
+
+const ClearTextBlock = (props:ClearProps) => {
+    return (
+        <p className={props.styling}>
+            {props.text}
+        </p>
+    )
+}
+
 const EditorTextBlock = (props:Props) => {
 
-    const [hoverBlock, setHoverBlock] = useState(false)
+    const [editBlock, setEditBlock] = useState(false)
 
-    const handleMouseOver = () => {
+    const toggleEditor = () => {
         props.selectBlock(props.id,props.type)
-        setHoverBlock(true)
-    }
-
-    const handleMouseOut = () => {
-        setHoverBlock(false)
+        setEditBlock(true)
     }
 
     const handleTextChange = (e : FormEvent) => {
@@ -27,18 +37,15 @@ const EditorTextBlock = (props:Props) => {
     }
 
     return (
-        <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+        <div onClick={toggleEditor} contentEditable={editBlock} >
             {
-                (hoverBlock)?
-                    <textarea onChange={handleTextChange}>
-                        {props.text}
-                    </textarea>
-                    : <p className={props.styling}>
-                        {props.text}
-                    </p>
+                 <ClearTextBlock onChange={handleTextChange} {...props} />
             }
         </div>
     )
 }
 
-export default EditorTextBlock
+export {
+    EditorTextBlock,
+    ClearTextBlock
+}

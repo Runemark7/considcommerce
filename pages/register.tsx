@@ -3,8 +3,6 @@ import {FormEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 
 const Register = () => {
-    const router = useRouter();
-
     const [passwordMatch, setPasswordMatch] = useState(false);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -37,7 +35,6 @@ const Register = () => {
                         return resp.json()
                     }
                 }).then(data => {
-                    console.log(data)
                 })
 
         }else{
@@ -66,7 +63,7 @@ const Register = () => {
                 <input type="password" name="passwordFirst" id="password" className={"inputField"} required/>
 
                 <label htmlFor="passwordAgain">passwordAgain*</label>
-                <input type="password" name="passwordAgain" id="password" className={"inputField"} required/>
+                <input type="passwordAgain" name="passwordAgain" id="password" className={"inputField"} required/>
 
                 <input type="submit"/>
             </form>

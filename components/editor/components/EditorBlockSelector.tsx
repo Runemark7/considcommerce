@@ -12,7 +12,7 @@ const EditorBlockSelector = (props:Props) => {
                 <div>
                     { (props.blockType == "textBlock") ?
                         <div>
-                            select color
+                            d
                         </div>
                         :<></>}
                 </div>

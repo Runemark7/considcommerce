@@ -43,6 +43,7 @@ const Cart = () => {
             <div className={"cartWrapper componentWrapper twocols seventy-thirty"}>
                 <div className={"leftCol"}>
                     <h1>Cart</h1>
+                    <h3>Products in cart</h3>
                     {data.products.map((product: Product) => (
                         <div className={"cartItemWrapper"} key={product.post_name}>
                             <Link href={`http://localhost:3000/product/${product.post_slug}`}>
@@ -80,6 +81,7 @@ const Cart = () => {
                     ))}
                 </div>
                 <div className={"rightCol"}>
+                    <h3>Cart info</h3>
                     <p>totalprice: {Math.round(data.totalprice*100)/100}</p>
                     <p>Calculate shipping cost in checkout</p>
                     <Link href={"http://localhost:3000/checkout"}>

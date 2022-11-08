@@ -1,5 +1,6 @@
 import {GetStaticPaths, GetStaticProps} from "next";
 import {Exception} from "sass";
+import PageEditorClear from "../components/editor/PageEditorClear";
 
 const PostLayout = (data:any) => {
     return (
@@ -10,6 +11,7 @@ const PostLayout = (data:any) => {
                     <p>
                         {data.postData.post_excerpt}
                     </p>
+                    <PageEditorClear postId={data.postData.post_id}/>
                 </div>
             ):<></>}
         </div>

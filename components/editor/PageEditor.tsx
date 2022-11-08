@@ -1,10 +1,18 @@
 import EditorBlockSelector from "./components/EditorBlockSelector";
 import {useEffect, useState} from "react";
-import EditorHeaderBlock from "./blocks/EditorHeaderBlock";
-import EditorTextBlock from "./blocks/EditorTextBlock";
+import {EditorHeaderBlock} from "./blocks/EditorHeaderBlock";
+import {EditorTextBlock} from "./blocks/EditorTextBlock";
 
 type Props = {
     postId: number,
+}
+
+
+type Block = {
+    id: number,
+    name: string,
+    value: any,
+    style: string
 }
 
 const PageEditor = (props:Props) => {
@@ -60,13 +68,17 @@ const PageEditor = (props:Props) => {
 
     return (
         <div className={"componentWrapper"}>
-            <h3>PageContent Preview</h3>
-
             <div>
                 {(pageContent)?
                     (pageContent.map((block: any)=>{
                         if (block.name == "header"){
-                            return <EditorHeaderBlock headerText={block.value} headerColor={block.style}/>
+                            return <EditorHeaderBlock
+                                selectBlock={selectBlock}
+                                changeState={updateState}
+                                type={block.name}
+                                id={block.id}
+                                text={block.value}
+                                styling={block.style}/>
                         }else if(block.name == "textBlock"){
                             return <EditorTextBlock
                                 selectBlock={selectBlock}
