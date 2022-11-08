@@ -1,7 +1,8 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 
 type Props = {
     changeState: any,
+    blockSelected: boolean,
     selectBlock: any,
     type: string,
     id: number,
@@ -32,9 +33,13 @@ const EditorTextBlock = (props:Props) => {
         setEditBlock(true)
     }
 
-    const handleTextChange = (e : any) => {
+    const handleTextChange = (e: FormEvent) => {
         props.changeState(e.target.value, props.id)
     }
+
+    useEffect(()=>{
+        setEditBlock(false)
+    }, [props.blockSelected])
 
     return (
         <div onClick={toggleEditor} >

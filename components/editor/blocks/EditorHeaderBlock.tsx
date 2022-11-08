@@ -1,8 +1,9 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 
 type EditorProps = {
     changeState: any,
     selectBlock: any,
+    blockSelected: boolean,
     type: string,
     id: number,
     text: string,
@@ -24,6 +25,7 @@ const ClearHeaderBlock = (props:ClearProps) => {
 }
 
 const EditorHeaderBlock = (props:EditorProps) => {
+
     const [editBlock, setEditBlock] = useState(false)
 
     const toggleEditor = () => {
@@ -35,8 +37,12 @@ const EditorHeaderBlock = (props:EditorProps) => {
         props.changeState(e.target.value, props.id)
     }
 
+    useEffect(()=>{
+        setEditBlock(false)
+    }, [props.blockSelected])
+
     return (
-        <div onClick={toggleEditor} contentEditable={editBlock} >
+        <div onClick={toggleEditor} >
             {
                 (editBlock)?
                     <textarea onChange={handleTextChange}>

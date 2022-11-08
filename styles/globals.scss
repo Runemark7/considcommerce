@@ -64,6 +64,14 @@ p{
   font-size: 1rem;
 }
 
+.showDiv{
+  display: block;
+}
+
+.hideDiv{
+  display:none;
+}
+
 button, input[type="submit"]{
   text-decoration: none;
   border:1px solid black;

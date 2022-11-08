@@ -2,6 +2,8 @@ import EditorBlockSelector from "./components/EditorBlockSelector";
 import {useEffect, useState} from "react";
 import {EditorHeaderBlock} from "./blocks/EditorHeaderBlock";
 import {EditorTextBlock} from "./blocks/EditorTextBlock";
+import EditorGeneralSettings from "./components/EditorGeneralSettings";
+import {array} from "prop-types";
 
 type Props = {
     postId: number,
@@ -9,34 +11,31 @@ type Props = {
     postContent: string
 }
 
-
 type Block = {
-    id: number,
     name: string,
-    value: any,
-    style: string
+    id: number,
+    value: string,
+    styling: string
 }
+
 
 const PageEditor = (props:Props) => {
 
-    const [pageContent, setPageContent] = useState([])
+    const [pageContent, setPageContent] = useState<Block[]>([])
 
     useEffect(()=>{
         const testContent = JSON.parse(props.postContent)
         setPageContent(testContent)
     },[])
 
-
-
     const updateState = (newValue:any, id: number) => {
-        const newState = pageContent.map((block:any)=>{
+        const newState = pageContent.map((block:Block)=>{
             if (block.id == id){
                 return {...block, value:newValue}
             }
             return block
         })
         setPageContent(newState)
-
     }
 
     useEffect(()=>{
@@ -52,14 +51,36 @@ const PageEditor = (props:Props) => {
         setSelectedBlock({...selectedBlock, id:id, type:type})
     }
 
+    const addNewBlock = (type: string) => {
+        const lastId = pageContent.at(-1);
+        const newBlock = {
+            name: type,
+            id: (lastId)?lastId.id+1:0,
+            value: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+            styling: ""
+        };
+        setPageContent(current => [...current, newBlock])
+    }
+
+    const removeBlock = (id: number) => {
+        let newArr = [...pageContent]
+        const index = newArr.findIndex(item => item.id == id);
+        if (index !== -1){
+            newArr.splice(index, 1);
+            setPageContent(newArr)
+        }
+    }
+
     return (
         <div className={"componentWrapper"}>
+            <EditorBlockSelector removeBlock={removeBlock} blockId={selectedBlock.id} blockType={selectedBlock.type}/>
             <div>
                 {(pageContent)?
                     (pageContent.map((block: any)=>{
                         if (block.name == "header"){
                             return <EditorHeaderBlock
                                 selectBlock={selectBlock}
+                                blockSelected={(selectedBlock.id == block.id)}
                                 changeState={updateState}
                                 type={block.name}
                                 id={block.id}
@@ -68,6 +89,7 @@ const PageEditor = (props:Props) => {
                         }else if(block.name == "textBlock"){
                             return <EditorTextBlock
                                 selectBlock={selectBlock}
+                                blockSelected={(selectedBlock.id == block.id)}
                                 changeState={updateState}
                                 type={block.name}
                                 id={block.id}
@@ -77,8 +99,7 @@ const PageEditor = (props:Props) => {
                     }))
                     :<div>no content</div>}
             </div>
-
-            <EditorBlockSelector blockId={selectedBlock.id} blockType={selectedBlock.type}/>
+            <EditorGeneralSettings addNewBlock={addNewBlock}/>
         </div>
     )
 }

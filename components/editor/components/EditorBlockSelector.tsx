@@ -1,6 +1,7 @@
 type Props = {
     blockId: number,
-    blockType: string
+    blockType: string,
+    removeBlock: any
 }
 
 
@@ -10,6 +11,11 @@ const EditorBlockSelector = (props:Props) => {
         <div className={"componentWrapper"}>
             {(props.blockType)?
                 <div>
+                    <button onClick={()=>{
+                        props.removeBlock(props.blockId)
+                    }}>
+                        remove this
+                    </button>
                     { (props.blockType == "textBlock") ?
                         <div>
                             d
