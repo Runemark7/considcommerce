@@ -81,12 +81,12 @@ const UserSettings = () => {
             <ul>
                 <li>
                     <Link href={"http://localhost:3000/profile/order"}>
-                        <a href="">Orders</a>
+                        Orders
                     </Link>
                 </li>
                 <li>
                     <Link href={"http://localhost:3000/profile/settings"}>
-                        <a href="">Settings</a>
+                        Settings
                     </Link>
 
                 </li>

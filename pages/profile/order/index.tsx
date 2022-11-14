@@ -45,12 +45,12 @@ const UserProfile = () => {
             <ul>
                 <li>
                     <Link href={"http://localhost:3000/profile/order"}>
-                        <a href="pages/profile/order/index">Orders</a>
+                        Orders
                     </Link>
                 </li>
                 <li>
                     <Link href={"http://localhost:3000/profile/settings"}>
-                        <a href="pages/profile/order/index">Settings</a>
+                        Settings
                     </Link>
 
                 </li>

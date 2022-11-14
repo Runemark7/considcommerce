@@ -25,36 +25,34 @@ export default function AdminNavbar() {
             <ul className={"zeroLevelNav"}>
                 <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000"}>
-                        <p>
                             Home
-                        </p>
                     </Link>
                 </li>
 
                 {data.map((posttype: PostType) => (
                     <li className={"zeroLevelLi"} key={posttype.posttype_id}>
                         <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
-                            <a>{posttype.posttype_name}</a>
+                            {posttype.posttype_name}
                         </Link>
                         <ul className={ "subMenu" }>
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
-                                    <a>All {posttype.posttype_name}</a>
+                                    All {posttype.posttype_name}
                                 </Link>
                             </li>
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/create`}>
-                                    <a>Create {posttype.posttype_name}</a>
+                                    Create {posttype.posttype_name}
                                 </Link>
                             </li>
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/categories`}>
-                                    <a>Categories</a>
+                                    Categories
                                 </Link>
                             </li>
                             <li>
                                 <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}/model`}>
-                                    <a>ModelFields</a>
+                                    ModelFields
                                 </Link>
                             </li>
                         </ul>
@@ -62,12 +60,12 @@ export default function AdminNavbar() {
                 ))}
                 <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/posttype/create"}>
-                        <a>Create posttype</a>
+                        Create posttype
                     </Link>
                 </li>
                 <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/user"}>
-                        <a>Users</a>
+                        Users
                     </Link>
                 </li>
             </ul>

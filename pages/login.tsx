@@ -72,9 +72,7 @@ const Login = () => {
                 <button type="submit">Login</button>
             </form>
             <Link href={"http://localhost:3000/register"}>
-                <a href="">
-                    Register
-                </a>
+                Register
             </Link>
         </div>
     )

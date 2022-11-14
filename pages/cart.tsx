@@ -53,6 +53,7 @@ const Cart = () => {
                                             src={product.post_featuredImage}
                                             width={859}
                                             height={1163}
+                                            alt={""}
                                         />
                                     </div>
                                     <div className={"cartItemInfo"}>

@@ -63,7 +63,7 @@ const Register = () => {
                 <input type="password" name="passwordFirst" id="password" className={"inputField"} required/>
 
                 <label htmlFor="passwordAgain">passwordAgain*</label>
-                <input type="passwordAgain" name="passwordAgain" id="password" className={"inputField"} required/>
+                <input type="password" name="passwordAgain" id="password" className={"inputField"} required/>
 
                 <input type="submit"/>
             </form>

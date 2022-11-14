@@ -8,18 +8,16 @@ export default function Footer() {
                     <ul>
                         <li>
                             <Link href={"http://localhost:3000/about-us"}>
-                                <a>about us</a>
+                                about us
                             </Link>
                         </li>
                         <li>
                             <Link href={"http://localhost:3000/about-us-two"}>
-                                <a>about us two</a>
+                                about us two
                             </Link>
                         </li>
                         <li>
-                            <a href="">
-                                Link 1
-                            </a>
+                            Link 1
                         </li>
                         <li>
                             <a href="">

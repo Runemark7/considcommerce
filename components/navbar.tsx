@@ -42,35 +42,35 @@ export default function Navbar() {
             <ul className={"nav"}>
                 <li>
                     <Link href={"http://localhost:3000/product-category/hoodie"}>
-                        <a>Hoodies</a>
+                        Hoodies
                     </Link>
                 </li>
                 <li>
                     <Link href={"http://localhost:3000/product-category/tshirt"}>
-                        <a>tshirts</a>
+                        shirts
                     </Link>
                 </li>
                 <li>
                     <Link href={"http://localhost:3000/cart"}>
-                        <a>Cart</a>
+                        Cart
                     </Link>
                 </li>
                 <li>
                     <Link href={"http://localhost:3000/checkout"}>
-                        <a>Checkout</a>
+                        Checkout
                     </Link>
                 </li>
                 {!user.loggedIn ?
                     <li>
                         <Link href={"http://localhost:3000/login"}>
-                            <a>Login</a>
+                            Login
                         </Link>
                     </li>
                     :
                     <div>
                         <li>
                             <Link href={"http://localhost:3000/profile"}>
-                                <a>Profile</a>
+                                Profile
                             </Link>
                         </li>
                         <li>
@@ -103,7 +103,7 @@ export default function Navbar() {
                             <div className={"cartItemWrapper"} key={product.post_name}>
                                 <div className={"cartItem"}>
                                     <Link href={`http://localhost:3000/product/${product.post_name}`}>
-                                        <a href={"#"} className={"productTitle"}>{product.post_name}</a>
+                                       {product.post_name}
                                     </Link>
                                     <p className={"productPrice"}>{product.product_price}</p>
                                     <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price ) * product.product_quantity)*100)/100}</p>
