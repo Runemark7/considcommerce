@@ -52,8 +52,6 @@ const ProductList = (props:Props) => {
 
     const [activeFilter, setActiveFilter] = useState(0)
 
-
-
     const filterOption = (e: FormEvent) => {
         const value = e.target.value
         switch (value){
@@ -93,6 +91,12 @@ const ProductList = (props:Props) => {
                         ))}
                     </div>
                     :<div>Can't find any products</div>}
+                {(products.length > 4)?
+                    <div>
+                        yo
+
+                    </div>
+                :<></>}
             </div>
         )
     }else{
@@ -105,6 +109,11 @@ const ProductList = (props:Props) => {
                         ))}
                     </div>
                     :<div>Can't find any products</div>}
+                {(products.length > 4)?
+                    <div>
+                        paginering
+                    </div>
+                    :<></>}
             </div>
         )
     }

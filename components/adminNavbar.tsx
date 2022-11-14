@@ -24,8 +24,8 @@ export default function AdminNavbar() {
         <div className={"adminMainNavBar"}>
             <ul className={"zeroLevelNav"}>
                 <li className={"zeroLevelLi"} >
-                    <Link href={"http://localhost:3000"}>
-                            Home
+                    <Link href={"http://localhost:3000/admin"}>
+                            Admin home
                     </Link>
                 </li>
 
@@ -61,6 +61,11 @@ export default function AdminNavbar() {
                 <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/posttype/create"}>
                         Create posttype
+                    </Link>
+                </li>
+                <li className={"zeroLevelLi"} >
+                    <Link href={"http://localhost:3000/admin/settings"}>
+                        Customizer Settings
                     </Link>
                 </li>
                 <li className={"zeroLevelLi"} >

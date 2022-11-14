@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import AdminNavbar from "../../components/adminNavbar";
 
 const AdminIndex: NextPage = () => {
     return (

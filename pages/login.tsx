@@ -14,7 +14,7 @@ const Login = () => {
 
     useEffect(()=>{
         if (user){
-            router.push("/register")
+            router.push("/profile")
         }
     },[user])
 

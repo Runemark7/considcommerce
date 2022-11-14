@@ -152,9 +152,9 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
                         <div>
                             <label htmlFor={category.category_name}>{category.category_name}</label>
                             <input type="checkbox" name={category.category_name} onChange={updateChangeCategory} value={category.category_id} defaultChecked={findCommonElement(category)}/>
-                            <input type="submit" value={"Change Category"}/>
                         </div>
                     ):<div>No categories for this posttype</div>}
+                    <input type="submit" value={"Change Category"}/>
                 </form>
             </div>
 
