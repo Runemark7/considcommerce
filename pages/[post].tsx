@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         }
     }
 
-    const endpoint = `http://localhost:8010/proxy/api/post/slug/${post}`
+    const endpoint = `/api/post/slug/${post}`
     const postData = await fetchData({
         endpoint: endpoint,
         method: "GET",

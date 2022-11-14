@@ -1,15 +1,16 @@
 import {useSelector} from "react-redux";
-import {fetch} from "next/dist/compiled/@edge-runtime/primitives/fetch";
 
 interface DataObj {
     endpoint: string,
     method: string,
     headers: string,
-    token: boolean,
+    token: string,
     body: any
 }
 
 async function fetchData (dataObj: DataObj) {
+    const endpoint = "http://localhost:8010/proxy" + dataObj.endpoint
+
     const options = {
         method: (dataObj.method == "POST")? "POST": "GET",
         headers: {
@@ -18,16 +19,15 @@ async function fetchData (dataObj: DataObj) {
     }
 
     if (dataObj.token){
-        const user = useSelector((state)=>(state.user))
         // @ts-ignore
-        options.headers["Authorization"] = 'Bearer ' + user.jwtToken;
+        options.headers["Authorization"] = 'Bearer ' + dataObj.token;
     }
 
     if (dataObj.body != null){
         options.body = JSON.stringify(dataObj.body)
     }
 
-      return await fetch(dataObj.endpoint, options)
+      return await fetch(endpoint, options)
         .then((resp) => {
             if (resp.ok) {
                 return resp.json()
