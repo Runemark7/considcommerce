@@ -1,6 +1,6 @@
 import {GetStaticPaths, GetStaticProps} from "next";
-import {Exception} from "sass";
 import PageEditorClear from "../components/editor/PageEditorClear";
+import fetchData from "../core/fetchDataHelper";
 
 const PostLayout = (data:any) => {
     return (
@@ -21,23 +21,22 @@ const PostLayout = (data:any) => {
 export const getStaticProps: GetStaticProps = async ({params}) => {
     const post = params.post;
     const endpoint = `http://localhost:8010/proxy/api/post/slug/${post}`
-    let postData:any = null;
-    try{
-        await fetch(endpoint).then((response)=>{
-            if (response.ok){
-                return response.json()
-            }else{
-                throw Exception
-            }
-        }).then((data)=>{
-            postData = data
-        })
+    const postData = await fetchData({
+        endpoint: endpoint,
+        method: "GET",
+        headers: "",
+        token:false,
+        body: null,
+    })
+
+    if(postData) {
+        console.log(postData)
         return {
             props: {
                 postData,
             },
         }
-    }catch {
+    } else{
         return {
             notFound: true
         }

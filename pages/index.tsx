@@ -5,7 +5,7 @@ const Home = () => {
     return(
         <div className={"homeWrapper"}>
             <div>
-                Home
+                <h1>Home</h1>
                 <ProductList posttype={"product"} category={"hoodie"} layout={"list"}/>
             </div>
         </div>

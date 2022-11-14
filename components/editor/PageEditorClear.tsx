@@ -23,11 +23,13 @@ const PageEditorClear = (props:Props) => {
                 (pageContent.map((block: any)=>{
                     if (block.name == "header"){
                         return <ClearHeaderBlock
+                            key={block.id}
                             type={block.name}
                             text={block.value}
                             styling={block.style}/>
                     }else if(block.name == "textBlock"){
                         return <ClearTextBlock
+                            key={block.id}
                             type={block.name}
                             text={block.value}
                             styling={block.style}/>
