@@ -15,7 +15,7 @@ const PageEditorClear = (props:Props) => {
     useEffect(()=>{
         const testContent = JSON.parse(props.postContent)
         setPageContent(testContent)
-    },[])
+    },[props.postContent])
 
     return (
         <div className={"componentWrapper"}>
