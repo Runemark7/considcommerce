@@ -19,7 +19,6 @@ export default (({ Component, ...rest }: AppProps) => {
                 </Layout>
             </PersistGate>
         </Provider>
-
     )
 });
 

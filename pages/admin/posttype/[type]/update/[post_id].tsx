@@ -88,7 +88,11 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
         const endpoint = `http://localhost:8010/proxy/category/post/${data.postData.post_id}`
 
         fetch(endpoint)
-            .then(resp=>resp.json())
+            .then((resp)=>{
+                if(resp.status == 201){
+                    return resp.json()
+                }
+            })
             .then(data => {
                 setPostCategories(data)
             })

@@ -2,7 +2,6 @@ import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
 import Product from "../models/Product";
 import ShippingOption from "../models/shippingOption";
-import {act} from "react-dom/test-utils";
 
 interface CartState {
     products: Product[],

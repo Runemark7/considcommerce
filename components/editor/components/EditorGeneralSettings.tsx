@@ -4,7 +4,6 @@ type Props = {
     addNewBlock: any
 }
 
-
 const EditorGeneralSettings = (props:Props) => {
     const chooseBlock = [
         {

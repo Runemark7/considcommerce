@@ -5,6 +5,8 @@ import {loginUser, selectAuthState} from "../store/authSlice";
 import {useRouter} from "next/router";
 import Link from "next/link";
 
+import cookie from "js-cookie"
+
 const Login = () => {
     const dispatch = useDispatch();
 
@@ -46,12 +48,11 @@ const Login = () => {
                     setError(false)
                     return resp.json()
                 }else{
-                    const error = new Error(resp.statusText)
-                    throw error
-
+                    throw resp.statusText
                 }
             })
             .then(data => {
+                cookie.set("jwtToken", data.jwtToken)
                 dispatch(loginUser(data))
             }).catch((error)=>{
                 setError(true)

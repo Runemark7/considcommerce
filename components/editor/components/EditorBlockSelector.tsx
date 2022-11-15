@@ -23,8 +23,6 @@ const EditorBlockSelector = (props:Props) => {
                         :<></>}
                 </div>
                 :<></>}
-
-            editor block settings
         </div>
     )
 }

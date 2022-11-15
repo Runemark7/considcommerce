@@ -6,6 +6,8 @@ import {removeItemFromCart} from "../store/cartSlice";
 import Product from "../models/Product";
 import SearchBar from "./searchBar";
 
+import cookie from "js-cookie"
+
 export default function Navbar() {
     const user = useSelector((state)=>(state.user))
 
@@ -87,7 +89,8 @@ export default function Navbar() {
                                 // @ts-ignore
                                 fetch(endpoint, options)
                                 .then(resp => {
-                                dispatch(logoutUser())
+                                    cookie.remove("jwtToken")
+                                    dispatch(logoutUser())
                             })}}
 
                             >Logout</a>

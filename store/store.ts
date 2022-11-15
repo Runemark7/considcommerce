@@ -15,7 +15,7 @@ const combinedReducer = combineReducers({
 });
 
 // BINDING MIDDLEWARE
-const bindMiddleware = (middleware) => {
+const bindMiddleware = (middleware:any) => {
     if (process.env.NODE_ENV !== 'production') {
         const { composeWithDevTools } = require('redux-devtools-extension');
         return composeWithDevTools(applyMiddleware(...middleware));
@@ -23,7 +23,7 @@ const bindMiddleware = (middleware) => {
     return applyMiddleware(...middleware);
 };
 
-const makeStore = ({ isServer }) => {
+const makeStore = ({ isServer }:any) => {
     if (isServer) {
         //If it's on server side, create a store
         return createStore(
@@ -36,7 +36,7 @@ const makeStore = ({ isServer }) => {
 
         const persistConfig = {
             key: 'root',
-            version: 19,
+            version: 22,
             whitelist: ["cart", "user"], // only counter will be persisted, add other reducers if needed
             storage, // if needed, use a safer storage
         };

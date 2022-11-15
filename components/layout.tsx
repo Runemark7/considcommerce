@@ -11,6 +11,7 @@ export default function Layout({ children }:any) {
     const router = useRouter()
     const [isAdmin, setIsAdmin] = useState(false);
 
+
     if(router.pathname.startsWith("/admin")){
         // @ts-ignore
         const user = useSelector((state)=>(state.user))

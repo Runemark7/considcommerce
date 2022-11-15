@@ -1,7 +1,7 @@
 import ProductList from "../components/ProductList";
 import {useEffect, useState} from "react";
 import PageEditorClear from "../components/editor/PageEditorClear";
-import fetchData from "../core/fetchDataHelper";
+import { fetchData } from "../core/fetchDataHelper";
 
 const Home = () => {
     const [postData, setPostData] = useState([])
@@ -28,7 +28,7 @@ const Home = () => {
         }
 
         getSlug()
-    })
+    }, [])
 
     return(
         <div className={"homeWrapper"}>

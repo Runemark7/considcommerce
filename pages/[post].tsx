@@ -1,6 +1,6 @@
 import {GetStaticPaths, GetStaticProps} from "next";
 import PageEditorClear from "../components/editor/PageEditorClear";
-import fetchData from "../core/fetchDataHelper";
+import {fetchData} from "../core/fetchDataHelper";
 
 const PostLayout = (data:any) => {
     return (

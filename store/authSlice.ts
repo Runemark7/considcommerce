@@ -33,11 +33,15 @@ const authSlice = createSlice({
             state.userId = 0;
             state.jwtToken = "";
         },
+        updateUserToken (state, action: PayloadAction<string>) {
+            state.jwtToken = action.payload
+        }
+
     },
 
 })
 
-export const { loginUser, logoutUser } = authSlice.actions
+export const { loginUser, logoutUser, updateUserToken } = authSlice.actions
 
 export const selectAuthState = (state: AppState) => state.user.loggedIn;
 
