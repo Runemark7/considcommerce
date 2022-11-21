@@ -8,6 +8,7 @@ export default interface KlarnaShippingOptions {
     "tax_amount": 0,
     "tax_rate": 0,
     "shipping_method": string,
+    "tms_reference": string,
     "delivery_details": {
         "carrier": "postNord",
         "class": "string",

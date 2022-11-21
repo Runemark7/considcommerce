@@ -1,13 +1,28 @@
 footer{
   background: #eee;
   padding: 60px 0px 1rem 0px;
-  div{
+
+  .footerWrapper{
     display: flex;
     flex-direction: row;
+    align-self: center;
     justify-content: space-around;
+    margin: auto;
+    width: 90%;
+    .footerBranding{
+      .footerLogo{
+        width: 100%;
+        img{
+          width: 200px;
+        }
+      }
+    }
+
     .column{
       ul{
         list-style-type: none;
+        margin: 0;
+        padding: 0;
         li{
           a{
 
@@ -16,4 +31,15 @@ footer{
       }
     }
   }
+  .footerDivider{
+    width: 90%;
+    margin: 2rem auto;
+  }
+
+  .socials{
+
+  }
+
+
+
 }

@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 
 const AdminIndex: NextPage = () => {
+
+
     return (
         <div>
             <div>

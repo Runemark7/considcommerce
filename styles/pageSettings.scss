@@ -1,6 +1,10 @@
 .pageWrapper{
   max-width: 1120px;
-  min-width: 920px;
   width: 90%;
   margin: auto;
+  @include breakpoint(small-screen){
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+  }
 }

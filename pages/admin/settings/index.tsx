@@ -1,11 +1,7 @@
 import type { NextPage } from 'next'
 import {FormEvent, useEffect, useState} from "react";
-import fetchData from "../../../core/fetchDataHelper";
+import {fetchData} from "../../../core/fetchDataHelper";
 import {useSelector} from "react-redux";
-import {set} from "immutable";
-import {Simulate} from "react-dom/test-utils";
-import dragOver = Simulate.dragOver;
-import PostType from "../../../models/PostType";
 import Post from "../../../models/Post";
 
 const AdminCustomizerSettings: NextPage = () => {

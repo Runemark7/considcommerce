@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {EditorHeaderBlock} from "./blocks/EditorHeaderBlock";
 import {EditorTextBlock} from "./blocks/EditorTextBlock";
 import EditorGeneralSettings from "./components/EditorGeneralSettings";
-import {array} from "prop-types";
+import {EditorWrapperBlock} from "./blocks/EditorWrapperBlock";
 
 type Props = {
     postId: number,
@@ -15,22 +15,20 @@ type Block = {
     name: string,
     id: number,
     value: string,
-    styling: string
+    styling: string,
 }
 
-
 const PageEditor = (props:Props) => {
-
     const [pageContent, setPageContent] = useState<Block[]>([])
 
-    useEffect(()=>{
+    useEffect(() => {
         const testContent = JSON.parse(props.postContent)
         setPageContent(testContent)
-    },[])
+    },[props.postContent])
 
     const updateState = (newValue:any, id: number) => {
-        const newState = pageContent.map((block:Block)=>{
-            if (block.id == id){
+        const newState = pageContent.map((block:Block) => {
+            if (block.id == id) {
                 return {...block, value:newValue}
             }
             return block
@@ -52,14 +50,22 @@ const PageEditor = (props:Props) => {
     }
 
     const addNewBlock = (type: string) => {
-        const lastId = pageContent.at(-1);
+        const lastId = (pageContent)?pageContent.at(-1):0;
         const newBlock = {
             name: type,
             id: (lastId)?lastId.id+1:0,
             value: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             styling: ""
         };
-        setPageContent(current => [...current, newBlock])
+        if(pageContent){
+            // @ts-ignore
+            setPageContent(current => [...current, newBlock])
+        }else{
+            const tempPageContent = []
+            tempPageContent.push(newBlock)
+            // @ts-ignore
+            setPageContent(tempPageContent)
+        }
     }
 
     const removeBlock = (id: number) => {
@@ -85,7 +91,8 @@ const PageEditor = (props:Props) => {
                                 type={block.name}
                                 id={block.id}
                                 text={block.value}
-                                styling={block.style}/>
+                                styling={block.style}
+                            />
                         }else if(block.name == "textBlock"){
                             return <EditorTextBlock
                                 selectBlock={selectBlock}
@@ -95,6 +102,16 @@ const PageEditor = (props:Props) => {
                                 id={block.id}
                                 text={block.value}
                                 styling={block.style}/>
+                        }else if(block.name == "wrapperBlock"){
+                            return <EditorWrapperBlock
+                                selectBlock={selectBlock}
+                                blockSelected={(selectedBlock.id == block.id)}
+                                changeState={updateState}
+                                type={block.name}
+                                id={block.id}
+                                text={block.value}
+                                styling={block.style}
+                                innerBlock={block.innerBlock}/>
                         }
                     }))
                     :<div>no content</div>}

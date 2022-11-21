@@ -1,12 +1,10 @@
 import Link from "next/link";
 import {useDispatch, useSelector} from "react-redux";
-import {logoutUser} from "../store/authSlice";
 import {useEffect, useState} from "react";
 import {removeItemFromCart} from "../store/cartSlice";
 import Product from "../models/Product";
 import SearchBar from "./searchBar";
 
-import cookie from "js-cookie"
 
 export default function Navbar() {
     const user = useSelector((state)=>(state.user))
@@ -34,95 +32,83 @@ export default function Navbar() {
     return (
         <div className={"mainNavBar"}>
             <div className={"companyBranding"}>
-                <Link href={"http://localhost:3000"}>
-                    <p>
-                        logo
-                    </p>
-                </Link>
-            </div>
+                <div className="brandingWrapper">
+                    <Link href={"http://localhost:3000"}>
+                        <img className={"brandingImg"}  src={"/sitelogo.png"} alt="sitelogo"/>
+                    </Link>
+                </div>
 
-            <ul className={"nav"}>
-                <li>
-                    <Link href={"http://localhost:3000/product-category/hoodie"}>
-                        Hoodies
-                    </Link>
-                </li>
-                <li>
-                    <Link href={"http://localhost:3000/product-category/tshirt"}>
-                        shirts
-                    </Link>
-                </li>
-                <li>
-                    <Link href={"http://localhost:3000/cart"}>
-                        Cart
-                    </Link>
-                </li>
-                <li>
-                    <Link href={"http://localhost:3000/checkout"}>
-                        Checkout
-                    </Link>
-                </li>
-                {!user.loggedIn ?
-                    <li>
-                        <Link href={"http://localhost:3000/login"}>
-                            Login
-                        </Link>
-                    </li>
-                    :
-                    <div>
+                <div className={"searchBarWrapper"}>
+                    <SearchBar/>
+                </div>
+                <ul>
+                    {!user.loggedIn ?
                         <li>
-                            <Link href={"http://localhost:3000/profile"}>
-                                Profile
+                            <Link href={"http://localhost:3000/login"}>
+                                <img className={"icon"} src={"/icons/user.svg"} alt="userIcon"/>
+                                Login
                             </Link>
                         </li>
-                        <li>
-                            <a onClick={()=>{
-                                const endpoint = "http://localhost:8010/proxy/logout"
-
-                                const options = {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': 'Bearer ' + user.jwtToken,
-                                },
-                            }
-
-                                // @ts-ignore
-                                fetch(endpoint, options)
-                                .then(resp => {
-                                    cookie.remove("jwtToken")
-                                    dispatch(logoutUser())
-                            })}}
-
-                            >Logout</a>
-                        </li>
-                    </div>
-                }
-                <li>
-                    <a onClick={()=>{
-                        toggleMiniCart()
-                    }} >Minicart {Math.round(cartDetails.totalprice*100)/100} ({cartDetails.totalQty})</a>
-                    <div className={(miniCartToggle)?"showMiniCart":"hideMiniCart"}>
-                        {cartDetails.products.map((product: Product) => (
-                            <div className={"cartItemWrapper"} key={product.post_name}>
-                                <div className={"cartItem"}>
-                                    <Link href={`http://localhost:3000/product/${product.post_name}`}>
-                                       {product.post_name}
-                                    </Link>
-                                    <p className={"productPrice"}>{product.product_price}</p>
-                                    <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price ) * product.product_quantity)*100)/100}</p>
-                                </div>
-
-                                <button className={"removeItem"}
-                                        onClick={()=>{
-                                            dispatch(removeItemFromCart(product))
-                                        }}
-                                >X</button>
+                        :
+                        <div>
+                            <li>
+                                <Link href={"http://localhost:3000/profile"}>
+                                    <img className={"icon"} src={"/icons/user.svg"} alt="userIcon"/>
+                                </Link>
+                            </li>
+                        </div>
+                    }
+                    <li>
+                        <Link href={"http://localhost:3000/cart"}>
+                            <div class={"cartIcon"}>
+                                <img className={"icon"} src={"/icons/cart.svg"} alt="cartIcon"/>
+                                <p>
+                                    ({cartDetails.totalQty})
+                                </p>
                             </div>
-                        ))}
-                    </div>
-                </li>
-            </ul>
-            <SearchBar/>
+
+                        </Link>
+
+                        <div className={(miniCartToggle)?"showMiniCart":"hideMiniCart"}>
+                            {cartDetails.products.map((product: Product) => (
+                                <div className={"cartItemWrapper"} key={product.post_name}>
+                                    <div className={"cartItem"}>
+                                        <Link href={`http://localhost:3000/product/${product.post_name}`}>
+                                            {product.post_name}
+                                        </Link>
+                                        <p className={"productPrice"}>{product.product_price}</p>
+                                        <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price ) * product.product_quantity)*100)/100}</p>
+                                    </div>
+
+                                    <button className={"removeItem"}
+                                            onClick={()=>{
+                                                dispatch(removeItemFromCart(product))
+                                            }}
+                                    >X</button>
+                                </div>
+                            ))}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div className={"underBranding"}>
+                <ul className={"nav"}>
+                    <li>
+                        <Link href={"http://localhost:3000/product-category/hoodie"}>
+                            Hoodies
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={"http://localhost:3000/product-category/tshirt"}>
+                            shirts
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+
+
         </div>
 
     )

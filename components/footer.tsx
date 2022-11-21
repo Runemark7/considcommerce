@@ -3,7 +3,13 @@ import Link from "next/link";
 export default function Footer() {
     return (
         <footer>
-            <div>
+            <div className={"footerWrapper"}>
+                <div className="footerBranding">
+                    <div className={"footerLogo"}>
+                        <img src={"/sitelogo.png"} alt="footerlogo"/>
+                    </div>
+                </div>
+
                 <div className={"column"}>
                     <ul>
                         <li>
@@ -60,6 +66,13 @@ export default function Footer() {
                         </li>
                     </ul>
                 </div>
+
+            </div>
+
+            <hr className={"footerDivider"}/>
+
+            <div className={"footerWrapper socials"}>
+                socials
             </div>
         </footer>
     )

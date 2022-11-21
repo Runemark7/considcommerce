@@ -58,6 +58,7 @@ const TypeCategories: NextPage = (data:any) => {
 
     return (
         <div>
+
             <h1>
                 Categories for {type}
             </h1>
@@ -73,13 +74,11 @@ const TypeCategories: NextPage = (data:any) => {
                     Categories
                 </h3>
                 <div>
-                    {(categories.length>0)?categories.map((category:any)=>
+                    {(categories)?categories.map((category:any)=>
                         <p>{category.category_name} ({category.amount_of_posts})</p>
                     ):<></>}
                 </div>
-
             </div>
-
 
         </div>
     )

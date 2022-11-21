@@ -59,6 +59,11 @@ export default function AdminNavbar() {
                     </li>
                 ))}
                 <li className={"zeroLevelLi"} >
+                    <Link href={"http://localhost:3000/admin/order"}>
+                        Orders
+                    </Link>
+                </li>
+                <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/posttype/create"}>
                         Create posttype
                     </Link>

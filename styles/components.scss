@@ -2,14 +2,23 @@
   display:flex;
   flex-direction: row;
   width: 100%;
+  @include breakpoint(small-screen){
+    display: block;
+  }
 
   &.fifty-fifty{
 
     .leftCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 50%;
     }
 
     .rightCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 50%;
     }
   }
@@ -17,10 +26,17 @@
   &.ninety-ten{
 
     .leftCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 10%;
     }
 
     .rightCol{
+
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 90%;
     }
   }
@@ -31,10 +47,17 @@
     }
 
     .leftCol{
+
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 20%;
     }
 
     .rightCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 80%;
     }
   }
@@ -45,10 +68,16 @@
     }
 
     .leftCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 70%;
     }
 
     .rightCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 30%;
     }
   }
@@ -59,10 +88,16 @@
     }
 
     .leftCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 60%;
     }
 
     .rightCol{
+      @include breakpoint(small-screen){
+        width: 100%;
+      }
       width: 40%;
     }
   }

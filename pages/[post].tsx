@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         endpoint: endpoint,
         method: "GET",
         headers: "",
-        token:false,
+        token:"",
         body: null,
     })
 

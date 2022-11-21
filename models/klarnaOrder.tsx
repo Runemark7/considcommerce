@@ -13,8 +13,10 @@ export default interface KlarnaOrder {
         "terms": "http://localhost:3000/terms",
         "checkout": "http://localhost:3000/checkout",
         "confirmation": "http://localhost:3000/thankyou/{checkout.order.id}",
-        "push": "http://localhost:3000/api/push"
-    }
+        "push": "http://localhost:3000/api/push",
+        "shipping_option_update": string
+    },
+    options: any
 }
 
 

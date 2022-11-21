@@ -1,19 +1,114 @@
 .mainNavBar{
-  display:flex;
+  padding:5px 0;
   .companyBranding{
-    align-content: center;
-    width: 200px;
+    @include breakpoint(small-screen){
+      width: 100%;
+    }
+    width: 80%;
+    display: flex;
+    flex-wrap: nowrap;
     text-align: center;
-    cursor:pointer;
+    max-width: 1340px;
+    justify-content: space-between;
+    align-content: space-between;
+    margin:auto;
+    .brandingWrapper{
+      justify-content: flex-start;
+      align-content: flex-start;
+      a{
+        justify-content: flex-start;
+        .brandingImg{
+          @include breakpoint(small-screen){
+            width: 150px;
+          }
+          width: 200px;
+          cursor:pointer;
+        }
+      }
+
+    }
+
+    img{
+      cursor: pointer;
+    }
+    .searchBarWrapper{
+      align-self: center;
+      justify-content: center;
+      width: 100%;
+      .searchBar{
+        width: 60%;
+        position:relative;
+        margin:auto;
+        input{
+          align-self: center;
+          border-radius: 19px/50%;
+          width: 100%;
+          height: 38px;
+          border-radius: 19px/50%;
+
+        }
+        button{
+          background-color: transparent;
+          border-radius: 50%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 38px;
+          transition: background-color .3s;
+          z-index: 22000;
+          padding: 8px;
+          box-sizing: border-box;
+          border: 1px solid transparent;
+          img{
+            height: 20px;
+          }
+        }
+      }
+
+    }
+    ul{
+      justify-content: flex-end;
+      display:flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-self: center;
+      .cartIcon{
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        p{
+          margin: 0;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-self: center;
+        }
+
+      }
+      li{
+        margin-left: 0.5rem;
+      }
+    }
   }
   .nav{
     display:flex;
     list-style: none;
+    justify-content: center;
+    justify-items: center;
+    align-self: center;
+    margin: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    box-shadow: 0 0 4px rgba(54,54,54,0.2), 0 0 4px rgba(54,54,54,0.2);
     li{
       margin-right: 1rem;
       a{
         cursor:pointer;
-        text-decoration: underline;
+        text-decoration: none;
+        padding: 3px 10px 3px 0px;
+        color:black;
+        text-transform: uppercase;
       }
     }
   }

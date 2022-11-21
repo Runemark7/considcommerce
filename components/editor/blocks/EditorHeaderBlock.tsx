@@ -7,7 +7,7 @@ type EditorProps = {
     type: string,
     id: number,
     text: string,
-    styling: string
+    styling: string,
 }
 
 type ClearProps = {
@@ -25,7 +25,6 @@ const ClearHeaderBlock = (props:ClearProps) => {
 }
 
 const EditorHeaderBlock = (props:EditorProps) => {
-
     const [editBlock, setEditBlock] = useState(false)
 
     const toggleEditor = () => {
@@ -33,8 +32,8 @@ const EditorHeaderBlock = (props:EditorProps) => {
         setEditBlock(true)
     }
 
-    const handleTextChange = (e : FormEvent) => {
-        props.changeState(e.target.value, props.id)
+    const handleTextChange = (text: string) => {
+        props.changeState(text, props.id)
     }
 
     useEffect(()=>{
@@ -45,9 +44,16 @@ const EditorHeaderBlock = (props:EditorProps) => {
         <div onClick={toggleEditor} >
             {
                 (editBlock)?
-                    <textarea onChange={handleTextChange}>
-                        {props.text}
-                    </textarea>
+                    <div
+                        contentEditable={true}
+                        suppressContentEditableWarning={true}
+                        onInput={(e)=>{
+                            handleTextChange(e.currentTarget.textContent)
+                        }}
+                    >
+                        <ClearHeaderBlock {...props} />
+                    </div>
+
                     : <ClearHeaderBlock {...props} />
             }
         </div>

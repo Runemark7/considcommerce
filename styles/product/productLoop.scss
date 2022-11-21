@@ -3,10 +3,19 @@
   flex-direction: row;
   flex-wrap: wrap;
   flex: 1 1 auto;
+  @include breakpoint(small-screen){
+    width: 100%;
+  }
   .productWrapper{
     width: 100%;
     flex-basis: 25%;
     padding: 0.5rem;
+    @include breakpoint(small-screen){
+      flex-basis: 50%;
+    }
+    a{
+      width: 100%;
+    }
     .productTitle{
 
     }

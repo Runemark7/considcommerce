@@ -32,14 +32,11 @@ const Home = () => {
 
     return(
         <div className={"homeWrapper"}>
-            <div>
-                <h1>Home</h1>
-                {(postData.post_content)?
-                    <PageEditorClear postId={postData.post_id} postContent={postData.post_content} />
-                    :
-                    <></>
-                }
-            </div>
+            {(postData.post_content)?
+                <PageEditorClear postId={postData.post_id} postContent={postData.post_content} />
+                :
+                <></>
+            }
         </div>
     )
 }

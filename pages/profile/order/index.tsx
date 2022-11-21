@@ -7,18 +7,19 @@ import Order from "../../../models/order";
 
 const UserProfile = () => {
 
+    fetch("/api/auth/settoken")
+        .then((data)=>{
+            console.log(data)
+    })
+
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
-    const router = useRouter();
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
     useEffect(()=>{
 
         setLoading(true);
-        if (!user.loggedIn) {
-            router.push("/login")
-        }else{
             const endpoint = "http://localhost:8010/proxy/user/orders"
 
             const options = {
@@ -28,16 +29,13 @@ const UserProfile = () => {
                 },
             }
 
-            fetch(endpoint, options)
-                .then(resp=>resp.json())
-                .then(data => {
-                    setLoading(false)
-                    setData(data)
-                })
-        }
+        fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                setLoading(false)
+                setData(data)
+            })
     }, [user])
-
-    console.log(data)
 
     return (
         <div>

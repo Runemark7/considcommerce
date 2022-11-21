@@ -4,7 +4,6 @@ import {GetStaticPaths, GetStaticProps} from "next";
 const updateSinglePost = (data:any) => {
     const router = useRouter()
     const { name } = router.query
-    console.log(data);
 
     return (
         <div>

@@ -5,6 +5,7 @@ import storage from './sync_storage';
 
 import cartSlice from "./cartSlice";
 import authSlice from "./authSlice";
+import {middleware} from "../middleware";
 // If you don't bother about the error redux-persist failed to create sync storage. falling back to noop storage...uncomment the next line and comment out the previous import. See more on - https://github.com/vercel/next.js/discussions/15687
 // const storage = require('redux-persist/lib/storage').default;
 
