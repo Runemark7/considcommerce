@@ -105,6 +105,11 @@ export default function Navbar() {
                             shirts
                         </Link>
                     </li>
+                    <li>
+                        <Link href={"http://localhost:3000/product-category/sweatshirt"}>
+                            Sweatshirts
+                        </Link>
+                    </li>
                 </ul>
             </div>
 

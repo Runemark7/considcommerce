@@ -78,6 +78,11 @@ export default function AdminNavbar() {
                         Users
                     </Link>
                 </li>
+                <li className={"zeroLevelLi"} >
+                    <Link href={"http://localhost:3000/admin/logs"}>
+                        Logs
+                    </Link>
+                </li>
             </ul>
         </div>
 

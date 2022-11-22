@@ -4,7 +4,6 @@ import Product from "../models/Product";
 import KlarnaOrder from "../models/klarnaOrder";
 import KlarnaOrderProduct from "../models/klarnaOrderProduct";
 import KlarnaShippingOptions from "../models/klarnaShippingOptions";
-import ProductListItem from "../components/productListItem";
 import DataTable from "react-data-table-component";
 
 const Checkout = () => {
@@ -44,11 +43,28 @@ const Checkout = () => {
             orderLines.push(klarnaProduct)
         })
 
-        const shippingOptions: KlarnaShippingOptions[] = []
+
+        const shippingOptions: KlarnaShippingOptions[] = [
+            /*{
+                "id": "id-1070",
+                "carrier": "postnord",
+                "name": "Postal delivery",
+                "price": 0,
+                "tax_rate": 0,
+                "delivery_time": {
+                    "interval": {
+                        "earliest": 4,
+                        "latest": 6
+                    }
+                },
+                "class": "standard"
+            }*/
+        ]
 
         deliveryOptions.map((deliveryOption: any)=>{
 
             let singleShippingOption: KlarnaShippingOptions = {
+                tms_reference: "",
                 delivery_details: {
                     carrier: "postNord",
                     class: "string",
@@ -156,8 +172,6 @@ const Checkout = () => {
                     singleShippingOption.price = 2500
                     shippingOptions.push(singleShippingOption)
                 }
-
-
             }else if(deliveryOption.type == "home"){
                 singleShippingOption.id = deliveryOption.deliveryOptions[0].id;
 
@@ -168,8 +182,14 @@ const Checkout = () => {
                 singleShippingOption.price = 5000
                 shippingOptions.push(singleShippingOption)
             }
-
         })
+
+
+
+
+
+
+
 
         const data:KlarnaOrder = {
             locale: "sv-SE",
@@ -177,14 +197,14 @@ const Checkout = () => {
                 checkout: "http://localhost:3000/checkout",
                 confirmation: "http://localhost:3000/thankyou/{checkout.order.id}",
                 push: "http://localhost:3000/api/push",
-                terms: "http://localhost:3000/terms"
+                terms: "http://localhost:3000/terms",
             },
             shipping_options: shippingOptions,
             order_lines: orderLines,
             order_tax_amount: 0,
             purchase_country: "se",
             purchase_currency: "SEK",
-            order_amount:cart.totalprice*100
+            order_amount:cart.totalprice*100,
         }
 
         const JSONdata = JSON.stringify(data);
@@ -202,6 +222,7 @@ const Checkout = () => {
 
         fetch(endpoint, options)
             .then(resp=>{
+                console.log(resp)
                 if (resp.ok){
                     return resp.json()
                 }
@@ -210,28 +231,30 @@ const Checkout = () => {
                 setCallbackHTML(data.html_snippet)
 
                 //create order in our database
-                 const formData = {
+                const formData = {
                     firstName: event.target.firstName.value,
                     lastName: event.target.lastName.value,
-                    userId: userId,
-                     klarna_order_id: data.order_id,
-                     klarna_order_amount: data.order_amount
+                    userId: (user.jwtToken)?userId:0,
+                    klarna_order_id: data.order_id,
+                    klarna_order_amount: data.order_amount
                 }
-
                 const fromFormDataToJSON = JSON.stringify(formData);
 
-                const endpoint = "http://localhost:8010/proxy/api/order"
+                const endpointAfter = "http://localhost:8010/proxy/api/order"
 
-                const options = {
+                const optionstwo = {
                     method: 'POST',
                     headers:{
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + user.jwtToken,
                     },
                     body: fromFormDataToJSON
                 }
 
-                fetch(endpoint, options)
+                if (user.jwtToken){
+                    optionstwo.headers["Authorization"] = 'Bearer ' + user.jwtToken;
+                }
+
+                fetch(endpointAfter, optionstwo)
                     .then(resp=>{
                         if (resp.ok){
                             return resp.json()
@@ -303,7 +326,7 @@ const Checkout = () => {
                 },
                 "warehouses": [
                     {
-                        "id": "my_identifier",
+                        "id": "PK64251",
                         "address": {
                             "countryCode": "SE",
                             "postCode": "30227",
@@ -402,6 +425,7 @@ const Checkout = () => {
 
                         <button type="submit">Make order</button>
                     </form>
+
                 </div>
 
                 <div className={"rightCol"}>

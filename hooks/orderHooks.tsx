@@ -1,6 +1,7 @@
 import {hooks} from "../pages/_app";
 
 const test = (data: any) => {
+
     console.log("test")
 }
 

@@ -6,8 +6,6 @@ const SearchListResult = (posts: Post[]) => {
     const router = useRouter()
     const { post } = router.query
 
-    console.log(posts)
-
     return (
         <div className={"productWrapper"}>
             Search result for: {post}

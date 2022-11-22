@@ -27,7 +27,9 @@ const PageEditorClear = (props:Props) => {
                             key={block.id}
                             type={block.name}
                             text={block.value}
-                            styling={block.style}/>
+                            styling={block.style}
+                            headerTag={"h1"}
+                        />
                     }else if(block.name == "textBlock"){
                         return <ClearTextBlock
                             key={block.id}
@@ -42,7 +44,7 @@ const PageEditorClear = (props:Props) => {
                             styling={block.style}/>
                     }
                 }))
-                :<div>no content</div>}
+                :<></>}
         </div>
     )
 }

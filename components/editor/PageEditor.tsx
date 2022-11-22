@@ -11,11 +11,17 @@ type Props = {
     postContent: string
 }
 
+type BlockProps = {
+    name: string,
+    value: string
+}
+
 type Block = {
     name: string,
     id: number,
     value: string,
     styling: string,
+    blockProps: BlockProps[]
 }
 
 const PageEditor = (props:Props) => {
@@ -30,6 +36,25 @@ const PageEditor = (props:Props) => {
         const newState = pageContent.map((block:Block) => {
             if (block.id == id) {
                 return {...block, value:newValue}
+            }
+            return block
+        })
+        setPageContent(newState)
+    }
+
+    const updateBlockProps = (blockPropsName:string, blockPropsValue:any, id: number) => {
+        const newState = pageContent.map((block:Block) => {
+            if (block.id == id) {
+                const value = block.blockProps.map((blockProps: BlockProps) => {
+                    if (blockProps.name == blockPropsName){
+                        return {...block.blockProps, value:blockPropsValue}
+                    }
+                })
+                if (!value){
+                    return [...block.blockProps, {blockPropsName:blockPropsValue}]
+                }else{
+                    return value
+                }
             }
             return block
         })
@@ -55,7 +80,8 @@ const PageEditor = (props:Props) => {
             name: type,
             id: (lastId)?lastId.id+1:0,
             value: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            styling: ""
+            styling: "",
+            blockProps: []
         };
         if(pageContent){
             // @ts-ignore
@@ -86,12 +112,14 @@ const PageEditor = (props:Props) => {
                         if (block.name == "header"){
                             return <EditorHeaderBlock
                                 selectBlock={selectBlock}
+                                updateBlockProps={updateBlockProps}
                                 blockSelected={(selectedBlock.id == block.id)}
                                 changeState={updateState}
                                 type={block.name}
                                 id={block.id}
                                 text={block.value}
                                 styling={block.style}
+                                blockProps={block.blockProps}
                             />
                         }else if(block.name == "textBlock"){
                             return <EditorTextBlock

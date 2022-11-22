@@ -20,10 +20,6 @@ const PosttypeIndex: NextPage = (data:any) => {
             {(data.posts)?
                 <div>
                     <DataTable
-                        onRowClicked={(row,event) => {
-
-                        }}
-
                         columns={[
                         {
                             name: "ID",
@@ -41,7 +37,6 @@ const PosttypeIndex: NextPage = (data:any) => {
                         {
                             name: "test",
                             cell: (row,index,column,id) => {
-                                console.log(row)
                                 return (
                                     <Link href={`http://localhost:3000/admin/posttype/${type}/update/${row.post_id}`}>
                                         <button>

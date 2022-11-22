@@ -6,13 +6,7 @@ const PostLayout = (data:any) => {
     return (
         <div>
             {(data)?(
-                <div>
-                    {data.postData.post_name}
-                    <p>
-                        {data.postData.post_excerpt}
-                    </p>
-                    <PageEditorClear postId={data.postData.post_id} postContent={data.postData.post_content} />
-                </div>
+                <PageEditorClear postId={data.postData.post_id} postContent={data.postData.post_content} />
             ):<></>}
         </div>
     );
@@ -46,7 +40,6 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
             notFound: true
         }
     }
-
 }
 
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
