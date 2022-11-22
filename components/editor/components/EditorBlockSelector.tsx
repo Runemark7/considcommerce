@@ -18,7 +18,12 @@ const EditorBlockSelector = (props:Props) => {
                     </button>
                     { (props.blockType == "textBlock") ?
                         <div>
-                            d
+                            textBlock test
+                        </div>
+                        :<></>}
+                    { (props.blockType == "header") ?
+                        <div>
+                            Select tag
                         </div>
                         :<></>}
                 </div>

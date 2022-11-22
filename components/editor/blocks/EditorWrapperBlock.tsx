@@ -46,9 +46,9 @@ const EditorWrapperBlock = (props:Props) => {
         <div onClick={toggleEditor} >
             {
                 (editBlock)?
-                    <textarea onChange={handleTextChange}>
-                        {props.text}
-                    </textarea>
+                    <div>
+                        wrapper
+                    </div>
                     : <ClearWrapperBlock {...props} />
             }
         </div>

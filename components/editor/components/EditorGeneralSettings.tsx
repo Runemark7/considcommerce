@@ -12,6 +12,9 @@ const EditorGeneralSettings = (props:Props) => {
         {
             type: "textBlock",
         },
+        {
+            type: "wrapperBlock",
+        },
     ]
 
     const [chooseABlock, setChooseABlock] = useState(false)

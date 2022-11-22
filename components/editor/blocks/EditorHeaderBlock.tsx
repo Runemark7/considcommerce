@@ -1,26 +1,39 @@
-import {FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+
+type BlockProps = {
+    name: string,
+    value: string
+}
 
 type EditorProps = {
     changeState: any,
     selectBlock: any,
+    updateBlockProps: any,
     blockSelected: boolean,
     type: string,
     id: number,
     text: string,
     styling: string,
+    blockProps: BlockProps[]
 }
 
 type ClearProps = {
-    type: string,
     text: string,
     styling: string
 }
 
-const ClearHeaderBlock = (props:ClearProps) => {
+interface HeaderBlock extends ClearProps{
+    headerTag: string
+}
+
+
+const ClearHeaderBlock = (props:HeaderBlock) => {
+    const element = `<${props.headerTag} class="${props.styling}">
+        ${props.text}
+    </${props.headerTag }>`
     return (
-        <h1 className={props.styling}>
-            {props.text}
-        </h1>
+        <div dangerouslySetInnerHTML={{__html: element}}>
+        </div>
     )
 }
 
@@ -36,25 +49,63 @@ const EditorHeaderBlock = (props:EditorProps) => {
         props.changeState(text, props.id)
     }
 
+    const handleBlockPropsChange = (name: string, value: string) => {
+       props.updateBlockProps(name,value,props.id)
+    }
+
     useEffect(()=>{
         setEditBlock(false)
     }, [props.blockSelected])
+
+
+    const [headerTag, setHeaderTag] = useState("h1")
+
+    useEffect(()=>{
+        if(props.blockProps){
+            props.blockProps.map((blockProps:BlockProps)=>{
+                if (blockProps.name == "headerTag"){
+                    setHeaderTag(blockProps.value)
+                }
+            })
+        }
+    },[props.blockProps])
 
     return (
         <div onClick={toggleEditor} >
             {
                 (editBlock)?
-                    <div
-                        contentEditable={true}
-                        suppressContentEditableWarning={true}
-                        onInput={(e)=>{
-                            handleTextChange(e.currentTarget.textContent)
-                        }}
-                    >
-                        <ClearHeaderBlock {...props} />
+                    <div>
+                        <div>
+                            topbar
+
+                            <button onClick={()=>{
+                                handleBlockPropsChange("headerTag", "h1")
+                            }}>
+                                H1
+                            </button>
+
+
+                            <button onClick={()=>{
+                                handleBlockPropsChange("headerTag", "h2")
+                            }}>
+                                H2
+                            </button>
+
+                        </div>
+                        <div
+                            contentEditable={true}
+                            suppressContentEditableWarning={true}
+                            onInput={(e)=>{
+                                handleTextChange(e.currentTarget.textContent)
+                            }}
+                        >
+
+                            <ClearHeaderBlock {...props} headerTag={headerTag} />
+                        </div>
                     </div>
 
-                    : <ClearHeaderBlock {...props} />
+
+                    : <ClearHeaderBlock {...props} headerTag={headerTag} />
             }
         </div>
     )
