@@ -26,6 +26,7 @@ const ProductListItem = (props: Props) => {
                             src={product.post_featuredImage}
                             width={859}
                             height={1163}
+                            alt={""}
                         />
 
 
