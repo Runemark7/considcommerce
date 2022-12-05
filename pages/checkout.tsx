@@ -240,6 +240,7 @@ const Checkout = () => {
                 }
                 const fromFormDataToJSON = JSON.stringify(formData);
 
+                //TODO: fix this route
                 const endpointAfter = "http://localhost:8010/proxy/api/order"
 
                 const optionstwo = {

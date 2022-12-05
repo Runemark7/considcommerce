@@ -1,70 +1,30 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
 import Link from "next/link";
-import cookie from "js-cookie"
-
 import {logoutUser} from "./../../store/authSlice";
+import {GetServerSidePropsContext} from "next";
 
-const UserIndex = () => {
-
+const UserIndex = (data: any) => {
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
-    const router = useRouter();
-    const [data, setData] = useState([]);
-    const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
-
-    useEffect(()=>{
-
-        setLoading(true);
-        if (!user.loggedIn) {
-            router.push("/login")
-        }else{
-            const endpoint = "http://localhost:8010/proxy/user/orders"
-
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-
-            fetch(endpoint, options)
-                .then(resp=>{
-                    if(resp.ok){
-                        resp.json()
-                    }
-                })
-                .then(data => {
-                    setLoading(false)
-                    setData(data)
-                })
-        }
-    }, [user])
-
 
     return (
         <div>
             <ul>
                 <li>
                     <a onClick={()=>{
-                        const endpoint = "http://localhost:8010/proxy/logout"
+                        // TODO: change this to local api using the right headers!!!
+                        const endpoint = "http://localhost:3000/api/auth/logout"
 
                         const options = {
                             method: 'POST',
-                            headers: {
-                                'Authorization': 'Bearer ' + user.jwtToken,
-                            },
                         }
 
                         // @ts-ignore
                         fetch(endpoint, options)
                             .then(resp => {
-                                cookie.remove("jwtToken")
                                 dispatch(logoutUser())
                             })}}
-
                     >Logout</a>
                 </li>
                 <li>
@@ -82,6 +42,27 @@ const UserIndex = () => {
             Index
         </div>
     );
+}
+
+export const getServerSideProps = async (context :GetServerSidePropsContext) => {
+    const endpoint = "http://localhost:8010/proxy/user/orders"
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const data = await res.json();
+
+    return{
+        props: {
+            data
+        }
+    }
 }
 
 export default UserIndex

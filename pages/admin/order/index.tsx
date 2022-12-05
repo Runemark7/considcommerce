@@ -1,37 +1,8 @@
-import type { NextPage } from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import DataTable from "react-data-table-component";
-import {useEffect, useState} from "react";
 import Link from "next/link";
 
-const AdminOrderIndex: NextPage = () => {
-    const [orders, setOrders] = useState([]);
-
-    useEffect(()=>{
-        async function getData(){
-            const endpoint = `http://localhost:8010/proxy/api/posttype/order`;
-            const options = {
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-            }
-            try{
-                await fetch(endpoint, options).then((response)=>{
-                    if (response.ok){
-                        return response.json()
-                    }
-                }).then((data)=>{
-                    setOrders(data)
-                })
-            }catch {
-                setOrders([])
-            }
-        }
-
-        getData()
-    }, [])
-
-    console.log(orders)
+const AdminOrderIndex: NextPage = (props: any) => {
 
     return (
         <div>
@@ -70,12 +41,31 @@ const AdminOrderIndex: NextPage = () => {
                     }
                 ]}
                 pagination={true}
-                data={orders}
+                data={props.orders}
                 highlightOnHover={true}
                 striped={true}
                 pointerOnHover={true} />
         </div>
     )
+}
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const endpoint = `http://localhost:8010/proxy/api/posttype/order`;
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const orders = await res?.json();
+
+    return {
+        props: orders
+    }
 }
 
 export default AdminOrderIndex

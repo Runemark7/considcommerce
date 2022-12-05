@@ -1,10 +1,8 @@
 import Navbar from './navbar'
 import Footer from './footer'
-
-import { useRouter } from 'next/router'
 import AdminNavbar from "./adminNavbar";
-import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
 
 
 export default function Layout({ children }:any) {
@@ -13,30 +11,20 @@ export default function Layout({ children }:any) {
 
 
     if(router.pathname.startsWith("/admin")){
-        // @ts-ignore
-        const user = useSelector((state)=>(state.user))
-
         useEffect(()=>{
-            const endpoint = "http://localhost:8010/proxy/auth/token/admin"
+            const endpoint = "http://localhost:3000/api/auth/admin"
 
             const options = {
                 method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
             }
 
             fetch(endpoint, options)
-                .then(resp=>resp.json())
-                .then(data => {
-                    if (data["auth"]){
+                .then(resp=>    {
+                    if (resp.ok){
                         setIsAdmin(true)
-                    }else{
-                        setIsAdmin(false)
                     }
                 })
-
-        },[user])
+        },[])
     }
 
     return (
@@ -48,7 +36,7 @@ export default function Layout({ children }:any) {
                 </div>
             </>
             :
-            <>
+            <div>
                 <Navbar />
                     <main>
                         <div className={"pageWrapper"}>
@@ -56,6 +44,8 @@ export default function Layout({ children }:any) {
                         </div>
                     </main>
                 <Footer />
-            </>
+            </div>
     )
 }
+
+

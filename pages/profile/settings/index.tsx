@@ -1,49 +1,15 @@
 import {useSelector} from "react-redux";
-import {FormEvent, useEffect, useState} from "react";
-import {useRouter} from "next/router";
+import {FormEvent} from "react";
 import Link from "next/link";
-import UserShowObj from "../../../models/userShowObj";
+import {GetServerSidePropsContext} from "next";
 
-const UserSettings = () => {
+const UserSettings = (props: any) => {
     // @ts-ignore
     const user = useSelector((state)=>(state.user))
-    const router = useRouter();
-    const [data, setData] = useState<UserShowObj>();
-    const [isLoading, setLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
-
-    useEffect(()=>{
-        setLoading(true);
-        if (!user.loggedIn) {
-            router.push("/login")
-        }else{
-            const endpoint = "http://localhost:8010/proxy/user/data"
-
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-
-            fetch(endpoint, options)
-                .then((resp)=>{
-                    if (resp.ok){
-                        return resp.json()
-                    }
-                })
-                .then(data => {
-                    setLoading(false)
-                    setData(data)
-                }).catch((error) => {
-                    setLoading(false)
-                    setIsError(error)
-                })
-        }
-    }, [user])
-
 
     const submitPasswordChanges = (e: FormEvent) => {
+
+        //TODO: Change this to the local api and user the right headers!!!
         e.preventDefault()
 
         const formData = {
@@ -92,32 +58,28 @@ const UserSettings = () => {
                 </li>
             </ul>
             <div>
-                {(isLoading)?
-                    <div>Loading...</div>
-                    :
-                    <div>
-                        {(data)?
-                            <div className={"cartItemWrapper"} >
-                                <div >
-                                    <p>
-                                        Username: {data.userName}
-                                    </p>
-                                    <p>
-                                        Email: {data.userEmail}
-                                    </p>
-                                    <p>
-                                        Role: {(data.userRole==1)?"Customer":"Admin"}
-                                    </p>
-                                    <p>
-                                        Status: {data.userStatus}
-                                    </p>
-                                </div>
+                <div>
+                    {(props.data)?
+                        <div className={"cartItemWrapper"} >
+                            <div >
+                                <p>
+                                    Username: {props.data.userName}
+                                </p>
+                                <p>
+                                    Email: {props.data.userEmail}
+                                </p>
+                                <p>
+                                    Role: {(props.data.userRole==1)?"Customer":"Admin"}
+                                </p>
+                                <p>
+                                    Status: {props.data.userStatus}
+                                </p>
                             </div>
-                            :<div>
-                                No orders found!
-                            </div>}
-                    </div>
-                }
+                        </div>
+                        :<div>
+                            info not found!
+                        </div>}
+                </div>
 
                 <h3>Update password</h3>
                     <form onSubmit={submitPasswordChanges}>
@@ -133,11 +95,30 @@ const UserSettings = () => {
                         <br/>
                         <input type="submit" value={"Change Password"}/>
                     </form>
-
             </div>
-
         </div>
     );
+}
+
+export const getServerSideProps = async (context :GetServerSidePropsContext) => {
+    const endpoint = "http://localhost:8010/proxy/user/data"
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const data = await res.json();
+
+    return{
+        props: {
+            data
+        }
+    }
 }
 
 export default UserSettings

@@ -1,4 +1,4 @@
-import {GetStaticPaths, GetStaticProps} from "next";
+import {GetServerSidePropsContext, GetStaticPaths, GetStaticProps} from "next";
 import ProductList from "../../components/ProductList";
 import {useRouter} from "next/router";
 
@@ -10,6 +10,7 @@ const CategoryList = () => {
         <ProductList posttype={"product"} category={category} layout={"list"}/>
     );
 }
+
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     return {

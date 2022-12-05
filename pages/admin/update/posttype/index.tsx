@@ -23,6 +23,8 @@ const AdminModifyPostTypeFields: NextPage = () => {
     }, [])
 
     const getPostTypeModel = (posttype: string)=>{
+
+        //TODO: fix this!
         const endpoint = `http://localhost:8010/proxy/api/posttype/model/${posttype}`
 
         const options = {

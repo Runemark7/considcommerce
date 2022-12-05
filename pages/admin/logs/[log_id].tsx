@@ -1,4 +1,4 @@
-import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 
 const AdminIndexSingleLog: NextPage = (props: any) => {
 
@@ -18,22 +18,23 @@ const AdminIndexSingleLog: NextPage = (props: any) => {
     )
 }
 
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const log_id = context.params?.log_id;
+    const endpoint = `http://localhost:8010/proxy/log/get/${log_id}`
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-    // @ts-ignore
-    const log_id = params.log_id
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
 
-    const data = await fetch(`http://localhost:8010/proxy/log/get/${log_id}`);
-    const logData = await data.json();
+    const res = await fetch(endpoint, options);
+    const logData = await res?.json();
+
     return {
         props: logData
-    }
-}
-
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
     }
 }
 

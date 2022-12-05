@@ -2,12 +2,13 @@ import {FormEvent, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import PostMetaField from "../../../models/PostMetaField";
 
-const AdminCreatePostType = () => {
+const AdminCreatePostType = (props:any) => {
 
     const user = useSelector((state)=>(state.user))
     const [postTypeModel, setPostTypeModel] = useState<PostMetaField[]>([]);
 
     const createPostType = async (e: FormEvent) => {
+        //TODO: fix this!
         e.preventDefault()
 
         // @ts-ignore
@@ -126,7 +127,5 @@ const AdminCreatePostType = () => {
         </div>
     )
 }
-
-
 
 export default AdminCreatePostType

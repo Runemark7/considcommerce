@@ -1,37 +1,14 @@
-import type {NextPage} from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import {useRouter} from "next/router";
 import {useSelector} from "react-redux";
-import {FormEvent, useEffect, useState} from "react";
+import {FormEvent, useState} from "react";
 import PostMetaField from "../../../../models/PostMetaField";
 
-const TypeCreate: NextPage = () => {
+const TypeCreate: NextPage = (props: any) => {
     const router = useRouter()
     const { type } = router.query
 
     const user = useSelector((state)=>(state.user))
-
-    const [postTypeModel, setPostTypeModel] = useState<PostMetaField[]>([]);
-
-    useEffect(() =>{
-        const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
-
-        const options = {
-            method: 'GET',
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
-        }
-        fetch(endpoint, options)
-            .then((resp)=>{
-                if (resp.status == 201){
-                    return resp.json()
-                }
-            })
-            .then(data => {
-                setPostTypeModel(data)
-            });
-    }, [type])
 
     const [newPostMetaField, setNewPostMetafield] = useState<PostMetaField>({
         meta_required:false,
@@ -92,7 +69,7 @@ const TypeCreate: NextPage = () => {
                     Existing Custom Fields:
                 </h3>
 
-                {(postTypeModel)?postTypeModel.map((postMeta:PostMetaField)=>
+                {(props.postTypeModel)?props.postTypeModel.map((postMeta:PostMetaField)=>
                     <div key={postMeta.meta_key}>
                         <p>
                             Metakey: {postMeta.meta_key}
@@ -132,6 +109,29 @@ const TypeCreate: NextPage = () => {
             </form>
         </div>
     )
+}
+
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const type = context.params?.type;
+    const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const postTypeModel = await res?.json();
+    return {
+        props: {
+            postTypeModel
+        }
+    }
 }
 
 export default TypeCreate

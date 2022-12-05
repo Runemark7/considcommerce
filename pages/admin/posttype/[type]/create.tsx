@@ -1,16 +1,14 @@
-import type {NextPage} from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import {useRouter} from "next/router";
 import {useSelector} from "react-redux";
 import {FormEvent, useEffect, useState} from "react";
 import PostMetaField from "../../../../models/PostMetaField";
 
-const TypeCreate: NextPage = () => {
+const TypeCreate: NextPage = (props: any) => {
     const router = useRouter()
     const { type } = router.query
 
     const user = useSelector((state)=>(state.user))
-
-    const [postTypeModel, setPostTypeModel] = useState<PostMetaField[]>([]);
 
     const [postData, setPostData] = useState({
         "post_type": type,
@@ -33,6 +31,7 @@ const TypeCreate: NextPage = () => {
     }
 
     const handleSubmit = (e :FormEvent)=>{
+        //TODO: handle post updates as admin
         e.preventDefault()
 
         const payload = {
@@ -60,29 +59,7 @@ const TypeCreate: NextPage = () => {
             })
             .then(data => {
             })
-
     }
-
-    useEffect(() =>{
-        const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
-
-        const options = {
-            method: 'GET',
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
-        }
-        fetch(endpoint, options)
-            .then((resp)=>{
-                if (resp.status == 201){
-                    return resp.json()
-                }
-            })
-            .then(data => {
-                setPostTypeModel(data)
-            });
-    }, [type])
 
     return (
         <div>
@@ -100,9 +77,9 @@ const TypeCreate: NextPage = () => {
                 <label htmlFor="post_featuredImage">Post featured image*</label>
                 <input type={"text"} name="post_featuredImage" onChange={handlePostDataChanges} required={true}/>
 
-                {(postTypeModel)?
+                {(props.postModel)?
                     <div>
-                        {postTypeModel.map((postMeta:PostMetaField, index:number)=>
+                        {props.postModel.map((postMeta:PostMetaField, index:number)=>
                             <div key={index}>
                                 {postMeta.meta_key}{(postMeta.meta_required)?"*":""}
                                 {(postMeta.data_type == "boolean")?
@@ -129,5 +106,28 @@ const TypeCreate: NextPage = () => {
         </div>
     )
 }
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const type = context.params?.type;
+    const endpoint = `http://localhost:8010/proxy/api/posttype/model/${type}`
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const postModel = await res?.json();
+    return {
+        props: {
+            postModel
+        }
+    }
+}
+
 
 export default TypeCreate

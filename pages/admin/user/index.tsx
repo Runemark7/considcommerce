@@ -1,31 +1,11 @@
-import type { NextPage } from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import {FormEvent, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 
-const AdminUserList: NextPage = () => {
+const AdminUserList: NextPage = (props:any) => {
     const user = useSelector((state)=>(state.user))
 
-    const [data, setData] = useState(null);
-    const [isLoading, setLoading] = useState(false);
-    useEffect(()=>{
-        setLoading(true);
-
-        const endpoint = "http://localhost:8010/proxy/get/users"
-
-        const options = {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
-        }
-
-        fetch(endpoint, options)
-            .then(resp=>resp.json())
-            .then(data => {
-                setData(data)
-                setLoading(false)
-            })
-    }, [user])
+    const [createUserMsg, setCreateUserMsg] = useState("");
 
     const createUser = (e :FormEvent) => {
         e.preventDefault()
@@ -55,7 +35,7 @@ const AdminUserList: NextPage = () => {
                 }
             })
             .then(msg => {
-                console.log(msg)
+                setCreateUserMsg(msg)
             });
     }
 
@@ -77,7 +57,7 @@ const AdminUserList: NextPage = () => {
                 <input type="submit"/>
             </form>
 
-            {(data)?data.map((user: any) => (
+            {(props.data)?props.data.map((user: any) => (
                 <div className={"cartItemWrapper"} key={user.userId}>
                     <p className={"productTitle"}>
                         {user.userName}
@@ -95,6 +75,27 @@ const AdminUserList: NextPage = () => {
         </div>
 
     )
+}
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const endpoint = "http://localhost:8010/proxy/get/users"
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const data = await res?.json();
+
+    return {
+        props: {
+            data
+        }
+    }
 }
 
 export default AdminUserList

@@ -1,42 +1,10 @@
-import { useRouter } from 'next/router'
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
 import DataTable from "react-data-table-component";
+import {GetServerSidePropsContext} from "next";
+import Link from "next/link";
 
-const OrderDetail = () => {
-    const router = useRouter()
-    const { orderid } = router.query
-
-    // @ts-ignore
-    const user = useSelector((state)=>(state.user))
-
-    const [data, setData] = useState(null);
+const OrderDetail = (data: any) => {
     const [klarnaData, setKlarnaData] = useState(null);
-
-    useEffect(()=>{
-        if (!user.loggedIn) {
-            router.push("/login")
-        }else{
-            const endpoint = `http://localhost:8010/proxy/user/order/${orderid}`
-
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
-            }
-
-            fetch(endpoint, options)
-                .then(resp=>{
-                    if (resp.ok){
-                        return resp.json()
-                    }
-                })
-                .then(data => {
-                    setData(data)
-                })
-        }
-    }, [user])
 
     useEffect(()=>{
         if (data && data.payment_method == "klarnaCheckout" && data.klarna_order_id != null){
@@ -63,64 +31,100 @@ const OrderDetail = () => {
         }
     },[data])
 
-
-
     return (
         <div className={"productWrapper componentWrapper"}>
+            <ul>
+                <li>
+                    <Link href={"http://localhost:3000/profile/order"}>
+                        Orders
+                    </Link>
+                </li>
+                <li>
+                    <Link href={"http://localhost:3000/profile/settings"}>
+                        Settings
+                    </Link>
+
+                </li>
+            </ul>
                 {(data) ?
                     <div>
-                        {data.post_name}
+                        <div>
+                            {
+                                (klarnaData)?
+                                    <div>
+                                        <h4>Order details</h4>
 
-                            <div>
-                                {
-                                    (klarnaData)?
-                                        <div>
-                                            <h4>Order details</h4>
+                                        {klarnaData.billing_address.email}
+                                        <br/>
+                                        {klarnaData.billing_address.given_name} {klarnaData.billing_address.family_name}
+                                        <br/>
+                                        {klarnaData.billing_address.phone}
+                                        <br/>
+                                        {klarnaData.billing_address.street_address}
+                                        <br/>
+                                        {klarnaData.billing_address.country} {klarnaData.billing_address.postal_code} {klarnaData.billing_address.city}
 
-                                            {klarnaData.billing_address.email}
-                                            <br/>
-                                            {klarnaData.billing_address.given_name} {klarnaData.billing_address.family_name}
-                                            <br/>
-                                            {klarnaData.billing_address.phone}
-                                            <br/>
-                                            {klarnaData.billing_address.street_address}
-                                            <br/>
-                                            {klarnaData.billing_address.country} {klarnaData.billing_address.postal_code} {klarnaData.billing_address.city}
+                                        <h4>Products</h4>
 
-                                            <h4>Products</h4>
+                                        <DataTable columns={[
+                                            {
+                                                name: "Product name",
+                                                selector: row => row.name
+                                            },
+                                            {
+                                                name: "Quantity",
+                                                selector: row => row.quantity
+                                            },
+                                            {
+                                                name: "Unit price",
+                                                selector: row => Math.round(row.unit_price/100),
+                                                sortable: true
+                                            },
+                                            {
+                                                name: "Total price",
+                                                selector: row => Math.round(row.total_amount/100),
+                                                sortable: true
+                                            },
+                                        ]} data={klarnaData.order_lines} />
+                                    </div>
+                                    :<div>
+                                        <h4>Order info for {data.data.post_name}</h4>
 
-                                            <DataTable columns={[
-                                                {
-                                                    name: "Product name",
-                                                    selector: row => row.name
-                                                },
-                                                {
-                                                    name: "Quantity",
-                                                    selector: row => row.quantity
-                                                },
-                                                {
-                                                    name: "Unit price",
-                                                    selector: row => Math.round(row.unit_price/100),
-                                                    sortable: true
-                                                },
-                                                {
-                                                    name: "Total price",
-                                                    selector: row => Math.round(row.total_amount/100),
-                                                    sortable: true
-                                                },
-                                            ]} data={klarnaData.order_lines} />
-                                        </div>
-                                        :<></>
-                                }
-                            </div>
+                                        Firstname: {data.data.firstName}
+                                        <br/>
+                                        Lastname: {data.data.lastName}
+                                        <br/>
+                                        OrderStatus: {data.data.orderStatus}
+                                    </div>
+                            }
+                        </div>
                     </div>
-
-
-
                     :<></>
                 }
         </div>
     );
+}
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const orderid = context.params?.orderid;
+    const endpoint = `http://localhost:8010/proxy/user/order/${orderid}`
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const data = await res?.json();
+
+    return{
+        props: {
+            data
+        }
+    }
 }
 
 export default OrderDetail

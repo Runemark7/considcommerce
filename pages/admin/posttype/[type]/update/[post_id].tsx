@@ -11,14 +11,13 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
     const [changedPostData, setChangedPostData] = useState(null);
     const [changedPostMeta, setChangedPostMeta] = useState(null);
 
-    const [isLoading, setLoading] = useState(false);
-
     const user = useSelector((state)=>(state.user))
 
     const router = useRouter()
     const { type } = router.query
 
     const handleSubmit = (e: FormEvent, postId: number) =>{
+        //TODO: you know what to do here
         e.preventDefault();
 
         const payload = {
@@ -42,7 +41,6 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
         fetch(endpoint, options)
             .then(resp=>resp.json())
             .then(data => {
-                setLoading(false)
             })
     }
 

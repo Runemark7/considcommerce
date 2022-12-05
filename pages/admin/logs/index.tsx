@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import DataTable from "react-data-table-component";
 import {useEffect, useState} from "react";
 import Link from "next/link";
@@ -77,6 +77,25 @@ const AdminOrderIndex: NextPage = () => {
                 pointerOnHover={true} />
         </div>
     )
+}
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const endpoint = `http://localhost:8010/proxy/log/getall`;
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const logs = await res?.json();
+
+    return {
+        props: logs
+    }
 }
 
 export default AdminOrderIndex

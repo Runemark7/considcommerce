@@ -1,15 +1,16 @@
-import type {NextPage} from 'next'
+import type {GetServerSidePropsContext, NextPage} from 'next'
 import {useRouter} from "next/router";
 import {useSelector} from "react-redux";
 import {FormEvent, useEffect, useState} from "react";
 
-const TypeCategories: NextPage = (data:any) => {
+const TypeCategories: NextPage = (props:any) => {
     const router = useRouter()
     const { type } = router.query
 
     const user = useSelector((state)=>(state.user))
 
     const createCategory = (e: FormEvent)=>{
+        //TODO: post request using body and route, make generic route for admin post/get methods
         e.preventDefault()
 
         const payload = {
@@ -39,23 +40,6 @@ const TypeCategories: NextPage = (data:any) => {
             })
     }
 
-    const [categories, setCategories] = useState([]);
-    useEffect(()=>{
-        const endpoint = `http://localhost:8010/proxy/category/posttype/${type}`
-
-        fetch(endpoint)
-            .then((resp)=>{
-                if (resp.status == 201){
-                    return resp.json()
-                }else if (resp.status == 204){
-                    return []
-                }
-            })
-            .then((data) => {
-                setCategories(data)
-            })
-    }, [type])
-
     return (
         <div>
 
@@ -74,7 +58,7 @@ const TypeCategories: NextPage = (data:any) => {
                     Categories
                 </h3>
                 <div>
-                    {(categories)?categories.map((category:any)=>
+                    {(props.categories)?props.categories.map((category:any)=>
                         <p>{category.category_name} ({category.amount_of_posts})</p>
                     ):<></>}
                 </div>
@@ -82,6 +66,28 @@ const TypeCategories: NextPage = (data:any) => {
 
         </div>
     )
+}
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const type = context.params?.type;
+    const endpoint = `http://localhost:8010/proxy/category/posttype/${type}`
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const categories = await res?.json();
+    return {
+        props: {
+            categories
+        }
+    }
 }
 
 export default TypeCategories

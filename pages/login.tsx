@@ -5,20 +5,12 @@ import {loginUser, selectAuthState} from "../store/authSlice";
 import {useRouter} from "next/router";
 import Link from "next/link";
 
-import cookie from "js-cookie"
-
 const Login = () => {
     const dispatch = useDispatch();
 
     const router = useRouter();
     // @ts-ignore
     const user = useSelector(selectAuthState)
-
-    useEffect(()=>{
-        if (user){
-            router.push("/profile")
-        }
-    },[user])
 
     const [error,setError] = useState(false)
 
@@ -32,17 +24,17 @@ const Login = () => {
 
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = "http://localhost:8010/proxy/auth/token"
+        const endpoint = "http://localhost:3000/api/auth/login"
 
         const options = {
             method: 'POST',
-            headers: {
+            headers: new Headers({
                 'Content-Type': 'application/json; charset=utf-8',
-            },
+            }),
             body: JSONdata
         }
 
-        await fetch(endpoint, options)
+        fetch(endpoint, options)
             .then(resp=>{
                 if (resp.ok){
                     setError(false)
@@ -52,7 +44,6 @@ const Login = () => {
                 }
             })
             .then(data => {
-                cookie.set("jwtToken", data.jwtToken)
                 dispatch(loginUser(data))
             }).catch((error)=>{
                 setError(true)

@@ -37,7 +37,9 @@ export default function SearchBar() {
                 setSearchResult([])
             }
         }
-        getData()
+        if (searchValue != ""){
+            getData()
+        }
     }, [searchValue])
 
     const searchForValue = () => {

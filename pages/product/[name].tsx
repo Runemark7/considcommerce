@@ -1,5 +1,6 @@
-import {GetStaticPaths, GetStaticProps} from "next";
+import {GetServerSidePropsContext} from "next";
 import ProductListItem from "../../components/productListItem";
+
 
 const ProductDetail = (data:any) => {
     return (
@@ -7,23 +8,27 @@ const ProductDetail = (data:any) => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-    const slug = params.name;
-    const endpoint = `http://localhost:8010/proxy/api/post/slug/${slug}`
-    const data = await fetch(endpoint);
-    const productData = await data.json();
-    return {
+
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const name = context.params?.name;
+    const endpoint = `http://localhost:8010/proxy/api/post/slug/${name}`
+
+    const options = {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            "Cookie": context.req.headers.cookie!
+        }
+    }
+
+    const res = await fetch(endpoint, options);
+    const productData = await res?.json();
+
+    return{
         props: {
             productData,
         },
-    }
-}
-
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
-    }
+   }
 }
 
 export default ProductDetail

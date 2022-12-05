@@ -8,11 +8,9 @@ import SearchBar from "./searchBar";
 
 export default function Navbar() {
     const user = useSelector((state)=>(state.user))
-
     const cart = useSelector((state)=>(state.cart))
 
     const [cartDetails, setCartDetails] = useState(cart);
-
     const [miniCartToggle, setMiniCart] = useState(false);
 
     const toggleMiniCart = () =>{
@@ -41,7 +39,7 @@ export default function Navbar() {
                 <div className={"searchBarWrapper"}>
                     <SearchBar/>
                 </div>
-                <ul>
+                <ul className={"userIcons"}>
                     {!user.loggedIn ?
                         <li>
                             <Link href={"http://localhost:3000/login"}>
@@ -60,7 +58,7 @@ export default function Navbar() {
                     }
                     <li>
                         <Link href={"http://localhost:3000/cart"}>
-                            <div class={"cartIcon"}>
+                            <div className={"cartIcon"}>
                                 <img className={"icon"} src={"/icons/cart.svg"} alt="cartIcon"/>
                                 <p>
                                     ({cartDetails.totalQty})
