@@ -3,14 +3,10 @@ import {FormEvent, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 
 const AdminUserList: NextPage = (props:any) => {
-    const user = useSelector((state)=>(state.user))
-
-    const [createUserMsg, setCreateUserMsg] = useState("");
-
     const createUser = (e :FormEvent) => {
         e.preventDefault()
 
-        const endpoint = "http://localhost:8010/proxy/user/createUser"
+        const endpoint = "http://localhost:3000/api/middleroutes/createuser"
 
         const payload = {
             "userPassword": e.target.userPassword.value,
@@ -22,20 +18,12 @@ const AdminUserList: NextPage = (props:any) => {
 
         const options = {
             method: 'POST',
-            headers:{
-                'Content-Type': 'application/json; charset=utf-8',
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
             body:JSONdata
         }
         fetch(endpoint, options)
             .then((resp)=>{
-                if (resp.status == 201){
-                    return resp.json()
-                }
             })
             .then(msg => {
-                setCreateUserMsg(msg)
             });
     }
 

@@ -41,21 +41,15 @@ const TypeCreate: NextPage = (props: any) => {
 
         const JSONdata = JSON.stringify(payload);
 
-        const endpoint = "http://localhost:8010/proxy/api/post"
+        const endpoint = "http://localhost:3000/api/middleroutes/posttype/createpostbyposttype"
 
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
             body:JSONdata
         }
 
         fetch(endpoint, options)
             .then((resp)=>{
-                if (resp.ok){
-                    return resp.json()
-                }
             })
             .then(data => {
             })
@@ -121,12 +115,21 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     }
 
     const res = await fetch(endpoint, options);
-    const postModel = await res?.json();
-    return {
-        props: {
-            postModel
+    if (res.status == 201) {
+        const postModel = await res?.json();
+        return {
+            props: {
+                postModel
+            }
+        }
+    }else{
+        return {
+            props: {
+                postModel: []
+            }
         }
     }
+
 }
 
 

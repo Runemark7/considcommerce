@@ -20,7 +20,7 @@ const TypeCreate: NextPage = (props: any) => {
         e.preventDefault()
 
         if(newPostMetaField.meta_key){
-            const endpoint = `http://localhost:8010/proxy/api/posttype/model/update`
+            const endpoint = `http://localhost:3000/api/middleroutes/posttype/updatemodel`
 
             const payload = {
                 "posttype_name": type,
@@ -31,17 +31,10 @@ const TypeCreate: NextPage = (props: any) => {
 
             const options = {
                 method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + user.jwtToken,
-                },
                 body:JSONdata
             }
             fetch(endpoint, options)
                 .then((resp)=>{
-                    if (resp.status == 201){
-                        return resp.json()
-                    }
                 })
                 .then(msg => {
                 });
@@ -62,7 +55,7 @@ const TypeCreate: NextPage = (props: any) => {
 
     return (
         <div>
-            <h1>Model</h1>
+            <h1>Model for {type}</h1>
 
             <div>
                 <h3>
@@ -126,12 +119,21 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     }
 
     const res = await fetch(endpoint, options);
-    const postTypeModel = await res?.json();
-    return {
-        props: {
-            postTypeModel
+    if(res.status == 201) {
+        const postTypeModel = await res?.json();
+        return {
+            props: {
+                postTypeModel
+            }
+        }
+    }else{
+        return {
+            props: {
+                postTypeModel: []
+            }
         }
     }
+
 }
 
 export default TypeCreate

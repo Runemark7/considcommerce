@@ -7,10 +7,7 @@ const TypeCategories: NextPage = (props:any) => {
     const router = useRouter()
     const { type } = router.query
 
-    const user = useSelector((state)=>(state.user))
-
     const createCategory = (e: FormEvent)=>{
-        //TODO: post request using body and route, make generic route for admin post/get methods
         e.preventDefault()
 
         const payload = {
@@ -20,21 +17,15 @@ const TypeCategories: NextPage = (props:any) => {
 
         const JSONdata = JSON.stringify(payload);
 
-        const endpoint = "http://localhost:8010/proxy/category/create"
+        const endpoint = "http://localhost:3000/api/middleroutes/posttype/createcategory"
 
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
             body:JSONdata
         }
 
         fetch(endpoint, options)
             .then((resp)=>{
-                if (resp.ok){
-                    return resp.json()
-                }
             })
             .then(data => {
             })
@@ -77,17 +68,25 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            "Cookie": context.req.headers.cookie!
         }
     }
 
     const res = await fetch(endpoint, options);
-    const categories = await res?.json();
-    return {
-        props: {
-            categories
+    if(res.status == 201){
+        const categories = await res.json();
+        return {
+            props: {
+                categories
+            }
+        }
+    }else{
+        return {
+            props: {
+                categories: []
+            }
         }
     }
+
 }
 
 export default TypeCategories

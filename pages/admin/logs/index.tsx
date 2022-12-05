@@ -3,34 +3,7 @@ import DataTable from "react-data-table-component";
 import {useEffect, useState} from "react";
 import Link from "next/link";
 
-const AdminOrderIndex: NextPage = () => {
-    const [logs, setLogs] = useState([]);
-
-    useEffect(()=>{
-        async function getData(){
-            const endpoint = `http://localhost:8010/proxy/log/getall`;
-            const options = {
-                method: 'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-            }
-            try{
-                await fetch(endpoint, options).then((response)=>{
-                    if (response.ok){
-                        return response.json()
-                    }
-                }).then((data)=>{
-                    setLogs(data)
-                })
-            }catch {
-                setLogs([])
-            }
-        }
-
-        getData()
-    }, [])
-
+const AdminOrderIndex: NextPage = (props: any) => {
     return (
         <div>
             <h1>Orders</h1>
@@ -71,7 +44,7 @@ const AdminOrderIndex: NextPage = () => {
                     }
                 ]}
                 pagination={true}
-                data={logs}
+                data={props.logs}
                 highlightOnHover={true}
                 striped={true}
                 pointerOnHover={true} />
@@ -94,7 +67,9 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     const logs = await res?.json();
 
     return {
-        props: logs
+        props: {
+            logs
+        }
     }
 }
 

@@ -1,6 +1,4 @@
-import {FormEvent, useEffect, useState} from "react";
-
-import {useRouter} from "next/router";
+import {FormEvent, useState} from "react";
 
 const Register = () => {
     const [passwordMatch, setPasswordMatch] = useState(false);

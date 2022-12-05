@@ -16,7 +16,6 @@ async function fetchData (dataObj: DataObj) {
         headers: {
             "Content-Type" : "application/json",
         },
-        body: {}
     }
 
     if (dataObj.token){

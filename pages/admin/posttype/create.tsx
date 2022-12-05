@@ -1,14 +1,10 @@
-import {FormEvent, useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {FormEvent, useState} from "react";
 import PostMetaField from "../../../models/PostMetaField";
 
-const AdminCreatePostType = (props:any) => {
-
-    const user = useSelector((state)=>(state.user))
+const AdminCreatePostType = () => {
     const [postTypeModel, setPostTypeModel] = useState<PostMetaField[]>([]);
 
     const createPostType = async (e: FormEvent) => {
-        //TODO: fix this!
         e.preventDefault()
 
         // @ts-ignore
@@ -19,31 +15,23 @@ const AdminCreatePostType = (props:any) => {
 
         const JSONdata = JSON.stringify(data);
 
-        const endpoint = "http://localhost:8010/proxy/api/posttypes"
+        const endpoint = "http://localhost:3000/api/middleroutes/createposttype"
 
         const options = {
             method: 'POST',
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
-            body: JSONdata
+            body: JSONdata,
         }
 
         // @ts-ignore
         const response = await fetch(endpoint, options)
             .then(resp=>{
-                console.log("resp");
                 console.log(resp);
             }).then(
                 data => {
-                    console.log("success");
                     console.log(data);
                 }
             );
     }
-
-
 
     const addAnotherField = ()=> {
         setPostTypeModel((oldArray :PostMetaField[]) => {

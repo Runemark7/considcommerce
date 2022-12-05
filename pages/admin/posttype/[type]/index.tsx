@@ -1,4 +1,4 @@
-import type {GetStaticPaths, GetStaticProps, NextPage} from 'next'
+import type {GetServerSidePropsContext, GetStaticPaths, GetStaticProps, NextPage} from 'next'
 import {useRouter} from "next/router";
 import Link from "next/link";
 import {Exception} from "sass";
@@ -54,45 +54,33 @@ const PosttypeIndex: NextPage = (data:any) => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-    const type = params.type;
+export const getServerSideProps = async (context:GetServerSidePropsContext) => {
+    const type = context.params?.type;
     const endpoint = `http://localhost:8010/proxy/api/posttype/${type}`;
 
     const options = {
         method: 'GET',
-        headers:{
+        credentials: "include",
+        headers: {
             'Content-Type': 'application/json',
-        },
-    }
-    let posts:any = []
-    try{
-        await fetch(endpoint, options).then((response)=>{
-            if (response.ok){
-                return response.json()
-            }else{
-                throw Exception
-            }
-        }).then((data)=>{
-            posts = data
-        })
-        return {
-            props: {
-                posts,
-            },
-        }
-    }catch {
-        return {
-            props: {
-                posts,
-            },
+            "Cookie": context.req.headers.cookie!
         }
     }
-}
 
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
+    const res = await fetch(endpoint, options);
+    if (res.status == 201) {
+        const posts = await res?.json();
+        return {
+            props: {
+                posts
+            }
+        }
+    }else{
+        return {
+            props: {
+                posts: []
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@ const PostLayout = (data:any) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-    const post = (params.post != undefined)?params.post:null;
+    const post = params?.post;
     if (!post){
         return {
             notFound: true

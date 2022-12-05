@@ -17,7 +17,6 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
     const { type } = router.query
 
     const handleSubmit = (e: FormEvent, postId: number) =>{
-        //TODO: you know what to do here
         e.preventDefault();
 
         const payload = {
@@ -28,13 +27,10 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
         const JSONdata = JSON.stringify(payload);
 
-        const endpoint = "http://localhost:8010/proxy/api/update/post"
+        const endpoint = "http://localhost:3000/api/middleroutes/posttype/updatepost"
 
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
             body:JSONdata
         }
 
@@ -97,9 +93,11 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
     }, [])
 
     const findCommonElement = (element:any) => {
-        for(let j = 0; j < postCategories.length; j++) {
-            if(element.category_id === postCategories[j].category_id) {
-                return true;
+        if (postCategories){
+            for(let j = 0; j < postCategories.length; j++) {
+                if(element.category_id === postCategories[j].category_id) {
+                    return true;
+                }
             }
         }
         return false;
@@ -116,23 +114,18 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
 
         const JSONdata = JSON.stringify(payload);
 
-        const endpoint = "http://localhost:8010/proxy/category/addpost"
+        const endpoint = "http://localhost:3000/api/middleroutes/posttype/updatecategory"
 
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + user.jwtToken,
-            },
             body:JSONdata
         }
 
         fetch(endpoint, options)
             .then(resp=>resp.json())
             .then(data => {
-                console.log(data)
             })
     }
-
 
     const updateChangeCategory = (e: FormEvent) =>{
         const value = e.target.value;
