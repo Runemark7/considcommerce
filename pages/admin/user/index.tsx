@@ -1,6 +1,7 @@
 import type {GetServerSidePropsContext, NextPage} from 'next'
-import {FormEvent, useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {FormEvent} from "react";
+import Link from "next/link";
+import DataTable from "react-data-table-component";
 
 const AdminUserList: NextPage = (props:any) => {
     const createUser = (e :FormEvent) => {
@@ -29,37 +30,63 @@ const AdminUserList: NextPage = (props:any) => {
 
     return (
         <div>
+            <h1>Users</h1>
 
             <form onSubmit={createUser}>
                 <label htmlFor="userName">userName*</label>
-                <input type={"text"} name="userName" required={true}/>
+                <input type={"text"} name="userName" required={true}  />
 
                 <label htmlFor="userPassword">userPassword*</label>
                 <input type={"password"} name="userPassword" required={true}/>
 
+                <label htmlFor="userRole">userRole*</label>
                 <select name="userRole">
                     <option value="1">User</option>
                     <option value="9">Administrator</option>
                 </select>
 
-                <input type="submit"/>
+                <input type="submit" value={"Create user"}/>
             </form>
 
-            {(props.data)?props.data.map((user: any) => (
-                <div className={"cartItemWrapper"} key={user.userId}>
-                    <p className={"productTitle"}>
-                        {user.userName}
-                        <br/>
-                        {user.userEmail}
-                        <br/>
-                        {user.userRole}
-                        <br/>
-                        {user.userStatus}
-                    </p>
-                </div>
-            )):<div>
-                loading
-            </div>}
+            <DataTable
+                columns={[
+                    {
+                        name: "Username",
+                        selector: ({userName}) => userName,
+                        sortable: true
+                    },
+                    {
+                        name: "Usermail",
+                        selector: ({userEmail}) => userEmail
+                    },
+                    {
+                        name: "Userrole",
+                        selector: ({userRole}) => (userRole=="9")?"Admin":"User",
+                        sortable: true
+                    },
+                    {
+                        name: "Userstatus",
+                        selector: ({userStatus}) => userStatus,
+                        sortable: true
+                    },
+                    {
+                        cell: ({userId}, index, column, id) => {
+                            return (
+                                <Link href={`http://localhost:3000/admin/user/${userId}`}>
+                                    <button>
+                                        Change
+                                    </button>
+                                </Link>
+                            )
+                        }
+                    }
+                ]}
+                pagination={true}
+                data={props.data}
+                highlightOnHover={true}
+                striped={true}
+                pointerOnHover={true} />
+
         </div>
 
     )

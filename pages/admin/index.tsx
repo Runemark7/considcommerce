@@ -6,7 +6,7 @@ const AdminIndex: NextPage = () => {
     return (
         <div>
             <div>
-                admin
+                admin, här kan man va
             </div>
         </div>
 

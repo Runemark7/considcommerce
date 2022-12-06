@@ -14,12 +14,6 @@ const PostLayout = (data:any) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     const post = params?.post;
-    if (!post){
-        return {
-            notFound: true
-        }
-    }
-
     const endpoint = `/api/post/slug/${post}`
     const postData = await fetchData({
         endpoint: endpoint,

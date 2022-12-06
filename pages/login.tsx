@@ -1,17 +1,11 @@
-import {useDispatch, useSelector} from "react-redux";
-import {FormEvent, useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {FormEvent, useState} from "react";
 
-import {loginUser, selectAuthState} from "../store/authSlice";
-import {useRouter} from "next/router";
+import {loginUser} from "../store/authSlice";
 import Link from "next/link";
 
 const Login = () => {
     const dispatch = useDispatch();
-
-    const router = useRouter();
-    // @ts-ignore
-    const user = useSelector(selectAuthState)
-
     const [error,setError] = useState(false)
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -23,14 +17,9 @@ const Login = () => {
         }
 
         const JSONdata = JSON.stringify(data);
-
         const endpoint = "http://localhost:3000/api/auth/login"
-
         const options = {
             method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json; charset=utf-8',
-            }),
             body: JSONdata
         }
 
@@ -59,7 +48,12 @@ const Login = () => {
                 <label htmlFor="password">password</label>
                 <input type="password" name="password" id="password" className={`inputField ${(error)?"inputError":""}`} required/>
 
-                {(error)?<p className={"errorText"}>Try again</p>:""}
+                {(error)
+                    ?
+                    <p className={"errorText"}>Try again</p>
+                    :
+                    ""
+                }
 
                 <button type="submit">Login</button>
             </form>

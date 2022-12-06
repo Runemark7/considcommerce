@@ -1,11 +1,9 @@
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Link from "next/link";
 import {logoutUser} from "./../../store/authSlice";
 import {GetServerSidePropsContext} from "next";
 
 const UserIndex = (data: any) => {
-    // @ts-ignore
-    const user = useSelector((state)=>(state.user))
     const dispatch = useDispatch();
 
     return (
@@ -13,7 +11,6 @@ const UserIndex = (data: any) => {
             <ul>
                 <li>
                     <a onClick={()=>{
-                        // TODO: change this to local api using the right headers!!!
                         const endpoint = "http://localhost:3000/api/auth/logout"
 
                         const options = {

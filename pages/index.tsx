@@ -1,4 +1,3 @@
-import ProductList from "../components/ProductList";
 import {useEffect, useState} from "react";
 import PageEditorClear from "../components/editor/PageEditorClear";
 import { fetchData } from "../core/fetchDataHelper";
@@ -32,7 +31,8 @@ const Home = () => {
 
     return(
         <div className={"homeWrapper"}>
-            {(postData.post_content)?
+            {(postData.post_content)
+                ?
                 <PageEditorClear postId={postData.post_id} postContent={postData.post_content} />
                 :
                 <></>

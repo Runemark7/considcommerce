@@ -4,9 +4,7 @@ import {NextResponse} from 'next/server'
 
 export async function middleware (request: NextRequest) {
     let {cookies} = request;
-
     let access_token = await cookies.get("refresh_token_cookie")?.value;
-
     if(!access_token){
         return NextResponse.redirect(new URL("/login", request.url))
     }else {

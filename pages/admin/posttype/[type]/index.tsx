@@ -12,11 +12,6 @@ const PosttypeIndex: NextPage = (data:any) => {
     return (
         <div>
             <h1>{type}(s)</h1>
-            <button onClick={()=>{
-                hooks.doActionOnHook(data, "product", "after", "updatePost" ,"afterAdminSubmit")
-            }}>
-                test
-            </button>
             {(data.posts)?
                 <div>
                     <DataTable

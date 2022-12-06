@@ -1,5 +1,5 @@
 import type {GetServerSidePropsContext, NextPage} from 'next'
-import DataTable from "react-data-table-component";
+
 import {useEffect, useState} from "react";
 import Link from "next/link";
 

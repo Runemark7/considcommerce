@@ -184,13 +184,6 @@ const Checkout = () => {
             }
         })
 
-
-
-
-
-
-
-
         const data:KlarnaOrder = {
             locale: "sv-SE",
             merchant_urls: {
@@ -208,9 +201,7 @@ const Checkout = () => {
         }
 
         const JSONdata = JSON.stringify(data);
-
         const endpoint = "https://api.playground.klarna.com/checkout/v3/orders"
-
         const options = {
             method: 'POST',
             headers:{
@@ -239,30 +230,16 @@ const Checkout = () => {
                     klarna_order_amount: data.order_amount
                 }
                 const fromFormDataToJSON = JSON.stringify(formData);
-
-                //TODO: fix this route
-                const endpointAfter = "http://localhost:8010/proxy/api/order"
-
+                const endpointAfter = "http://localhost:3000/api/middleroutes/createorder"
                 const optionstwo = {
                     method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json',
-                    },
                     body: fromFormDataToJSON
-                }
-
-                if (user.jwtToken){
-                    optionstwo.headers["Authorization"] = 'Bearer ' + user.jwtToken;
                 }
 
                 fetch(endpointAfter, optionstwo)
                     .then(resp=>{
-                        if (resp.ok){
-                            return resp.json()
-                        }
                     })
                     .then(data => {
-                        console.log(data)
                     })
             })
     }
@@ -365,9 +342,7 @@ const Checkout = () => {
             }
 
             const endpoint = "https://atapi2.postnord.com/rest/shipment/v1/deliveryoptions/bywarehouse?apikey=50f1dbd11731869229f07cae6dd75627"
-
             const JSONdata = JSON.stringify(postData);
-
             const options = {
                 method: 'POST',
                 headers: {
