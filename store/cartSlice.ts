@@ -1,11 +1,9 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
 import Product from "../models/Product";
-import ShippingOption from "../models/shippingOption";
 
 interface CartState {
     products: Product[],
-    shippingObj: ShippingOption,
     totalprice: number,
     totalQty: number
 }
@@ -13,18 +11,10 @@ interface CartState {
 interface ProductMulti {
     product: Product,
     qty: number
-
-}
-
-const initStateShipping : ShippingOption= {
-    shippingName:"free",
-    shippingEstimateDelivery: "5-7",
-    shippingCost:0,
 }
 
 const initialState = {
     products: [],
-    shippingObj: initStateShipping,
     totalprice: 0,
     totalQty: 0
 } as CartState
@@ -91,24 +81,14 @@ const cartSlice = createSlice({
                 state.totalQty += action.payload.qty;
             }
         },
-        addShippingCost (state, action: PayloadAction<ShippingOption>){
-            let tempPrice = state.totalprice;
-
-            if(state.shippingObj != action.payload){
-                tempPrice -= state.shippingObj.shippingCost;
-                tempPrice += action.payload.shippingCost;
-            }
-
-            return Object.assign({}, state, {
-                shippingObj: action.payload,
-                totalprice: tempPrice
-            });
-        },
-        clearItemFromCart(state, action: PayloadAction<any>){
+        clearAllItemsInCart(state){
+            state.products.splice(0 , state.products.length)
+            state.totalQty = 0
+            state.totalprice = 0
         }
     },
 })
 
-export const { addItemToCart, removeItemFromCart, removeMultipleItemsFromCart, addMultipleItemsToCart,removeAllOfThisItemFromCart, addShippingCost} = cartSlice.actions
+export const { addItemToCart, removeItemFromCart, removeMultipleItemsFromCart, addMultipleItemsToCart,removeAllOfThisItemFromCart, clearAllItemsInCart} = cartSlice.actions
 
 export default cartSlice.reducer

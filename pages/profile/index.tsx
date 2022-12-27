@@ -2,9 +2,12 @@ import {useDispatch} from "react-redux";
 import Link from "next/link";
 import {logoutUser} from "./../../store/authSlice";
 import {GetServerSidePropsContext} from "next";
+import {useRouter} from "next/router";
+import {clearAllItemsInCart} from "../../store/cartSlice";
 
 const UserIndex = (data: any) => {
     const dispatch = useDispatch();
+    const router = useRouter();
 
     return (
         <div>
@@ -14,13 +17,15 @@ const UserIndex = (data: any) => {
                         const endpoint = "http://localhost:3000/api/auth/logout"
 
                         const options = {
-                            method: 'POST',
+                            method: 'GET',
                         }
 
                         // @ts-ignore
                         fetch(endpoint, options)
                             .then(resp => {
                                 dispatch(logoutUser())
+                                dispatch(clearAllItemsInCart())
+                                router.push("/login")
                             })}}
                     >Logout</a>
                 </li>
@@ -53,11 +58,19 @@ export const getServerSideProps = async (context :GetServerSidePropsContext) => 
     }
 
     const res = await fetch(endpoint, options);
-    const data = await res.json();
 
-    return{
-        props: {
-            data
+    if (res.ok){
+        const data = await res?.json();
+        return{
+            props: {
+                data
+            }
+        }
+    }else{
+        return{
+            props: {
+                data: []
+            }
         }
     }
 }

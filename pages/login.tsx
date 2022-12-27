@@ -3,9 +3,11 @@ import {FormEvent, useState} from "react";
 
 import {loginUser} from "../store/authSlice";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
 const Login = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const [error,setError] = useState(false)
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -34,6 +36,7 @@ const Login = () => {
             })
             .then(data => {
                 dispatch(loginUser(data))
+                router.push("/profile")
             }).catch((error)=>{
                 setError(true)
             })

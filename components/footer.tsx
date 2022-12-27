@@ -14,55 +14,38 @@ export default function Footer() {
                     <ul>
                         <li>
                             <Link href={"http://localhost:3000/about-us"}>
-                                about us
+                                About us
                             </Link>
                         </li>
                         <li>
                             <Link href={"http://localhost:3000/about-us-two"}>
-                                about us two
+                                About us
                             </Link>
                         </li>
                         <li>
-                            Link 1
+                            <Link href={"http://localhost:3000/terms-of-service"}>
+                                Terms of service
+                            </Link>
                         </li>
-                        <li>
-                            <a href="">
-                                Link 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                Link 1
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
                 <div className={"column"}>
                     <ul>
                         <li>
-                            <a href="">
-                                Link 1
-                            </a>
+                            <Link href={"http://localhost:3000/contact-us"}>
+                                Contact Us
+                            </Link>
                         </li>
                         <li>
-                            <a href="">
-                                Link 1
-                            </a>
+                            <Link href={"http://localhost:3000/shipping-terms"}>
+                                Shipping Terms
+                            </Link>
                         </li>
                         <li>
-                            <a href="">
-                                Link 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                Link 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                Link 1
-                            </a>
+                            <Link href={"http://localhost:3000/gdpr"}>
+                                GDPR rules
+                            </Link>
                         </li>
                     </ul>
                 </div>

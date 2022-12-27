@@ -99,7 +99,6 @@ const EditorHeaderBlock = (props:EditorProps) => {
                                 handleTextChange(e.currentTarget.textContent)
                             }}
                         >
-
                             <ClearHeaderBlock {...props} headerTag={headerTag} />
                         </div>
                     </div>

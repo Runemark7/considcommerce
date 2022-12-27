@@ -1,9 +1,8 @@
 import type {GetServerSidePropsContext, NextPage} from 'next'
-
-import {useEffect, useState} from "react";
+import DataTable from "react-data-table-component";
 import Link from "next/link";
 
-const AdminOrderIndex: NextPage = (props: any) => {
+const AdminLogsIndex: NextPage = (props: any) => {
     return (
         <div>
             <h1>Orders</h1>
@@ -73,4 +72,4 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     }
 }
 
-export default AdminOrderIndex
+export default AdminLogsIndex

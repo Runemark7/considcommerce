@@ -2,3 +2,78 @@
   padding: 2rem 0;
 
 }
+
+.categoryBlock{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-top: 2rem;
+
+  .categoryItemWrapper{
+    flex:1;
+  }
+}
+
+
+
+.underLineLink{
+  line-height: 1.25;
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  text-decoration: underline ;
+  a{
+
+  }
+
+
+}
+
+.grayBackground{
+  background-color: #ece9e6;
+}
+
+
+.blackGrayBackground{
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.regularPadding{
+  padding:1rem;
+}
+
+
+.blackBlackBackground{
+  background-color: #101010;
+  color: #ffffff;
+}
+
+.splitContent{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-top: 2rem;
+
+  .splitContentItem{
+    flex:1;
+    &.content{
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+}
+
+.bannerMobile{
+  display:none;
+  @include breakpoint(small-screen){
+    display:block;
+  }
+
+}
+
+.bannerDesktop{
+  @include breakpoint(small-screen){
+    display:none;
+  }
+}

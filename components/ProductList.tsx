@@ -5,7 +5,8 @@ import {FormEvent, useEffect, useState} from "react";
 type Props = {
     posttype: String,
     category: String,
-    layout: String
+    layout: String,
+    filter: String
 }
 
 const ProductList = (props:Props) => {
@@ -76,16 +77,21 @@ const ProductList = (props:Props) => {
     if(props.layout == "list"){
         return (
             <div className={"componentWrapper"}>
-                <div>
-                    <p>
-                        Filter:
-                    </p>
-                    <select onChange={filterOption}>
-                        <option value="0" defaultChecked={true}>Default</option>
-                        <option value="1">Price rising</option>
-                        <option value="2">Price falling</option>
-                    </select>
-                </div>
+                {(props.filter != "none")?
+                    <div>
+                        <p>
+                            Filter:
+                        </p>
+                        <select onChange={filterOption}>
+                            <option value="0" defaultChecked={true}>Default</option>
+                            <option value="1">Price rising</option>
+                            <option value="2">Price falling</option>
+                        </select>
+                    </div>
+                    :
+                    <></>
+                }
+
                 {(products)?
                     <div className={"productListWrapper"}>
                         {products.map((product: Product)=>(

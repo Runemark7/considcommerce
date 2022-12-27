@@ -1,15 +1,17 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FormEvent, useEffect, useState} from "react";
 import Product from "../models/Product";
 import KlarnaOrder from "../models/klarnaOrder";
 import KlarnaOrderProduct from "../models/klarnaOrderProduct";
 import KlarnaShippingOptions from "../models/klarnaShippingOptions";
 import DataTable from "react-data-table-component";
+import {clearAllItemsInCart} from "../store/cartSlice";
 
 const Checkout = () => {
 
     // @ts-ignore
     const cart = useSelector((state)=>(state.cart))
+
 
     const [orderData, setOrderData] = useState(cart);
 
@@ -44,22 +46,7 @@ const Checkout = () => {
         })
 
 
-        const shippingOptions: KlarnaShippingOptions[] = [
-            /*{
-                "id": "id-1070",
-                "carrier": "postnord",
-                "name": "Postal delivery",
-                "price": 0,
-                "tax_rate": 0,
-                "delivery_time": {
-                    "interval": {
-                        "earliest": 4,
-                        "latest": 6
-                    }
-                },
-                "class": "standard"
-            }*/
-        ]
+        const shippingOptions: KlarnaShippingOptions[] = []
 
         deliveryOptions.map((deliveryOption: any)=>{
 
@@ -145,6 +132,8 @@ const Checkout = () => {
                         singleSingleShippingOption.delivery_details.pickup_location.address.postal_code = localSingleShippingOption.location.address.postCode
                         singleSingleShippingOption.delivery_details.pickup_location.name = localSingleShippingOption.location.name
                         singleSingleShippingOption.delivery_details.pickup_location.id = localSingleShippingOption.location.id
+                        singleSingleShippingOption.id = localSingleShippingOption.location.id
+                        singleSingleShippingOption.shipping_method = "pickup-point"
 
                         singleSingleShippingOption.name = localSingleShippingOption.serviceInfo.serviceName + " - " + localSingleShippingOption.location.name
 
@@ -155,7 +144,7 @@ const Checkout = () => {
                         shippingOptions.push(singleSingleShippingOption)
                     })
                 }else{
-                    singleShippingOption.id = deliveryOption.deliveryOptions[0].id;
+                    singleShippingOption.id = deliveryOption.deliveryOptions[0].location.id;
 
                     //pickup_location
                     singleShippingOption.delivery_details.pickup_location.address.street_name = deliveryOption.deliveryOptions[0].location.address.streetName
@@ -164,6 +153,7 @@ const Checkout = () => {
                     singleShippingOption.delivery_details.pickup_location.address.postal_code = deliveryOption.deliveryOptions[0].location.address.postCode
                     singleShippingOption.delivery_details.pickup_location.name = deliveryOption.deliveryOptions[0].location.name
                     singleShippingOption.delivery_details.pickup_location.id = deliveryOption.deliveryOptions[0].location.id
+                    singleShippingOption.shipping_method = "pickup-point"
 
                     singleShippingOption.name = deliveryOption.deliveryOptions[0].serviceInfo.serviceName + " - " + deliveryOption.deliveryOptions[0].location.name
 
@@ -172,15 +162,6 @@ const Checkout = () => {
                     singleShippingOption.price = 2500
                     shippingOptions.push(singleShippingOption)
                 }
-            }else if(deliveryOption.type == "home"){
-                singleShippingOption.id = deliveryOption.deliveryOptions[0].id;
-
-                singleShippingOption.name = deliveryOption.deliveryOptions[0].serviceInfo.serviceName
-
-                singleShippingOption.description = deliveryOption.deliveryOptions[0].timeOfDelivery.dayInterval + " days"
-
-                singleShippingOption.price = 5000
-                shippingOptions.push(singleShippingOption)
             }
         })
 
@@ -189,8 +170,9 @@ const Checkout = () => {
             merchant_urls: {
                 checkout: "http://localhost:3000/checkout",
                 confirmation: "http://localhost:3000/thankyou/{checkout.order.id}",
-                push: "http://localhost:3000/api/push",
+                push: "http://localhost:3000/api/push/{checkout.order.id}",
                 terms: "http://localhost:3000/terms",
+                //shipping_option_update: "http://localhost:3000/api/shipping"
             },
             shipping_options: shippingOptions,
             order_lines: orderLines,
@@ -213,7 +195,6 @@ const Checkout = () => {
 
         fetch(endpoint, options)
             .then(resp=>{
-                console.log(resp)
                 if (resp.ok){
                     return resp.json()
                 }
@@ -227,7 +208,8 @@ const Checkout = () => {
                     lastName: event.target.lastName.value,
                     userId: (user.jwtToken)?userId:0,
                     klarna_order_id: data.order_id,
-                    klarna_order_amount: data.order_amount
+                    klarna_order_amount: data.order_amount,
+                    userEmail: addressEndpoint.userEmail
                 }
                 const fromFormDataToJSON = JSON.stringify(formData);
                 const endpointAfter = "http://localhost:3000/api/middleroutes/createorder"
@@ -266,7 +248,8 @@ const Checkout = () => {
         deliveryAddress: "",
         postalCode: "",
         cityName: "",
-        countryCode: ""
+        countryCode: "",
+        userEmail: ""
     });
 
     const checkDeliveryAddress = (value:string, stringKey: String) => {
@@ -277,6 +260,9 @@ const Checkout = () => {
                 break;
             case "secondName":
                 copyObj.secondName = value;
+                break;
+            case "userEmail":
+                copyObj.userEmail = value;
                 break;
             case "deliveryAddress":
                 copyObj.deliveryAddress = value;
@@ -357,6 +343,7 @@ const Checkout = () => {
                     return resp.json()
                 }
             }).then(data => {
+                console.log(data)
                 if (data.warehouseToDeliveryOptions) {
                     if(data.warehouseToDeliveryOptions[0].deliveryOptionsPerType){
                         setDeliveryOptions(data.warehouseToDeliveryOptions[0].deliveryOptionsPerType)
@@ -376,12 +363,14 @@ const Checkout = () => {
                         (e)=>{
                             checkoutHandler(e, orderData.products, user.userId);
                         }}>
-
                         <input type="text" name="firstName" id="firstName" placeholder={"FirstName*"}  className={"inputField"} onChange={(e:FormEvent)=>{
                             checkDeliveryAddress(e.target.value, "firstName")
                         }} required/>
                         <input type="text" name="lastName" id="lastName" placeholder={"LastName*"} className={"inputField"} onChange={(e:FormEvent)=>{
                             checkDeliveryAddress(e.target.value, "secondName")
+                        }} required/>
+                        <input type="text" name="userEmail" id="userEmail" placeholder={"Email*"}  className={"inputField"} onChange={(e:FormEvent)=>{
+                            checkDeliveryAddress(e.target.value, "userEmail")
                         }} required/>
                         <input type="text" name="deliveryAddress" placeholder={"DeliveryAddress"} id="deliveryAddress" onChange={(e:FormEvent)=>{
                             checkDeliveryAddress(e.target.value, "deliveryAddress")
@@ -394,14 +383,17 @@ const Checkout = () => {
                         }} className={"inputField"} required/>
                         <select onChange={(e:FormEvent)=>{
                             checkDeliveryAddress(e.target.value, "countryCode")
-                        }}>
+                        }} defaultValue={""}>
                             <option value="" selected disabled hidden>Choose here</option>
                             <option value="SE">Sweden</option>
                         </select>
-
-                        <button type="submit">Make order</button>
+                        {(cart.products.length != 0)?
+                            <button type="submit">Make order</button>
+                            :<div>
+                                Add products to cart to make order
+                            </div>
+                        }
                     </form>
-
                 </div>
 
                 <div className={"rightCol"}>

@@ -5,7 +5,6 @@ import PostType from "../models/PostType";
 export default function AdminNavbar() {
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(false)
-    const [showSubMenu, setShowMenu] = useState(false)
 
     useEffect(()=>{
         setLoading(true)
@@ -18,8 +17,6 @@ export default function AdminNavbar() {
     }, [])
 
     if (isLoading) return <p>Loading...</p>
-    if (!data) return <p>No profile data</p>
-
     return (
         <div className={"adminMainNavBar"}>
             <ul className={"zeroLevelNav"}>
@@ -29,7 +26,7 @@ export default function AdminNavbar() {
                     </Link>
                 </li>
 
-                {data.map((posttype: PostType) => (
+                {(data)?data.map((posttype: PostType) => (
                     <li className={"zeroLevelLi"} key={posttype.posttype_id}>
                         <Link href={`http://localhost:3000/admin/posttype/${posttype.posttype_name}`}>
                             {posttype.posttype_name}
@@ -57,7 +54,7 @@ export default function AdminNavbar() {
                             </li>
                         </ul>
                     </li>
-                ))}
+                )):<></>}
                 <li className={"zeroLevelLi"} >
                     <Link href={"http://localhost:3000/admin/order"}>
                         Orders

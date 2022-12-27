@@ -5,17 +5,12 @@ import storage from './sync_storage';
 
 import cartSlice from "./cartSlice";
 import authSlice from "./authSlice";
-import {middleware} from "../middleware";
-// If you don't bother about the error redux-persist failed to create sync storage. falling back to noop storage...uncomment the next line and comment out the previous import. See more on - https://github.com/vercel/next.js/discussions/15687
-// const storage = require('redux-persist/lib/storage').default;
 
-//COMBINING ALL REDUCERS
 const combinedReducer = combineReducers({
     "cart" : cartSlice,
     "user" : authSlice,
 });
 
-// BINDING MIDDLEWARE
 const bindMiddleware = (middleware:any) => {
     if (process.env.NODE_ENV !== 'production') {
         const { composeWithDevTools } = require('redux-devtools-extension');
@@ -57,5 +52,4 @@ const makeStore = ({ isServer }:any) => {
     }
 };
 
-// Export the wrapper & wrap the pages/_app.js with this wrapper only
 export const wrapper = createWrapper(makeStore);

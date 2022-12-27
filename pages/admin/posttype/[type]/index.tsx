@@ -30,7 +30,7 @@ const PosttypeIndex: NextPage = (data:any) => {
                             sortable: true
                         },
                         {
-                            name: "test",
+                            name: "",
                             cell: (row,index,column,id) => {
                                 return (
                                     <Link href={`http://localhost:3000/admin/posttype/${type}/update/${row.post_id}`}>

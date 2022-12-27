@@ -1,7 +1,9 @@
 import {FormEvent, useState} from "react";
+import {useRouter} from "next/router";
 
 const Register = () => {
     const [passwordMatch, setPasswordMatch] = useState(false);
+    const router = useRouter()
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -33,6 +35,7 @@ const Register = () => {
                         return resp.json()
                     }
                 }).then(data => {
+                    router.push("/login")
                 })
 
         }else{

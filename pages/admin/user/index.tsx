@@ -39,6 +39,9 @@ const AdminUserList: NextPage = (props:any) => {
                 <label htmlFor="userPassword">userPassword*</label>
                 <input type={"password"} name="userPassword" required={true}/>
 
+                <label htmlFor="userEmail">userPassword*</label>
+                <input type={"email"} name="userEmail" required={true}/>
+
                 <label htmlFor="userRole">userRole*</label>
                 <select name="userRole">
                     <option value="1">User</option>

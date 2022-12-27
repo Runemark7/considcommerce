@@ -134,9 +134,28 @@ const AdminUpdateSinglePost: NextPage = (data: any) => {
         setUpdatedCategories({...updatedCategories, [value]: checked})
     }
 
+    const removeThis = (postId:any) => {
+        const endpoint = `http://localhost:3000/api/middleroutes/posttype/removepost/${postId}`
+
+        const options = {
+            method: 'DELETE',
+        }
+
+        fetch(endpoint, options)
+            .then(resp=>resp.json())
+            .then(data => {
+                router.push(`/admin/posttype/${type}`)
+            })
+    }
+
     return (
         <div>
             <h1>Update {type}</h1>
+            <button onClick={()=>{
+                removeThis(data.postData.post_id)
+            }}>
+                Remove This
+            </button>
 
             <div>
                 <h3>Categories</h3>

@@ -1,11 +1,14 @@
 import { useRouter } from 'next/router'
 import {useEffect, useState} from "react";
 import {GetStaticPaths, GetStaticProps} from "next";
+import {clearAllItemsInCart} from "../../store/cartSlice";
+import {useDispatch} from "react-redux";
 
 const ThankYouIndex = () => {
     const router = useRouter()
     const { orderid } = router.query
     const [callbackHTML, setCallbackHTML] = useState();
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         const endpoint = `https://api.playground.klarna.com/checkout/v3/orders/${orderid}`
@@ -18,6 +21,10 @@ const ThankYouIndex = () => {
             },
         }
 
+        const bodyObj = {
+            "klarnaOrderId": orderid
+        }
+
         fetch(endpoint, options)
             .then(resp=>{
                 if (resp.ok){
@@ -26,7 +33,13 @@ const ThankYouIndex = () => {
             })
             .then(data => {
                 setCallbackHTML(data.html_snippet)
-                //TODO: set order to payed, and waiting for shipping
+                fetch(`http://localhost:3000/api/push/${orderid}`, {
+                    method: "POST",
+                    body: JSON.stringify(bodyObj)
+                })
+                    .then(()=>{
+                        dispatch(clearAllItemsInCart())
+                    })
 
             })
     }, [] )

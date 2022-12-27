@@ -1,8 +1,6 @@
 import Link from "next/link";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {removeItemFromCart} from "../store/cartSlice";
-import Product from "../models/Product";
 import SearchBar from "./searchBar";
 
 
@@ -11,21 +9,10 @@ export default function Navbar() {
     const cart = useSelector((state)=>(state.cart))
 
     const [cartDetails, setCartDetails] = useState(cart);
-    const [miniCartToggle, setMiniCart] = useState(false);
-
-    const toggleMiniCart = () =>{
-        if (miniCartToggle){
-            setMiniCart(false);
-        }else{
-            setMiniCart(true);
-        }
-    }
 
     useEffect(()=>{
         setCartDetails(cart)
     }, [cart.totalprice])
-
-    const dispatch = useDispatch();
 
     return (
         <div className={"mainNavBar"}>
@@ -66,26 +53,6 @@ export default function Navbar() {
                             </div>
 
                         </Link>
-
-                        <div className={(miniCartToggle)?"showMiniCart":"hideMiniCart"}>
-                            {cartDetails.products.map((product: Product) => (
-                                <div className={"cartItemWrapper"} key={product.post_name}>
-                                    <div className={"cartItem"}>
-                                        <Link href={`http://localhost:3000/product/${product.post_name}`}>
-                                            {product.post_name}
-                                        </Link>
-                                        <p className={"productPrice"}>{product.product_price}</p>
-                                        <p>{product.product_quantity}x{product.product_price} = {Math.round((parseInt(product.product_price ) * product.product_quantity)*100)/100}</p>
-                                    </div>
-
-                                    <button className={"removeItem"}
-                                            onClick={()=>{
-                                                dispatch(removeItemFromCart(product))
-                                            }}
-                                    >X</button>
-                                </div>
-                            ))}
-                        </div>
                     </li>
                 </ul>
             </div>

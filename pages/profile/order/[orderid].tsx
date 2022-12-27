@@ -6,9 +6,12 @@ import Link from "next/link";
 const OrderDetail = (data: any) => {
     const [klarnaData, setKlarnaData] = useState(null);
 
+
     useEffect(()=>{
-        if (data && data.payment_method == "klarnaCheckout" && data.klarna_order_id != null){
-            const order_id = data.klarna_order_id;
+        if (data && data.data.payment_method == "klarnaCheckout" && data.data.klarna_order_id != null){
+            console.log(data.data.klarna_order_id)
+            const order_id = data.data.klarna_order_id;
+            console.log(order_id)
 
             const endpoint = `https://api.playground.klarna.com/checkout/v3/orders/${order_id}`
 
@@ -21,6 +24,7 @@ const OrderDetail = (data: any) => {
 
             fetch(endpoint, options)
                 .then(resp=>{
+                    console.log(resp.statusText)
                     if (resp.ok){
                         return resp.json()
                     }

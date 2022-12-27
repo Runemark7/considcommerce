@@ -1,5 +1,6 @@
 import type {GetServerSidePropsContext, NextPage} from 'next'
 
+
 const AdminIndexSingleLog: NextPage = (props: any) => {
 
     return (

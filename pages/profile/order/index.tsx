@@ -1,9 +1,9 @@
 import Link from "next/link";
-import Order from "../../../models/order";
 import {GetServerSidePropsContext} from "next";
-import {Simulate} from "react-dom/test-utils";
+import DataTable from "react-data-table-component";
 
 const UserProfile = (props: any) => {
+    console.log(props.data)
     return (
         <div>
             <ul>
@@ -20,25 +20,41 @@ const UserProfile = (props: any) => {
                 </li>
             </ul>
             <div>
-                {(props.data)?props.data.map((order: Order) => (
-                    <div className={"cartItemWrapper"} key={order.post_id}>
-                        <Link href={`http://localhost:3000/profile/order/${order.post_id}`}>
-                            <div className={"twocols"}>
-                                <p>
-                                    {order.post_name}
-                                </p>
-                                <p>
-                                    {order.orderStatus}
-                                </p>
-                                <p>
-                                    {order.post_id}
-                                </p>
-                            </div>
-                        </Link>
-                    </div>
-                )):<div>
-                    No orders found!
-                </div>}
+
+                <DataTable
+                    columns={[
+                        {
+                            name: "Order name",
+                            selector: ({post_name}) => post_name,
+                        },
+                        {
+                            name: "Order status",
+                            selector: ({orderStatus}) => orderStatus,
+                        },
+                        {
+                            name: "Order payment",
+                            selector: ({payment_method}) => payment_method,
+                        },
+                        {
+                            name: "Order amount",
+                            selector: ({klarna_order_amount}) => (klarna_order_amount/100) + " SEK",
+                        },
+                        {
+                            cell: ({post_id}, index, column, id) => {
+                                return (
+                                    <Link href={`http://localhost:3000/profile/order/${post_id}`}>
+                                        <button>
+                                            Goto
+                                        </button>
+                                    </Link>
+                                )
+                            }
+                        }
+                    ]}
+                    data={props.data}
+                    highlightOnHover={true}
+                    striped={true}
+                    pointerOnHover={true} />
             </div>
         </div>
     );
@@ -56,13 +72,23 @@ export const getServerSideProps = async (context :GetServerSidePropsContext) => 
     }
 
     const res = await fetch(endpoint, options);
-    const data = await res?.json();
 
-    return{
-        props: {
-            data
+
+    if (res.ok){
+        const data = await res?.json();
+        return{
+            props: {
+                data
+            }
+        }
+    }else{
+        return{
+            props: {
+                data: []
+            }
         }
     }
+
 }
 
 export default UserProfile

@@ -6,7 +6,9 @@ const PostLayout = (data:any) => {
     return (
         <div>
             {(data)?(
-                <PageEditorClear postId={data.postData.post_id} postContent={data.postData.post_content} />
+                <div>
+                    <PageEditorClear postId={data.postData.post_id} postContent={data.postData.post_content} />
+                </div>
             ):<></>}
         </div>
     );

@@ -64,7 +64,9 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     const orders = await res?.json();
 
     return {
-        props: orders
+        props: {
+            orders
+        }
     }
 }
 

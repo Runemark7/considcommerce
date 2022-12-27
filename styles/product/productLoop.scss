@@ -17,10 +17,24 @@
       width: 100%;
     }
     .productTitle{
-
+      margin: 0 0 0.5rem 0;
+      overflow: hidden;
+      height: 22px;
+      line-height: 22px;
+      word-wrap: break-word;
+      font-size: 16px;
+      letter-spacing: .5px;
+      display: block;
+      width: 100%;
+      text-transform: capitalize;
+      text-decoration: none;
+      text-align: left;
     }
     .productPrice{
-
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      text-shadow: 0px 0px 1px #000;
     }
   }
 }
